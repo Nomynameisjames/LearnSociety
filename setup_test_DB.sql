@@ -1,6 +1,5 @@
  -- delete database if exixt
 
-DROP DATABASE IF EXISTS BotSchedule;
 
  -- Creates database if not exist
 
@@ -8,7 +7,7 @@ CREATE DATABASE IF NOT EXISTS BotSchedule;
 
  -- Switch database to new database
 
-USE BotSchedule_test_db;
+USE BotSchedule;
 
 -- create user if not exists and set password, privileges
 
