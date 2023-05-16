@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    <style>
+        h1 {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            border-radius: 5px;
+            color: #fff;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ file[1] }}</h1>
+	    <p>Dear {{ file[2] }},</p>
+        <p>{{ file[0] }}</p>
+        {% if url == None %}
+        <p></p>
+        {% else %}
+            <a href="{{ url }}" class="button">Verify Email</a>
+        {% endif %}
+	    <p>If you did not sign up for our service, please ignore this email.</p>
+</body>
+</html>
+

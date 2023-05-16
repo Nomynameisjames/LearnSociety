@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - Botschedule</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link href="static/styles/styles.css" rel="stylesheet" />
+         <link href="static/styles/styles_2.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.iconify.design/iconify-icon/1.0.4/iconify-icon.min.js"></script>
+    </head>
+    <body class="sb-nav-fixed" id="status" data-my-var="{{ status }}">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+             
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}"><b>BotSchedule</b></a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+           	{% with messages = get_flashed_messages(with_categories=true) %}
+                	{% if messages %}
+                        	{% for category, message in messages %}
+                                      <div class="alert alert-{{ category }}">
+                                          {{ message }}
+                                      </div>
+                                {% endfor %}
+                         {% endif %}
+                 {% endwith %}
+<!--            <div class="form-check form-switch" style="position: absolute; right: 25%;">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckCheckedDisabled" style="width: 30px; height: 20px;" checked disabled>
+                <label class="form-check-label" for="flexSwitchCheckCheckedDisabled" style="color: #fff;">Mode Auto</label>
+</div> -->
+		 <!-- Navbar Search-->
+         {% block search %}
+          	  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                  {{ form.hidden_tag() }}
+                <div class="input-group">
+                     {% if form.search.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.search.errors %}
+                                {{ _(' %(error)s', error=error) }}
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.search(class="form-control search-bar", placeholder="Search for...", aria_label="Search for...", aria_describedby="btnNavbarSearch") }}
+                        {% endif %}
+                    <!--<input class="form-control" type="text" id="search-bar" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" /> -->
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            {% endblock %}
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('Main.settings') }}">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="{{ url_for('Main.logout') }}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="{{ url_for('Main.view') }}">
+                                <div class="sb-nav-link-icon"><iconify-icon icon="fluent-mdl2:b-i-dashboard" height="30" width="30" style="color: #fff;"></iconify-icon></div>
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Show</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><iconify-icon  icon="fluent:tasks-app-28-filled"  height="30" width="30" style="color: #fff"></iconify-icon></div>
+                                View Task
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="{{ url_for('Main.view') }}">All</a>
+                                    <a class="nav-link" href="{{ url_for('Main.daily') }}">Daily</a>
+                                    <a class="nav-link" href="{{ url_for('Main.upcoming') }}">Upcoming</a>
+                                    <a class="nav-link" href="{{ url_for('Main.missed') }}">Missed</a>
+                                </nav>
+                            </div>
+                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                    <div class="sb-nav-link-icon"><iconify-icon icon="fluent:quiz-new-28-regular" height="30" width="30" style="color: #fff"></iconify-icon></div>
+                                    Quiz
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                        <a class="nav-link" href="{{ url_for('Main.quiz') }}">
+                                        Start New Quiz
+                                        </a>
+                                        <a class="nav-link" href="{{ url_for('Main.quiz') }}">
+                                            View Past Quiz
+                                        </a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    <div class="sb-nav-link-icon"><iconify-icon icon="mdi:bookshelf" height="30" width="30" style="color: #fff"></iconify-icon></div>
+                                    Courses
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" id="course-opt" href="{{ url_for('Main.dashboard', myID='Python') }}">
+                                        Python
+                                        </a>
+                                        <a class="nav-link" id="course-opt" href="{{ url_for('Main.dashboard', myID='Javascript') }}">
+                                        Javascript
+                                        </a>
+                                        <a class="nav-link" id="course-opt" href="{{ url_for('Main.dashboard', myID='React') }}">
+                                        React
+                                        </a>
+                                        <a class="nav-link" id="course-opt" href="{{ url_for('Main.dashboard', myID='C') }}">
+                                        C
+                                        </a>
+                                    </nav>
+                                </div>
+
+                            <div class="sb-sidenav-menu-heading">Features</div>
+                            <a class="nav-link" id="chat-link" href="{{ url_for('Main.help') }}">
+                                <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent-mdl2:chat-bot" height="30" width="30" style="color: #fff;" onclick="ShowBox();"></iconify-icon></div>
+                                Chat Bot
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                <div class="sb-nav-link-icon"><iconify-icon icon="ion:library" height="30" width="30" style="color: #fff"></iconify-icon></div>
+                                Library
+				                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+				            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                		        <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" id="article-link" href="{{ url_for('Main.articles') }}">
+                                         Daily Resources
+                                    </a>
+                                    <a class="nav-link" id="article-link" href="{{ url_for('Main.articles') }}">
+                                         All Resources
+                                    </a>
+                                </nav>
+                            </div>
+		                </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as: </div>
+                        {{ _(' %(user)s', user=user) }} 
+                    </div>
+                </nav>
+            </div>
+            {% block content %}
+            <div id="layoutSidenav_content">
+                <main>
+
+                    <div class="container">
+                            {% block page_content %}
+                            {% endblock %}
+                    </div>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"><a href="{{ url_for('Main.view') }}">Home </a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                        </ol>
+
+
+
+                    <div class="card border-primary mb-3" id="about-body">
+                         <div class="card-header">
+                           Daily Quotes
+                         </div>
+                        <div class="card-body">
+                            <div>
+                                <blockquote class="blockquote mb-0">
+                                    <p class="quotes card-text" id="get-quote">....</p>
+                                    <footer class="blockquote-footer"> <cite title="Source" id="author" style="color:#4FC3F7">Unknown</cite></footer>
+                                 </blockquote>
+                             </div>
+                         </div>
+                     </div>
+                     <br>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4" id="chart-body">
+                                    <div class="card-header" style="color: #000000">
+                                        <i class="fas fa-chart-area me-1" id="tab"></i>
+                                        Topics focused on most
+                                    </div>
+                                    <div class="card-body" ><canvas id="myPieChart" width="100%" height="50"></canvas></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4" id="chart-body">
+                                    <div class="card-header" style="color: #000000">
+                                        <i class="fas fa-chart-bar me-1" id="tab"></i>
+                                        Average on Tasks completed
+                                    </div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4" id="chart-body">
+                            <div class="card-header" id="table-dash">
+                                <i class="fas fa-table me-1" id="tab"></i>
+                                Monthly Schedules
+                                <!--  <button id="add-row" href="{{ url_for('Main.new') }}">New</button>  -->
+                                {% block btn %}
+                                <div class='table-btns' style='overflow-x: auto;'> 
+                                    <button type="button" title="Delete Task" class="remove-bin" id="my-btn"><iconify-icon icon="fluent:delete-32-filled" height="27" width="35"></iconify-icon></button>
+                                    <button type="button" title="set alarm" class="set-alarm" id="my-alarm"><iconify-icon icon="material-symbols:alarm-outline" height="27" width="35"></iconify-icon></button>
+                        	        <button type="button" title="Update Task" class="edit-btn"><iconify-icon icon="material-symbols:edit" height="27" width="35"></iconify-icon></button>
+                                    <button type="button" title="create new Task" class="create-btn">
+                                        <iconify-icon icon="material-symbols:create-new-folder-sharp" height="27" width="35"></iconify-icon>
+					                    <a class="small text-white stretched-link" id="add-new" href="{{ url_for('Main.new') }}"></a>
+                                    </button>
+                                </div>
+                            {% endblock %}
+			                </div>
+                            <div class="card-body mb-4" id="table-back">
+                                <table class="table table-hover" id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th> </th>
+                                            <th> ID </th>
+                                            <th> Date </th>
+                                            <th> Course </th>
+                                            <th> Topic </th>
+                                            <th> Target </th>
+                                            <th> Average </th>
+                                            <th> Reminder </th>
+                                            <th> Created </th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th> </th>
+                                            <th> ID </th>
+                                            <th> Date </th>
+                                            <th> Course </th>
+                                            <th> Topic </th>
+                                            <th> Target </th>
+                                            <th> Average </th>
+                                            <th> Reminder </th>
+                                            <th> Created </th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    {% block table %}
+                                        {% for key, value in data.items() %} 
+                                         <tr style='overflow: hidden;'>
+                                                <td id="radio-btn" style='overflow-y: auto;'> </td>
+                                                <td id="my-key">{{ key }}</td>
+                                                <td>{{ data[key]["Date"] }}</td>
+                                                <td>{{ data[key]["Course"] }}</td>
+                                                <td> {{ data[key]["Topic"] }} </td>
+                                                <td class="Dont">{{ data[key]["Target"] }}</td>
+                                                <td class="Dont">{{ data[key]["Average"] }}</td>
+                                                <td>{{ data[key]["Reminder"] }}</td>
+                                                <td class="Dont">{{ data[key]["Created"] }}</td>
+                                
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody> 
+                                 </table>
+                                 {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+    {% block modal %}
+    <div class="modal fade" id="staticBackdrop8" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel8" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel8"> </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #fff; background-color: #fff;"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center font-monospace" id="search-text"> </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    </div>
+
+                </main>
+                <footer class="py-4 bg-dark mt-auto">
+		{% endblock %}
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-white bg-dark">Copyright &copy; Nomynameisjamees 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+  
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="static/script/scripts.js"></script>
+        <script src="static/script/Quiz.js"></script>
+        <!--    <script src="static/script/charts.js"></script> -->
+        <script src="static/script/settings.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+       <script src="static/assets/demo/chart-pie-demo.js"></script>
+       <script src="static/assets/demo/chart-bar-demo.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="static/script/datatables-simple-demo.js"></script>
+    </body>
+</html>

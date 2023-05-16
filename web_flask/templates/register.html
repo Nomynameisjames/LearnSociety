@@ -1,0 +1,108 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="static/styles/first.css">
+  <link rel="stylesheet" href="static/styles/styles_2.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="a    nonymous">
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+</head> 
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+
+  <div class="align-center">
+      <div class="card-body" id='chart-body' style="max-width: 600px; height:600px;">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="ID" value="{{ ID }}">
+            <fieldset  class="form-group">
+                {% block formm %}
+                <legend class="border-bottom mb-4 signup">Sign Up</legend>
+                <div class="mb-6" id="reg-form-label">
+                    {{ form.username.label(for="exampleFormControlInput1", class="form-control-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                    <div id="exampleFormControlInput1">{{ form.username(type="text", autocomplete="username", class="form-control form-control-sm") }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <div  id="reg-form-label">
+                        {{ form.email.label(for="exampleFormControlInput1", class="form-control-label") }}
+                        {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                    <div id="exampleFormControlInput1"> {{ form.email(type="text", autocomplete="email", class="form-control form-control-sm") }}</div>
+                    {% endif %}
+                </div>`
+                <div class="form-group">
+                    <div  id="reg-form-label">
+                        {{ form.password.label(class="form-control-label") }}
+                        {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                    <div id="inputPassword5">{{ form.password(type="password",  autocomplete="new-password", class="form-control form-control-sm") }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <div class=" text-nowrap " id="reg-form-label">
+                        {{ form.confirm_password.label(for="inputPassword5", class="form-control-label") }}
+                        {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                    <div id="inputPassword5">{{ form.confirm_password(type="password",  autocomplete="new-password", class="form-control form-control-sm") }}</div>
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group" id="frm-btn">
+                {{ form.submit(class="btn btn-outline-success") }}
+            </div>
+    
+        <br>
+        <br>
+        <span class="bottom_text" style="font-size:small;"><label class="swtich" for="register_toggle" style="color: #130486;font-size: small;">Have an account? <a style="font-size: small;" href="{{ url_for('Main.login') }}"> Login </a></label></span>
+
+      <!-- <button class="form--submit">
+          Sign up
+      </button> -->
+      {% endblock %}
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+ </html> 

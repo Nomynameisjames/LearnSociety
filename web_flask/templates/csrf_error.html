@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CSRF Error</title>
+  </head>
+  <body>
+       {% with messages = get_flashed_messages(with_categories=true) %}
+             {% if messages %}
+               {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}" style="max-width: 500px;">
+                   {{ message }}
+                 </div>
+               {% endfor %}
+             {% endif %}
+           {% endwith %}
+           {% block content %}{% endblock %}
+    <h1>CSRF Error</h1>
+    <p>There was an error processing your request. Please try again.</p>
+  </body>
+</html>
+

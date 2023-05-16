@@ -1,0 +1,419 @@
+{% extends 'index.html' %}
+{% block content %}
+<div id="layoutSidenav_content" style="background-color: #212121;">
+    <main>
+        <header>
+            <h5 style="color: #fff">My Account</h5>
+        </header>
+        <br>
+        <div class="container">
+            <div class="card" style="width: 40rem; height: 25rem;" id="settings-card">
+                <div class="card-header" style="color: #fff; text-align: center;">
+                Account Info
+                </div>
+                <div class="card-body">
+                    <label for="exampleColorInput" class="form-label" style="color: #fff;">Username</label>
+                    <div class="input-group mb-3">
+                        <input type="hidden" name="user ID" value="{{ data.get('ID') }}" id='usr-id'>
+                        <input class="form-control form-control-sm" type="text" value="{{ data.get('user') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="{{ data.get('user') }}">Edit</button>
+                        </div>
+                    </div>
+                    <label for="exampleColorInput" class="form-label" style="color: #fff">Email</label>
+                    <div class="input-group mb-3">
+                        <input class="form-control form-control-sm" type="text" value="{{ data.get('Email') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-outline-success me-md-2" type="button" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" value="email-reset" id="mail-reset">Edit</button>
+                        </div>
+                    </div>
+                    <label for="exampleColorInput" class="form-label" style="color: #fff">Phone Number</label>
+                    <div class="input-group mb-3">
+                        {% if data.get('phone') %}
+                        <input class="form-control form-control-sm" type="text" value="{{ data.get('phone') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle='modal' data-bs-target='#exampleModal4'id='add-number'>Edit</button>
+                        {% else %}
+                            <input class="form-control form-control-sm" type="text" value="Phone Number not provided" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle='modal' data-bs-target='#exampleModal4'id='add-number'>Add</button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <h5 style="color: #fff; margin-top: 20px;">Password and Authentication</h5>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-target="#exampleModal5" data-bs-toggle="modal">Change Password</button>
+            </div>
+            <br>
+            <div>
+                <h5 style="color: #fff; margin-top: 20px;">Two Factor Authentication</h5>
+                <p class="fw-light text-wrap" style="color: #fff; max-width: 30rem; font-size: 12px;">Two factor authentication is currently disabled, Would you like to enable two-factor authentication for your BotSchedule account? Two-factor authentication adds an extra layer of security to your account by requiring a code in addition to your password when logging in. This reduces the risk of unauthorized access and helps to protect your personal information. Enabling two-factor authentication is strongly recommended to ensure the security of your account.</p>
+                <button type="button" class="btn btn-primary btn-sm" data-bs-target='#exampleModal6' data-bs-toggle='modal'>Enable Two-Factor Auth</button>
+        </div>
+            <div class="modal fade" id="exampleModal6" tabindex="-1" aria-labelledby="exampleModalLabel6" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="clear-modal">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel6"><b>Set up Two Factor Auth</b></h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                        </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <p class='text-center font-monospace'> To enable two-factor authentication for your account, please follow these steps:</p>
+                                    <ul>
+                                        <li> Log on to the Twilio website and sign up for an account.</li>
+                                        <li> Obtain your API key from Twilio.</li>
+                                        <li> Save your API key in your BotSchedule profile.</li>
+                                        <li> Enable two-factor authentication in your BotSchedule profile.</li>
+                                        <li> Log out of your BotSchedule account and log back in.</li>
+                                    </ul>
+                                    <p class='text-center'><b>Rest assured that your data is safe and strictly personalized.</b></p>
+                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-link" href='https://www.twilio.com/'>Get started</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <br>
+        <br>
+	<div class="card" id="settings-card">
+                  <div class="card-header" style="color: #fff; text-align: center;">
+                  Data & Privacy
+                  </div>
+                  <div class="card-body">
+                    <label for="exampleColorInput" class="form-label mb-3" style="color: #fff;">Conversation</label>
+                        <div class="input-group mb-3">
+                            <input class="form-control form-control-sm" type="text" value="clear chat history" style="background-color: transparent; border: none; color: #fff;" aria-label="Disabled input example" disabled readonly>                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-outline-danger btn-sm me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
+                            </div>
+                        </div>
+			            <div class="input-group mb-3">
+				            <input class="form-control form-control-sm" type="text" value="Disable chat history" style="background-color: transparent; border: none; color: #fff;" aria-label="Disabled input exam    ple" disabled readonly>
+                                <div class="form-check form-switch form-check-reverse">
+                                    <input class="form-check-input" type="checkbox" style="position: absolute; right: 15px; width: 3rem; max-width: 3rem;" role="switch" value="{{ data['auto'] }}" id="flexSwitchCheckReverse">
+                                </div>
+                        </div>
+                    <label for="exampleColorInput" class="form-label mb-3" style="color: #fff;">Course</label>
+                        <div class="input-group mb-3">
+                            <input class="form-control form-control-sm" type="text" value="Delete Course" style="background-color: transparent; border: none; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-outline-danger btn-sm me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Delete</button>
+                            </div>
+                        </div>
+                      <div class="input-group mb-5">
+                          <input class="form-control form-control-sm" type="text" value="Customise learning pace" style="background-color: transparent; border: none; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-outline-primary me-md-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">&nbsp;Edit</button>
+                            </div>
+                        </div>
+                    <label for="exampleColorInput" class="form-label mb-3" style="color: #fff;">Account Removal</label>
+                        <p class="fw-light text-wrap" style="color: #fff; max-width: 30rem; font-size: 12px;">Disabling your account means you can retrive it anytime you want. If you delete your account, you will not be able to recover it.</p>
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="button" class="btn btn-danger btn-sm">Disable Account</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" style="margin-left: 1.5rem" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete Account</button>
+                        </div>
+                  </div>
+    </div>
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content" id="clear-modal">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Change Username</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #fff; background-color: #fff;"></button>
+                                </div>
+                        <div class="modal-body">
+                            <p class="font-monospace">Enter new username and existing password</p>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label">Username</label>
+                                    <input type="text" autocomplete="username" class="form-control" id="recipient-name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message-text" class="col-form-label">Password</label>
+                                    <input type="password" autocomplete="current-password" class="form-control" id="recipient-password">
+                                </div>
+                            </form>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="bi-modal">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel" style="text-align: center;">Verify email address</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center"> We will need to verify your email address {{ data.get('Email') }} real quick.</p>
+                        <p class="text-center"> Lost access to your email address?, please contact your email provider to regain access.</p>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="send-confirm">Send verification code</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal" id="cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel4">Phone Number</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Phone number</label>
+                                <input type="tel" class="form-control" id="phone-number" placeholder="+1-XXXXXXXXXX">
+                            </div>
+                        </form>
+                    </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="Mycontact">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel2" style="float: center;"><b>Enter code</b></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center"> We have sent a verification code to this email {{ data.get('Email') }}. Please enter the code below to verify your email address.</p>
+                    <label for="verify-code" class="col-form-label">Verification code</label>
+                    <input type="text" class="form-control" id="verify-code">
+                    <small class="text-muted"><a href="#" class="text-decoration-none">Didn't recieve a code or it expired? Resend code</a></small>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-toggle="modal" id="send-verifyCode">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel3">Enter email address</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center"> Enter your new email address and password to change your email address.</p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Email address</label>
+                            <input type="text" autocomplete="username" class="form-control" id="email-reset">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Password</label>
+                            <input type="password" autocomplete="current-password" class="form-control" id="password-reset">
+                        </div>
+                    </form>
+                </div>
+                 <div class="d-grid gap-2">
+                         <div class="modal-footer">
+                             <button class="btn btn-primary"  data-bs-toggle="modal" id="send-verifyEmail">Done</button>
+                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">Back</button>
+                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalToggle4" aria-hidden="true" aria-labelledby="exampleModalToggleLabel4" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel4">Account removal confirmation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center"><iconify-icon icon="fa-solid:sad-tear" height="60" width="60"></iconify-icon></h5>
+                    <p class="text-center" style="font-size: 20px;">Warning the following action is irreversible and all your data would be erased</p>
+                    <p class="text-center" style="font-size: 20px;">Are you sure you want to delete your account?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-toggle="modal" id="account-removal">Confirm</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel5"><b>Update your password</b></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form.hidden_tag() }}
+                        <form method="POST" id="reset-form">
+                             <fieldset  class="form-group">
+
+                                <div class="mb-3">
+                                    {{ form.old_password.label(class="form-label col-form-label") }}
+                                        {% if form.old_password.errors %}
+                                        {{ form.old_password(class="form-control form-control-sm is-invalid") }}
+                                 <div class="invalid-feedback">
+                                     {% for error in form[0].old_password.errors %}
+                                        <span>{{ error }}</span>
+                                     {% endfor %}
+                                </div>
+                                {% else %}
+                                    {{ form.old_password(type='password', autocomplete='current-password', class="form-control form-control-sm", id='old-pass') }}
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.password.label(class="form-control-label") }}
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control form-control-sm is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(type='password', autocomplete='current-password', class="form-control form-control-sm", id='new-pass') }}
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.confirm_password.label(class="form-control-label") }}
+                                {% if form.confirm_password.errors %}
+                                    {{ form.confirm_password(class="form-control form-control-sm is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form[0].confirm_password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.confirm_password(type='password', autocomplete='current-password', class="form-control form-control-sm", id='new-passC') }}
+                                {% endif %}
+                            </div>
+                    </div>
+                     </fieldset>
+                    <div class="modal-footer">
+                        <div class="form-group" id="frm-btn">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            {{ form.submit(class="btn btn-outline-success", id='set-password') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Clearing Chat history</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Are you sure you want to clear your chat history?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id='clear-chatHistory'>Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel"><b>Delete course data</b></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group"  id="clear-modal">
+                            <li class="list-group-item" id="clear-modal">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="Python" id="firstRadio" checked>
+                                <label class="form-check-label" for="firstRadio">Python</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="badge bg-dark rounded-pill" id="target-display">{{ target[0] }}%</span>
+                            </li>
+                            <li class="list-group-item" id="clear-modal">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="Javascript" id="secondRadio">
+                                <label class="form-check-label" for="secondRadio">Javascript</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="badge bg-dark rounded-pill" id="target-display">{{ target[2] }}%</span>
+                            </li>
+                            <li class="list-group-item" id="clear-modal">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="React" id="thirdRadio">
+                                <label class="form-check-label" for="thirdRadio">React</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="badge bg-dark rounded-pill" id="target-display">{{ target[1] }}%</span>
+                            </li>
+                            <li class="list-group-item" id="clear-modal">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="C" id="thirdRadio">
+                                <label class="form-check-label" for="thirdRadio">C</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span class="badge bg-dark rounded-pill" id="target-display">{{ target[3] }}%</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id='delete-course'>Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="clear-modal">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Customise learning Pace</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-center">Set interval between next topic</p>
+                            <div class='flex-btn' style="display: grid; place-items: start;">
+                                <div class="btn-group" role="group" aria-label="Basic example" style="background-color: black;">
+                                   <button type="button" id="decrease-btn" style="background-color: transparent; border: none;"><iconify-icon icon="ooui:arrow-previous-ltr" width="40" style="color: #29990a;" id='icon-btn'></iconify-icon></button>
+                                    <span class="input-group-text" value="0" id="learning-pace">0  Days</span>
+                                    <button type="button" id="increase-btn" style="background-color: transparent; border: none;"><iconify-icon icon="ooui:arrow-previous-rtl" width="40" style="color: #29990a;" id='Icon-btn'></iconify-icon></button>
+                                </div>
+                                </div>
+                            <div class="dropdown" style="display: flex; justify-content: center; align-items: center;">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Select Course
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li class="dropdown-item active">All courses</li>
+                                            <li><button type="button" class="dropdown-item" id="Mypace">Python</button></li>
+                                            <li><button type="button" class="dropdown-item" id="Mypace">React</button></li>
+                                            <li><button type="button" class="dropdown-item" id="Mypace">Javascript</button></li>
+                                            <li><button type="button" class="dropdown-item" id="Mypace">C</button></li>
+                                    </ul>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-pace">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% block modal %}
+      {{ super() }}
+         </div>
+    {% endblock %}
+    </main>
+<footer class="py-4 bg-dark mt-auto">
+{% endblock %}

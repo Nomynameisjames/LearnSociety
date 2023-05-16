@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+{% block content %}
+{% block search %} {% endblock %}
+<div id="layoutSidenav_content">
+<main>
+<section class="quiz-body">
+<div class="container-md" id="quiz-sec">
+    <h1 id="h-quiz">Daily Quiz Session</h1>
+    <div class="qanda">
+        <p class="data_id" id="quiz-text"> Quiz session ID {{ data_ID }}</p>
+        {% for key, value in data.items() %}
+            {% if key not in [15] %}
+                <div class="question">
+                    <p class"font-monospace" id="quiz-text">{{ value }}</p>
+                </div>
+                <div class="input-group mb-3">
+                    <input class="form-control" type="text" name="answer" placeholder="Enter your answer" maxlength="200">
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <button type="submit" id="quiz-btn" class="btn btn-outline-success">Submit Answers</button>
+</div>
+</section>
+</main>
+<footer class="py-4 bg-dark mt-auto">
+{% endblock %}

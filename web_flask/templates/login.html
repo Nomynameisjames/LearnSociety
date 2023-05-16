@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="static/styles/first.css">
+  <link rel="stylesheet" href="static/styles/styles_2.css">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <div class="container">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="max-width: 500px;">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+  <div class="align-center">
+    <div class="card-body" id='chart-body' style="max-width: 550px; height: 550px;">
+        <form method='POST' action=''>
+        {{ form.hidden_tag() }}
+            <fieldset  class="form-group">
+                <legend class="border-bottom mb-4 signup">LOGIN</legend> 
+                    <div class="mb-3" style="color: #000000;">
+                        <!-- <div class="input-group-prepend" style="margin-right: 5px;"> -->
+                            {{ form.email.label(for="exampleFormControlInput1", class="form-label login-label") }}
+                            {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        <div  id="exampleFormControlInput1"> {{ form.email(type="text", autocomplete="email", class="form-control") }}</div>
+                        {% endif %}
+                        </div>
+                    <br>
+                    <div class=" mb-3" style="color: #000000;">
+                        <!--    <div class="input-group-prepend"> -->
+                    {{ form.password.label(for="inputPassword5", class="form-label login-label") }} 
+                    {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control-sm is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div id="inputPassword5">{{ form.password(type="password", autocomplete="current-password", class="form-control form-control") }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-check" id="rem-me" style="left: 35%; color: #000000;">
+                        {{ form.remember(class="form-check-input") }}
+                        {{ form.remember.label(class="form-check-label") }}
+                    </div>
+            </fieldset>
+                <br>
+                <div class="form-group" id="frm-btn">
+                {{ form.submit(class="btn btn-success") }}
+                </div>
+                <br>
+                <br>
+                <span class="bottom_text btn btn-link" style="font-size:small;"><label class="swtich" for="register_toggle" style="color:#130486;">Don't have an account? <a href="{{ url_for('Main.signup', token=token) }} " style="font-size: small;">Sign up</a></label></span>
+                <br>
+                <span class="bottom_text btn btn-link" style="font-size:small;"><label class="swtich" for="register_toggle" style="color:#130486;">Forgot Password?  <a style="font-size: small;" href="{{ url_for('Main.reset') }}">Click here</a> </span>
+
+        </form>
+    </div>
+</div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
