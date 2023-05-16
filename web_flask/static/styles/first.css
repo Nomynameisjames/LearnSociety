@@ -1,0 +1,313 @@
+
+.form {
+  background-color: #171717;
+  padding: 3.125em;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 5px 5px 15px -1px rgba(0,0,0,0.75);
+  align-items: center;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+}
+
+body {
+    background-color: #171717;
+}
+
+#form-card {
+    height: 500px;
+    max-width: 500px;
+    border-radius: 27px;
+    background: #f2f2f2;
+    box-shadow:  23px 23px 22px #a4a4a4,
+             -23px -23px 22px #ffffff;
+    
+ }
+/* .reg-frm{
+  width: 400px;
+  height: 400px;
+  border: none;
+  } */
+ #frm-btn {
+     position: absolute;
+     right: 49%;
+     align-items: center;
+  
+} 
+
+  
+.forget{
+  width: 350px;
+  height: 250px;
+}
+
+.register{
+  width: 350px;
+  height: 350px;
+}
+
+.login{
+  width: 350px;
+  height: 400px;
+}
+.align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-top: 0;
+}
+
+.form {
+  text-align: center;
+}
+
+.signup {
+  color: rgb(77, 75, 75);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  font-weight: bold;
+  font-size: x-large;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.form-control-label {
+  width: 20%;
+}
+
+.form--input:focus {
+  border: 1px solid #639;
+  outline: none;
+}
+
+.form--marketing {
+  display: flex;
+  margin-bottom: 1.25em;
+  align-items: center;
+}
+
+.form--marketing > input {
+  margin-right: 0.625em;
+}
+
+.form--marketing > label {
+  color: grey;
+}
+
+.checkbox, input[type="checkbox"] {
+  accent-color: #162D16;
+}
+
+.form--submit {
+  width: 50%;
+  padding: 0.625em;
+  border-radius: 5px;
+  color: white;
+  background-color: #162D16;
+  border: 1px dashed #162D16;
+  cursor: pointer;
+}
+
+.form--submit:hover {
+  color: #162D16;
+  background-color: #18a818;
+  border: 1px dashed #162D16;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+
+
+/* about page styling */
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card-container:after {
+  content: "";
+  display: table;
+  clear: both;
+  display: grid;
+ grid-template-columns: 1fr 1fr;
+ grid-template-rows: 1fr 1fr;
+ gap: 5px;
+ overflow: visible;
+}
+
+.card-2{
+  position: absolute;
+  right: 50%;
+  
+}
+.card {
+  /* display: grid; */
+  margin-bottom: 20px;
+  width: 45%;
+  vertical-align: top;
+  margin-right: 5%;
+  height: 100%;
+  background: #162D16;
+  transition: 1s ease-in-out;
+  clip-path: polygon(30px 0%, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0% 30px);
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.card span {
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  display: block;
+  padding-top: 1em;
+  font-size: 2em;
+  margin-top: 1em;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.card .info {
+  font-weight: 400;
+  color: white;
+  display: block;
+  text-align: center;
+  padding-top: 0.1em;
+  font-size: 1em;
+  margin: 1em;
+  margin-top: 2em;
+}
+
+a{
+  text-decoration: none;
+  color: #ffffff;
+  font-size: large;
+}
+.card .img {
+  width: 5.2em;
+  height: 5.2em;
+  /* background: white; */
+  padding-top: 1em;
+  border-radius: 15px;
+  margin: auto;
+  margin-top: 1.7em;
+}
+
+.card .share {
+  text-align: center;
+  margin-top: 1.8em;
+}
+
+.card a {
+  color: white;
+  transition: .4s ease-in-out;
+}
+
+.card a:hover {
+  color: rgb(36, 116, 221);
+}
+
+.card button {
+  padding: 0.8em 1.7em;
+  display: block;
+  margin: auto;
+  border-radius: 25px;
+  border: none;
+  margin-top: 2em;
+  font-weight: bold;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  transition: .4s ease-in-out;
+}
+
+.card button:hover {
+  background: rgb(36, 116, 221);
+  color: white;
+}
+
+.bottom_text {
+  font-size: 0.65em;
+}
+
+.bottom_text .swtich {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+.auto-cards {
+  position: relative;
+}
+
+.auto-card {
+  z-index: 1;
+  position: absolute;
+  width: 254px;
+  height: 190px;
+  border-radius: 10px;
+  transition: all .5s ease-out;
+  overflow: hidden;
+  transform: translateX(0px) translateY(0px) perspective(905px) rotateX(0deg) rotateY(0deg) rotateZ(-8deg);
+}
+
+.auto-card.one {
+  top: -120px;
+  left: -150px;
+  background: linear-gradient(180deg, #FF0055 0%, #000066 100%);
+}
+
+.auto-card.two {
+  top: -95px;
+  left: -125px;
+  background: linear-gradient(180deg, #fa00ff 0%, #01f998 99%);
+}
+
+.auto-card.three {
+  top: -70px;
+  left: -100px;
+  background: linear-gradient(180deg, #c0f901 0%, #fa00ff 100%);
+}
+
+.auto-card:hover {
+  z-index: 4;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) !important;
+  transition: all .5s ease-out;
+}
+
+.cardDetails {
+  width: 55%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  background: rgba(0,0,0,0.8);
+  transition: .5s;
+  transform-origin: left;
+  transform: perspective(2000px) rotateY(-90deg);
+}
+
+.auto-card:hover .cardDetails {
+  transform: perspective(2000px) rotateY(0deg);
+}
+
+.cardDetailsHaeder {
+  font-weight: 600;
+  color: #edb899;
+}
+
+.cardDetailsButton {
+  padding: 3px 6px;
+  border-radius: 25px;
+  background-color: #edb899;
+  color: #000;
+  font-weight: 600;
+}
