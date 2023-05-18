@@ -65,6 +65,15 @@ if [[ $confirm == "y" ]]; then
     read -p "Enter TWILIO_AUTH_TOKEN: " TWILIO_AUTH_TOKEN
 fi
 
-# Run the command
-python3 web_flask/app.py
+read -p "Do you want to start the Flask app or the API route? (app/api): " choice
+
+if [[ $choice == "app" ]]; then
+    # Run the Flask app
+    python3 web_flask/app.py
+elif [[ $choice == "api" ]]; then
+    # Run the API route
+    HBNB_API_PORT=5001 python3 -m api.v1.app
+else
+    echo "Invalid choice. Exiting..."
+fi
 
