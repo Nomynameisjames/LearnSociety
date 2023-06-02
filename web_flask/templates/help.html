@@ -1,53 +1,45 @@
 {% extends 'index.html' %}
-    {% block content %}
- <div id="layoutSidenav_content">
+{% block content %}
+<div id="layoutSidenav_content" class="chatbot-container">
     <main>
-     <header>
-         <script src="https://code.iconify.design/iconify-icon/1.0.4/iconify-icon.min.js"></script>
-        <script type="text/javascript"  src="static/script/JQue.js"></script>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="navbar-brand" id ="nav-id">
-
-              <iconify-icon icon="openmoji:eyes" height="60" width="75"></iconify-icon>
-
-          </div>
-      </nav>
-    </header>
-     <div class="chat-container">
-    <main class="chat-conversation">
-        {% for message in data %}
-            {% if message.role == 'user' %}
-                {% if message.ID == ID %}
-        <div class="sent-message">
-            <p class="sent-message">{{ message.content }}</p>
+        <div class="chat-eyes">
+            <div class="navbar-brand" id ="nav-id">
+                <iconify-icon icon="openmoji:eyes" height="60" width="75"></iconify-icon>
+            </div>
         </div>
-                {% endif %}
-            {% endif %}
-            {% if message.role == 'bot' %}
-                {% if message.ID == ID %}
-        <div class="replied-message">
-            <p class="received-message">{{ message.content }}</p>
+        <div class="chat-container">
+            <section class="chat-conversation">
+                {% for message in data %}
+                    {% if message.role == 'user' %}
+                        {% if message.ID == ID %}
+                            <div class="sent-message">
+                                <p class="sent-message">{{ message.content }}</p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if message.role == 'bot' %}
+                        {% if message.ID == ID %}
+                            <div class="replied-message">
+                                <p class="received-message">{{ message.content }}</p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </section>
         </div>
-            {% endif %}
-        {% endif %}
-    {% endfor %}
+        <div class="chat-form">
+            <form>
+                <div id="input-container">
+                    <textarea type="text" id="my-chat-input" placeholder= "Enter a prompt here ..."></textarea>
+                    <div class="input-group-append">
+                        <button id="chat-submit" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% block modal %}
+            {{ super() }}
+        {% endblock %}
     </main>
-
-    <div class="chat-form">
-      <form id="chat-form">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control" id="my-chat-input" placeholder= "Type a message ...">
-          <div class="input-group-append">
-            <button id="chat-submit" type="button" onclick="chatlog()"><i class="fa fa-paper-plane"></i></button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-{% block modal %}
-    {{ super() }}
-        </div>
+    <footer class="py-4 bg-dark mt-auto">
 {% endblock %}
-</main>
-<footer class="py-4 bg-dark mt-auto">
-    {% endblock %}

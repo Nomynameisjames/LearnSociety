@@ -1,6 +1,8 @@
 let xhr;
 let url = 'http://127.0.0.1:5001/api/v1/settings/'
-let flashMsg = function(msg, type) {
+
+// export function that triggers a flash message on the screen
+export const flashMsg = function(msg, type) {
     let message = $("<div>");
     message.addClass("flash-message " + type);
     message.text(msg);
@@ -9,13 +11,17 @@ let flashMsg = function(msg, type) {
         message.hide();
     }, 7000);
 }
-let loader = function(btn) {
+
+// export function that triggers a load button spinner on the screen
+export const loader = function(btn) {
 		  $(btn).html(
               '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...'
      );
 }
 
-let RequestCall = function(type, url, data, btn, text, callback) {
+
+// export function that makes an ajax call to the server
+export const RequestCall = function(type, url, data, btn, text, callback) {
      $.ajax({
         url: url,
         type: type,
@@ -27,8 +33,7 @@ let RequestCall = function(type, url, data, btn, text, callback) {
             xhr.setRequestHeader('x-access-token', getCookie('access_token'));
         },
         success: function(response) {
-            
-            callback(response);
+                callback(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error', textStatus, errorThrown);
@@ -39,8 +44,8 @@ let RequestCall = function(type, url, data, btn, text, callback) {
     });
 }
 
-
-function getCookie(cname) {
+// export function that gets the value of a cookie
+export function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
@@ -56,6 +61,7 @@ function getCookie(cname) {
     return "";
  }    
 
+// function updates a user's username via the api endpoint
 $(document).ready(function () {
         const exampleModal = $('#exampleModal');
     exampleModal.on('show.bs.modal', function (event) {
@@ -79,11 +85,13 @@ $(document).ready(function () {
       });
     })
 
+// function updates a user's email via the api endpoint 
 $(document).ready(function () {
     let opt;
     $("#mail-reset").click(function() {
         opt =  $(this).val();
     });
+    // function updates a user's email via the api endpoint sends a verification code to the user's email
     $('#send-confirm').on('click', function() {
         let btn = "#send-confirm";
         loader(btn);
@@ -94,6 +102,7 @@ $(document).ready(function () {
         });
 
     });
+    // function updates a user's email via the api endpoint verifies confirmation code sent to the user's email
     $('#send-verifyCode').click(function() {
         const data = {}
         var code = $('#verify-code').val();
@@ -112,6 +121,7 @@ $(document).ready(function () {
         });
         
     });
+    // function updates a user's email via the api endpoint updates the user's email
         $('#send-verifyEmail').click(function() {
             const data = {}
             var email = $('#email-reset').val();
@@ -130,6 +140,7 @@ $(document).ready(function () {
             });
 
         });
+    // deletes a user's account via the api endpoint
     $('#account-removal').click(function() {
         const data = {}
         data['confirmDelete'] = true;
@@ -143,6 +154,7 @@ $(document).ready(function () {
 
 });
 
+// function cancels an ajax request if the cancel button is clicked
 $("#cancel-btn").click(function() {
   // Check if xhr object exists and is not in a completed state
   if (xhr && xhr.readyState !== 4) {
@@ -151,6 +163,8 @@ $("#cancel-btn").click(function() {
   }
 });
 
+
+// function updates a user's phone number via the api endpoint
 $(document).ready(function () {
     $("#Mycontact").click(function() {
         let data = {}
@@ -169,6 +183,7 @@ $(document).ready(function () {
 });
 
 
+// function updates a user's password via the api endpoint
 $(document).ready(function() {
   $('#reset-form').submit(function(event) {
     event.preventDefault();
@@ -217,6 +232,7 @@ $(document).ready(function() {
   });
 });
 
+// function clears a user's chat history via the api endpoint
 $(document).ready(function() {
     $('#clear-chatHistory').click(function() {
         var id = $('#usr-id').val();
@@ -227,6 +243,7 @@ $(document).ready(function() {
     });
 });
 
+// function disables a users converssation save history via the api endpoint
 $(document).ready(function() {
     var checkBox = $('#flexSwitchCheckReverse').val()
       if (checkBox === 'False') {
@@ -254,6 +271,7 @@ $('#flexSwitchCheckReverse').change(function() {
  
  });
 
+// function deletes a user's automated courses via the api endpoint
 $(document).ready(function() {
   $('#delete-course').click(function() {
     var course = $('input[name="listGroupRadio"]:checked').val();
@@ -267,6 +285,7 @@ $(document).ready(function() {
 });
 });
 
+// function that updates a user's learning pace via the api endpoint
 $(document).ready(function() {
     var course;
      var tempo = 0;
@@ -312,6 +331,7 @@ $(document).ready(function() {
     });
 });
 
+// function that activates the search bar and displays the search results 
 $(document).ready(function() {
     let RandomSearchBtn = "#btnNavbarSearch";
     let RandomSearchCourseBtn = ".CourseSearch";

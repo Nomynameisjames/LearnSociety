@@ -1,3 +1,6 @@
+// loader icon logic 
+import { flashMsg, RequestCall, getCookie } from './settings.js';
+
 // function that animates the chatbot header div 
 function ShowBox() {
     $("#nav-id").css("background-color", "black")
@@ -8,27 +11,16 @@ function ShowBox() {
     });
 }
 
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
+// function that toggles the chatbot animated div to show and hide
 $(document).ready(function() {
     // Get the textarea element
     var textarea = $("#my-chat-input");
     var container = $('.chat-container');
     container.scrollTop(container.prop("scrollHeight"));
+    $('#my-chat-input').on('input', function() {
+          $(this).css('height', 'auto');
+          $(this).css('height', $(this)[0].scrollHeight + 'px');
+        });
     // Attach the focus and blur events
     textarea.on("focus", function() {
         // Slide up the nav element
@@ -47,14 +39,13 @@ $(document).ready(function() {
 
 
 // function makes a call to the openai api for the chatbot functionality 
-function chatlog() {
+$(document).ready(function() {
+ $('#chat-submit').click(function() {
   // Get user value from the input field
   var inputMsg = $("#my-chat-input").val();
   var postData = { "text": inputMsg };
   $("#my-chat-input").val("");
   // Make a GET request to get conversation history and append to the chatbot div
-      
-      // Make a POST request to the RESTFULAPI to invoke chatbot functionality
       $.ajax({
         url: 'http://127.0.0.1:5001/api/v1/help/',
         type: 'POST',
@@ -78,18 +69,11 @@ function chatlog() {
           // upon error log error message and output a flash message on the chatbot div
           console.log('Error', textStatus, errorThrown);
           $('#nav-id').css('border', '.2em solid #FF5349');
-          var message = $("<div>");
-          message.addClass("flash-message fail");
-          message.text("Bot Server down please help report issue!");
-          $("body").append(message);
-          
-          // Automatically hide the message after a few seconds
-          setTimeout(function() {
-            message.hide();
-          }, 7000);
+          flashMsg("Bot Server down please help report issue!", 'fail');
         }
       })
-    }
+    });
+});
 
 
 // function makes a call to the RESTFul api to create a new schedule 
@@ -122,47 +106,11 @@ $(document).ready(function() {
       $('.Course').val('');
       $('.Topic').val('');
       $('.Reminder').val('');
-
-      $.ajax({
-        url: 'http://127.0.0.1:5001/api/v1/tasks/',
-        type: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(postDate),
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('x-access-token', getCookie('access_token'));
-        },
-        success: function(response) {
-          console.log(response);
-          // Code to save the new table data and display success message
-          // Code to save the table data goes here
-
-          // Display a success message
-          var message = $("<div>");
-          message.addClass("flash-message success");
-          message.text("Table data created successfully!");
-          $("body").append(message);
-
-          // Automatically hide the message after a few seconds
-          setTimeout(function() {
-            message.hide();
-          }, 7000);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log('Error', textStatus, errorThrown);
-          var message = $("<div>");
-          message.addClass("flash-message fail");
-          message.text("some error occured while creating table data!");
-          $("body").append(message);
-          // Automatically hide the message after a few seconds
-            setTimeout(function() {
-            message.hide();
-            }, 7000);
-        }
-      });
+      let url = 'http://127.0.0.1:5001/api/v1/tasks/';
+      RequestCall('POST', url, postDate, null, null, function(response) {
+        console.log(response);
+        flashMsg('Table data created successfully!', 'success');
+        });
     }
   });
 });
-
-

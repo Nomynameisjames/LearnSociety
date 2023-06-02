@@ -1,3 +1,4 @@
+import { flashMsg, RequestCall } from './settings.js';
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -16,68 +17,21 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 });
 
-$(document).ready(function() {
-    console.log("ready!");
-});
-
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
+// function deletes a users Schedule from the database via the API endpoint
 $(document).ready(function() {
 $('#my-btn').click(function() {
     var id = prompt("Enter item ID:");
+    let url = 'http://127.0.0.1:5001/api/v1/tasks/' + id;
     if (id != null && id.trim() != '') {
-      $.ajax({
-        url: 'http://127.0.0.1:5001/api/v1/tasks/' + id,
-        type: 'DELETE',
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('x-access-token', getCookie('access_token'));
-        },  
-        success: function(data) {
-           console.log(data);
-            // Code to save the new table data and display success message
-           // Code to save the table data goes here
- 
-           // Display a success message
-           var message = $("<div>");
-           message.addClass("flash-message success");
-           message.text("data Deleted successfully!");
-           $("body").append(message);
- 
-           // Automatically hide the message after a few seconds
-            setTimeout(function() {
-            message.hide();
-           }, 7000);
-         },
-        error: function(xhr, Status, error) {
-           console.log('Error', Status, error);
-           var message = $("<div>");
-           message.addClass("flash-message fail");
-           message.text("error occured while Deleting data!" + ' ' + error);
-           $("body").append(message);
-           // Automatically hide the message after a few seconds
-             setTimeout(function() {
-             message.hide();
-             }, 7000);
-         }
+      RequestCall('DELETE', url, null, null, null, function(data) {
+        console.log(data);
+        flashMsg('data Deleted successfully!', 'success');
         });
     }
 });
 });
 
+// function aUpdates a users Schedule in the database via the API endpoint
 $(document).ready(function() {
   // Add event listener to update button
   var topicValue, courseValue, reminderValue;
@@ -152,40 +106,12 @@ $(document).ready(function() {
           "Course": courseValue,
           "Reminder": reminderValue
         };
-
-        // make call to api using the Ajax method 
-        $.ajax({
-          url: 'http://127.0.0.1:5001/api/v1/tasks/' + rowId.trim(),
-          type: "PUT",
-          data: JSON.stringify(postData),
-            contentType: "application/json",
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('x-access-token', getCookie('access_token'));
-            },
-            success: function(response) {
-            // send flash message upon success
-              var message = $("<div>");
-             message.addClass("flash-message success");
-             message.text("data Updated successfully!");
-             $("body").append(message);
-  
-             // Automatically hide the message after a few seconds
-              setTimeout(function() {
-              message.hide();
-             }, 7000);
-            },
-            error: function(error) {
-              var message = $("<div>");
-             message.addClass("flash-message fail");
-             message.text("some error occured while updating Data!", +' '+ error);
-             $("body").append(message);
-  
-             // Automatically hide the message after a few seconds
-              setTimeout(function() {
-              message.hide();
-             }, 7000);
-            }
-          });
+        let url = 'http://127.0.0.1:5001/api/v1/tasks/' + rowId.trim();
+        // makes call to API endpoint to update data
+        RequestCall('PUT', url, postData, null, null, function(data) {
+            console.log(data);
+            flashMsg('data Updated successfully!', 'success');
+        });
          $('.send-btn').remove();
           //location.reload()
         });
