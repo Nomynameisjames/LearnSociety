@@ -31,7 +31,7 @@ class Cache:
     """
     def __init__(self):
         self._cache = Redis(host='localhost', port=6379, db=0)
-        self._cache.flushdb()
+        #self._cache.flushdb()
 
     """
         Methods for retreiving a data from the cache. based on the key.
@@ -58,7 +58,12 @@ class Cache:
         if result is not None:
             return json.loads(result)
         return []
-    
+   
+    def get_list_dict(self, key) -> List:
+        result = self._cache.lrange(key, 0, -1)
+        if result is not None:
+            return [json.loads(item.decode('utf-8')) for item in result]
+        return []
     """
         method deletes a key from the cache.
     """
@@ -107,6 +112,10 @@ class Cache:
     def set_list(self, key, values):
         for value in values:
             self._cache.lpush(key, value)
+
+    def set_list_dict(self, key, values):
+        for value in values:
+            self._cache.lpush(key, json.dumps(value))
 
     """
         method creates a new key in the redis database with a dictionary

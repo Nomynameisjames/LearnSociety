@@ -33,7 +33,7 @@ def token_required(f):
             data = jwt.decode(token, app.config['SECRET_KEY'],
                               algorithms=['HS256'])
             ID = data["user_id"]
-            current_user = storage.access(str(ID), 'id', user_id)
+            current_user = storage.access(ID, 'id', user_id)
         except:
             return jsonify({"message" : "Token is invalid!"}), 401
         return f(current_user, *args, **kwargs)

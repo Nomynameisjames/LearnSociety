@@ -6,7 +6,7 @@ from models import redis_storage
 from models.checker import Checker
 from .tasks import token_required, limit_request_frequency
 from web_flask.Performance_logger import performance_logger
-from .update_data import Settings
+from .update_data import Settings, create_community
 import yaml
 
 obj = {} # temp storage for quiz data
@@ -170,4 +170,31 @@ def Update_user_profile(current_user):
                     return jsonify({"message": "successfully updated"}), 200
                 else:
                     abort(404, 'invalid credentials')
+
+@main_app.route('/community/', methods=['POST'])
+@token_required
+@limit_request_frequency(num_requests=3, per_seconds=10)
+@performance_logger
+def community(current_user):
+    """
+        function handles the community functionality which enables the user
+        to create a room
+    """
+    ID = current_user.id
+    username = current_user.User_name
+    data = request.get_json()
+    room = data.get('room')
+    description = data.get('description')
+    #if current_user.Rooms:
+    #    return jsonify({"message": "You already have a room"}), 200
+    new_room = {
+            'name': room,
+            'description': description,
+            'admin': username
+            }
+    Community = create_community(ID, **new_room)
+    if Community:
+        return jsonify({"message": "successfully created"}), 201
+    else:
+        return jsonify({"message": "Can't create room"}), 400
 

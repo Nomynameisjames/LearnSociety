@@ -132,7 +132,7 @@ class Checker:
             if not usr.save_history:
                 conversation_history.append({"role": "bot", "content": answer,
                                         "ID": self.my_id})
-                models.redis_storage.set_dict(cache_key, conversation_history)
+                models.redis_storage.set_dict(cache_key, conversation_history, ex=86400)
             return answer.strip()
         except Exception as e:
             raise Exception(f"Error invoking chatbot {e}")

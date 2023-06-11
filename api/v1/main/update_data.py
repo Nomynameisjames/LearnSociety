@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask import request
 from datetime import datetime, timedelta
 from typing import Union, Dict
+from uuid import uuid4
 
 
 def compose_message(user: user_id) -> Dict[str, str]:
@@ -20,6 +21,37 @@ def compose_message(user: user_id) -> Dict[str, str]:
      }
     return mydic
 
+def create_community(ID, **kwargs):
+    """
+        function that creates a community
+    """
+    admin_user = storage.access(ID, 'id', user_id)
+    if not admin_user.active_rooms():
+        admin_user.Rooms = 0
+        storage.save()
+    Check = redis_storage.get_list_dict('community')
+    if admin_user.Rooms >= 1:
+        return False
+    if Check:
+        for item in Check:
+            for _, value in item.items():
+                if value["name"] == kwargs.get('name'):
+                    return False
+    ID = uuid4()
+    Community = {
+            str(ID): {
+                "name": kwargs.get('name'),
+                "users": [admin_user.User_name],
+                "chat": [],
+                "admin": kwargs.get('admin'),
+                "date": kwargs.get('date'),
+                "description": kwargs.get('description')
+                }
+            }
+    admin_user.Rooms = 1
+    storage.save()
+    redis_storage.set_list_dict('community', [Community])
+    return True
 
 def update_profile(ID: str, item: str, value: Union[str, int, bool]):
     """

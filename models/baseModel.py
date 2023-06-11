@@ -96,6 +96,7 @@ class user_id(Base, UserMixin):
     Created_at = Column(DateTime, default=datetime.utcnow)
     Updated_at = Column(DateTime)
     save_history = Column(Boolean)
+    Rooms = Column(Integer, default=0)
     schedules = relationship('User', backref='January', lazy='dynamic')
     auto_schedules = relationship('AutoSchedule', backref='PythonDB',
                                   lazy='dynamic')
@@ -178,3 +179,17 @@ class user_id(Base, UserMixin):
             if timestamp - data.get('expiration_time') < 600:
                 return True
         return False
+
+    def active_rooms(self):
+        """
+            returns the number of active rooms a user has
+        """
+        user = models.storage.access(self.id, 'id', user_id)
+        community = models.redis_storage.get_list_dict('community')
+        if community:
+            for items in community:
+                for _, value in items.items():
+                    if value['admin'] == user.User_name and user.Rooms:
+                        return True
+        else:
+            return False

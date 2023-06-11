@@ -1,4 +1,5 @@
-from flask import Flask, render_template, abort, url_for, redirect, flash, request, jsonify
+from flask import (Flask, render_template, abort, url_for, redirect,
+                    flash, request, jsonify, make_response)
 from models.Schedule import Create_Schedule
 from models.checker import Checker
 from flask_login import login_required, current_user
@@ -6,6 +7,7 @@ from ..Performance_logger import performance_logger
 from . import Main
 from .form import SearchBar
 from .. import cache
+from uuid import uuid4
 import models
 
 
@@ -17,6 +19,8 @@ import models
 quiz_data = {}
 auto = False
 course = None
+
+
 #@cache.memoize(timeout=200, make_name=lambda user_id: 'get_last_update_time_v1_uid' + str(user_id))
 #def get_last_update_time(user_id):
 #    bot = Create_Schedule(user_id)
@@ -124,8 +128,10 @@ def view():
         data = dic
         models.redis_storage.set_dict(cache_key, data, ex=200)
     auto = False
-    return render_template('index.html', data=data, status=auto, user=user,
-                           form=form)
+    response = make_response(render_template('index.html', data=data, status=auto, user=user,
+                           form=form))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
 
 @Main.route('/upcoming')
 @login_required
@@ -203,16 +209,18 @@ def dashboard():
     ID = current_user.id
     user = current_user.User_name
     form = SearchBar()
+    files = None
     if not ID:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
     data = models.storage.view(ID)[0].get(ID)
-    files = {
-            "Python" : data.auto_schedules,
-            "Javascript" : data.JScourse,
-            "React" : data.Reactcourse,
-            "C" : data.C_course
-        }
+    if data:
+        files = {
+                "Python" : data.auto_schedules,
+                "Javascript" : data.JScourse,
+                "React" : data.Reactcourse,
+                "C" : data.C_course
+            }
     course = request.args.get('myID')
     doc = {}
     key = None
@@ -238,8 +246,8 @@ def dashboard():
         return render_template('auto_reg.html', form=form)
 
 
-@Main.route('/articles', methods=['GET', 'POST'])
-#@login_required
+@Main.route('/articles', methods=['GET'])
+@login_required
 @performance_logger
 def articles():
     """
@@ -260,3 +268,32 @@ def articles():
         return render_template('C_articles.html', status=auto, form=form)
     else:
         return render_template('auto_reg.html', form=form)
+
+
+@Main.route('/ChatRoom', methods=['GET'])
+@login_required
+@performance_logger
+def ChatRoom():
+    """
+        This route enables user to view the chat room
+    """
+    username = current_user.User_name
+    community = []
+    Form = SearchBar()
+    get_community = models.redis_storage.get_list_dict('community')
+    if get_community:
+        community = get_community
+        #for key, value in get_community.items():
+        #    community.append(value)
+    return render_template('chatRoom.html', form=Form, communities=community,
+                           user=username)
+
+@Main.route('/ChatRoom/<room_id>', methods=['GET', 'POST'])
+@login_required
+@performance_logger
+def ChatRoomID(room_id):
+    """
+        This route enables user to view the chat room
+    """
+    form = SearchBar()
+    return render_template('chatRoomPage.html', form=form)

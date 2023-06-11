@@ -118,3 +118,21 @@ $(document).ready(function() {
       });
     });
   });
+
+$(document).ready(function() {
+   var url = 'http://127.0.0.1:5001/api/v1/community/';
+    $("#create-groupchat").click(function() {
+        let room = $('#new-community-name').val();
+        console.log(room);
+        let desc = $('#new-community-desc').val();
+        console.log(desc);
+        var data = {
+            'room': room,
+            'description': desc
+            };
+        RequestCall('POST', url, data, null, null, function(data) {
+            console.log(data);
+            flashMsg(data.message, 'success');
+        });
+    });
+});

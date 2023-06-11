@@ -18,6 +18,7 @@ app = create_app('default')
 babel.init_app(app)
 #migrate = Migrate(app, db)
 
+
 """
     babel.localeselector decorator registers the decorated function as a
     local selector function. The function is invoked for each request to
@@ -59,4 +60,5 @@ if __name__ == '__main__':
     process = psutil.Process()
     print(f'Initial memory usage: {process.memory_info().rss / 1024 / 1024} MB')
     app.run(port=5000, debug=False)
+    #socketio.run(app, port=5000, debug=True)
     #cProfile.run('main()', filename='myapp_profile.out')

@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask
+from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
@@ -13,12 +14,14 @@ from datetime import timedelta
 import models 
 
 bootstrap = Bootstrap()
+#socketio = SocketIO()
 mail = Mail()
 moment = Moment()
 jwt = JWTManager()
 csrf = CSRFProtect()
 login_manager = LoginManager()
 babel = Babel()
+#socketio = SocketIO()
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       "CACHE_DEFAULT_TIMEOUT": 300})
 
@@ -30,9 +33,10 @@ def create_app(config_name):
     """
     from .main import Main as main_blueprint
     app = Flask(__name__)
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     #app.config['SERVER_NAME'] = 'localhost.localdomain:5000'
     app.register_blueprint(main_blueprint)
+    #socketio.init_app(app)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     bootstrap.init_app(app)

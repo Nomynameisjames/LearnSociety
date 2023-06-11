@@ -85,7 +85,8 @@ def signup():
                 'email': form.email.data,
                 'id': ID
                 }
-        sent = mail_app.send_Grid(None, **temp_file)
+        print(url)
+        sent = True #mail_app.send_Grid(None, **temp_file)
         if sent:
             flash(_(f"An email has been sent to {form.email.data} to complete your registration"), 'success')
             password = generate_password_hash(form.password.data)
