@@ -58,8 +58,19 @@
 {% block content %}
 <div id="layoutSidenav_content" class="chatbot-container">
     <main>
-        <div class="chat-eyes">
-            <div class="navbar-brand" id ="nav-id">
+        <div class="group-intro">
+            <div class="grouppie">
+                <h2 class="group-title">{{ groupinfo.name }}</h2>
+            </div>
+            <div class="btn-group dropend" id="group-title-dropdown">
+                <button type="button"  class="group-title-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="30" height="50"></iconify-icon></button>
+                <ul class="dropdown-menu">
+                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Group Info</button></li>
+                    <li><button type="button" class="dropdown-item" href="#">clear chat</button></li>
+                    <li><button type="button" class="dropdown-item" href="#">Report</button></li>
+                    <li><button type="button" class="dropdown-item" href="#">Leave Group</button></li>
+                    <li><button type="button" class="dropdown-item" href="#">Delete Group</button></li>
+                </ul>
             </div>
         </div>
         <div class="chat-container">
@@ -75,12 +86,42 @@
         <div class="chat-form">
             <form>
                 <div id="input-container">
-                    <textarea type="text" id="my-chat-input" placeholder= "Enter a prompt here ..."></textarea>
+                    <textarea type="text" id="my-chat-input" placeholder= "Enter a text here ..."></textarea>
                     <div class="input-group-append">
                         <button id="chat-submit" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ groupinfo.name }}</h1>&nbsp&nbsp&nbsp
+                        <span class="fs-6">202 Participants</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="fs-6">Group ID</h2>
+                        <span class="fs-6">123</span>
+                        <h2 class="fs-6">Group Members</h2>
+                        {% for person in groupinfo.users %}
+                            <ul class="fs-6">
+                                <li class="fs-6">{{ person }}</li>
+                            </ul>
+                        {% endfor %}
+                        <h2 class="fs-6">Group Admin</h2>
+                        <p class="fs-6">{{ groupinfo.admin }}</p>
+                        <h2 class="fs-6">Active members</h2>
+                        <p class="fs-6">1</p>
+                        <h2 class="fs-6">Description</h2>
+                        <p class="fs-6">{{ groupinfo.description }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 <footer class="py-4 bg-dark mt-auto">

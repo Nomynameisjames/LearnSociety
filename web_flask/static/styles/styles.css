@@ -176,18 +176,19 @@ pre.scrollable::-webkit-scrollbar-thumb:hover {
   font-size: 12px;
 }
 .chatbot-container {
+    display: flex;
     float: left;
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 0;
+    box-sizing: border-box;
 }
 .chat-eyes {
     position: fixed;
     width: 100%;
     height: 45px;
     background-color: #e8e8e8;
-    margin: 0;
+    margin-right: 0px;
     border-bottom: 1px solid #000;
 }
 .chat-container {

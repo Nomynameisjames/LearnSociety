@@ -270,8 +270,9 @@ def articles():
         return render_template('auto_reg.html', form=form)
 
 
-@Main.route('/ChatRoom', methods=['GET'])
+@Main.route('/community', methods=['GET'])
 @login_required
+@cache.cached(timeout=200)
 @performance_logger
 def ChatRoom():
     """
@@ -290,10 +291,26 @@ def ChatRoom():
 
 @Main.route('/ChatRoom/<room_id>', methods=['GET', 'POST'])
 @login_required
+@cache.cached(timeout=200)
 @performance_logger
 def ChatRoomID(room_id):
     """
         This route enables user to view the chat room
     """
+    username = current_user.User_name
+    community = []
+    groupinfo = {}
     form = SearchBar()
-    return render_template('chatRoomPage.html', form=form)
+    get_community = models.redis_storage.get_list_dict('community')
+    if get_community:
+        community = get_community
+        for item in get_community:
+            for key, value in item.items():
+                if key == room_id:
+                    groupinfo = value
+    rendered_template = render_template('chatRoomPage.html', form=form,
+                                        communities=community,
+                                        groupinfo=groupinfo,
+                                        user=username)
+    response = make_response(rendered_template)
+    return response
