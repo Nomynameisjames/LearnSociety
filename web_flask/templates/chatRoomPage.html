@@ -73,7 +73,7 @@
                 </ul>
             </div>
         </div>
-        <div class="chat-container">
+        <div class="chat-container" style="margin-top: 80px;">
              <section class="chat-conversation">
                               <div class="sent-message">
                                   <p class="sent-message"></p>
@@ -86,9 +86,9 @@
         <div class="chat-form">
             <form>
                 <div id="input-container">
-                    <textarea type="text" id="my-chat-input" placeholder= "Enter a text here ..."></textarea>
+                    <textarea class="groupchat-textinput" type="text" placeholder= "Enter a text here ..."></textarea>
                     <div class="input-group-append">
-                        <button id="chat-submit" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
+                        <button class="groupchat-submit-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
                     </div>
                 </div>
             </form>
@@ -98,12 +98,12 @@
                 <div class="modal-content" id="clear-modal">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ groupinfo.name }}</h1>&nbsp&nbsp&nbsp
-                        <span class="fs-6">202 Participants</span>
+                        <span class="fs-6">{{ groupinfo.users | length }} Participants</span>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h2 class="fs-6">Group ID</h2>
-                        <span class="fs-6">123</span>
+                        <h2 class="fs-6">Invitation code</h2>
+                        <span class="fs-6">{{ groupinfo.code }}</span>
                         <h2 class="fs-6">Group Members</h2>
                         {% for person in groupinfo.users %}
                             <ul class="fs-6">
@@ -112,8 +112,6 @@
                         {% endfor %}
                         <h2 class="fs-6">Group Admin</h2>
                         <p class="fs-6">{{ groupinfo.admin }}</p>
-                        <h2 class="fs-6">Active members</h2>
-                        <p class="fs-6">1</p>
                         <h2 class="fs-6">Description</h2>
                         <p class="fs-6">{{ groupinfo.description }}</p>
                     </div>

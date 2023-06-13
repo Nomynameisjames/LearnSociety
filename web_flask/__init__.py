@@ -1,5 +1,5 @@
 from flask import Flask
-#from flask_socketio import SocketIO
+from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from flask_jwt_extended import JWTManager
 from flask_wtf.csrf import CSRFProtect
 from web_flask.config import config
+from flask_cors import CORS
 from flask_caching import Cache
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _l
@@ -14,14 +15,14 @@ from datetime import timedelta
 import models 
 
 bootstrap = Bootstrap()
-#socketio = SocketIO()
 mail = Mail()
 moment = Moment()
 jwt = JWTManager()
 csrf = CSRFProtect()
 login_manager = LoginManager()
 babel = Babel()
-#socketio = SocketIO()
+socketio = SocketIO()
+cors = CORS()
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       "CACHE_DEFAULT_TIMEOUT": 300})
 
@@ -36,10 +37,11 @@ def create_app(config_name):
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     #app.config['SERVER_NAME'] = 'localhost.localdomain:5000'
     app.register_blueprint(main_blueprint)
-    #socketio.init_app(app)
+    socketio.init_app(app, async_mode='eventlet', cors_allowed_origins='*', manage_session=False)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     bootstrap.init_app(app)
+    cors.init_app(app)
     cache.init_app(app)
     jwt.init_app(app)
     babel.init_app(app)

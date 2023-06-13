@@ -60,10 +60,20 @@ class Cache:
         return []
    
     def get_list_dict(self, key) -> List:
+        """
+            Get all items from a list of dictionaries
+        """
         result = self._cache.lrange(key, 0, -1)
         if result is not None:
             return [json.loads(item.decode('utf-8')) for item in result]
         return []
+
+    def update_list_dict(self, key, idx, value):
+        """
+            Update a list of dictionaries at a specific index
+        """
+        self._cache.lset(key, idx, json.dumps(value))
+        
     """
         method deletes a key from the cache.
     """
@@ -114,8 +124,16 @@ class Cache:
             self._cache.lpush(key, value)
 
     def set_list_dict(self, key, values):
+        community = self.get_list_dict(key)
+        unique_keys = set()
+        if community:
+            for item in community:
+                unique_keys.add(next(iter(item.keys())))
         for value in values:
-            self._cache.lpush(key, json.dumps(value))
+            get_key = next(iter(value.keys()))
+            if get_key not in unique_keys:
+                self._cache.lpush(key, json.dumps(value))
+                unique_keys.add(get_key)
 
     """
         method creates a new key in the redis database with a dictionary

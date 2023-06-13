@@ -272,7 +272,6 @@ def articles():
 
 @Main.route('/community', methods=['GET'])
 @login_required
-@cache.cached(timeout=200)
 @performance_logger
 def ChatRoom():
     """
@@ -284,14 +283,11 @@ def ChatRoom():
     get_community = models.redis_storage.get_list_dict('community')
     if get_community:
         community = get_community
-        #for key, value in get_community.items():
-        #    community.append(value)
     return render_template('chatRoom.html', form=Form, communities=community,
                            user=username)
 
 @Main.route('/ChatRoom/<room_id>', methods=['GET', 'POST'])
 @login_required
-@cache.cached(timeout=200)
 @performance_logger
 def ChatRoomID(room_id):
     """
@@ -308,9 +304,13 @@ def ChatRoomID(room_id):
             for key, value in item.items():
                 if key == room_id:
                     groupinfo = value
+    if username not in groupinfo.get("users"):
+        flash('You are not a member of this group get group code to join',
+              'danger')
+        return redirect(url_for('Main.ChatRoom'))
     rendered_template = render_template('chatRoomPage.html', form=form,
-                                        communities=community,
-                                        groupinfo=groupinfo,
+                                            communities=community,
+                                            groupinfo=groupinfo,
                                         user=username)
     response = make_response(rendered_template)
     return response

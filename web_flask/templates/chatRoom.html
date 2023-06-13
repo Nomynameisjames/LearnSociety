@@ -65,7 +65,7 @@
         <div class="community-note">
             <h2 class="group-title">Welcome to the community</h2>
             <p class="text-center" style="font-size: 18px;">Easily Organize your related groups and send announcements, find study peers and share perspective with those undergoing similar learning experience as you!</p>
-            <button type="button" class="btn btn-success btn-lg" id="com-btn" style="border-radius: 20px; width: 350px; white-space: nowrap;">Join Community</button>
+            <button type="button" class="btn btn-success btn-lg" id="com-btn" style="border-radius: 20px; width: 350px; white-space: nowrap;" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join Community</button>
         </div>
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -96,6 +96,28 @@
 </div>
         <br>
         <br>
+<div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="clear-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Enter Room code</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form method="POST">
+            <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Room Code</label>
+                <input type="text" name="room" value="" class="form-control" id="room-code">
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="send-RoomCode-btn">Join</button>
+      </div>
+    </div>
+  </div>
+</div>
     </main>
     <footer class="py-4 bg-dark mt-auto">
 {% endblock %}

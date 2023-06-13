@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
-from web_flask import create_app
+from web_flask import create_app, babel, socketio
 import psutil
 import os
 import pstats
 import click
 import cProfile
 from werkzeug.serving import run_simple
-from flask_migrate import Migrate
 from flask import request
-from flask_babel import Babel
 """
     This is the entry point of the application.
     It creates the application instance and runs it.
 """
-babel = Babel()
+
 app = create_app('default')
-babel.init_app(app)
 #migrate = Migrate(app, db)
+
 
 
 """
@@ -59,6 +57,6 @@ def profile(length, profile_dir):
 if __name__ == '__main__':
     process = psutil.Process()
     print(f'Initial memory usage: {process.memory_info().rss / 1024 / 1024} MB')
-    app.run(port=5000, debug=False)
-    #socketio.run(app, port=5000, debug=True)
+    #app.run(port=5000, debug=False)
+    socketio.run(app)
     #cProfile.run('main()', filename='myapp_profile.out')

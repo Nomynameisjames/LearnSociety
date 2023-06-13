@@ -8,7 +8,25 @@ from flask import request
 from datetime import datetime, timedelta
 from typing import Union, Dict
 from uuid import uuid4
+from string import ascii_uppercase
+import random
 
+def generate_unique_code(length):
+    community = redis_storage.get_list_dict('community')
+    rooms = []
+    if community:
+        for item in community:
+            for _, value in item.items():
+                rooms.append(value["code"])
+    while True:
+        code = ""
+        for _ in range(length):
+            code += random.choice(ascii_uppercase)
+        
+        if code not in rooms:
+            break
+    
+    return code
 
 def compose_message(user: user_id) -> Dict[str, str]:
     token = user.generate_confirmation_code()
@@ -44,6 +62,7 @@ def create_community(ID, **kwargs):
                 "users": [admin_user.User_name],
                 "chat": [],
                 "admin": kwargs.get('admin'),
+                "code": generate_unique_code(6),
                 "date": kwargs.get('date'),
                 "description": kwargs.get('description')
                 }

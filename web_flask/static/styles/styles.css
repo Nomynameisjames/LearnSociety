@@ -260,7 +260,7 @@ pre.scrollable::-webkit-scrollbar-thumb:hover {
     padding: 3px;
     margin-left: 50px;
 }
-#my-chat-input {
+.groupchat-textinput, #my-chat-input {
     width: 100%;
     height: 50px;
     max-height: 200px;
@@ -275,7 +275,7 @@ pre.scrollable::-webkit-scrollbar-thumb:hover {
 }
     
     /* Style the chat submit button */
-    #chat-submit {
+    .groupchat-submit-btn, #chat-submit {
         position: absolute;
         top: 50%;
         right: 10px;
@@ -291,7 +291,7 @@ pre.scrollable::-webkit-scrollbar-thumb:hover {
 
     
     /* Style the chat submit button on hover */
-    #chat-submit:hover {
+   .groupchat-submit-btn:hover, #chat-submit:hover {
         color: #3e8e41;
     }
 
