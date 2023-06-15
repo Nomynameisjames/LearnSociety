@@ -293,9 +293,14 @@ def ChatRoomID(room_id):
     """
         This route enables user to view the chat room
     """
+    if room_id is None:
+        return redirect(url_for('Main.ChatRoom'))
     username = current_user.User_name
+    ID = current_user.id
+    chat_history = []
     community = []
     groupinfo = {}
+    joinroom = []
     form = SearchBar()
     get_community = models.redis_storage.get_list_dict('community')
     if get_community:
@@ -304,13 +309,15 @@ def ChatRoomID(room_id):
             for key, value in item.items():
                 if key == room_id:
                     groupinfo = value
-    if username not in groupinfo.get("users"):
+                    chat_history = value.get('chat')
+                    joinroom = groupinfo.get("users")
+    if groupinfo is None or username not in joinroom:
         flash('You are not a member of this group get group code to join',
               'danger')
         return redirect(url_for('Main.ChatRoom'))
     rendered_template = render_template('chatRoomPage.html', form=form,
                                             communities=community,
                                             groupinfo=groupinfo,
-                                        user=username)
+                                            user=username, ID=ID, chats=chat_history)
     response = make_response(rendered_template)
     return response

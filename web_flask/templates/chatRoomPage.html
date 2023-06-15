@@ -65,7 +65,7 @@
             <div class="btn-group dropend" id="group-title-dropdown">
                 <button type="button"  class="group-title-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="30" height="50"></iconify-icon></button>
                 <ul class="dropdown-menu">
-                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Group Info</button></li>
+                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Group Info</button></li>
                     <li><button type="button" class="dropdown-item" href="#">clear chat</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Report</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Leave Group</button></li>
@@ -74,26 +74,37 @@
             </div>
         </div>
         <div class="chat-container" style="margin-top: 80px;">
-             <section class="chat-conversation">
-                              <div class="sent-message">
-                                  <p class="sent-message"></p>
+             <section class="group-chat-conversation">
+                 {% for item in chats %}
+                    {% if item.sender == user %}
+                    <span id="joinMessage" style="text-align: center; font-size: 15px;"></span>
+                            <div class="sent-group-message d-flex flex-column  mb-3">
+                                <div class="grp-username"><h6 class="sent-group-chat-username" style="color: #d6d6d6;">{{ item.sender }}</h6></div>
+                                <p class="sent-group">{{ item.text }}</p>
+                                <div class="grp-sent-time">{{ item.date }}</div>
                               </div>
-                              <div class="replied-message">
-                                  <p class="received-message"></p>
-                              </div>
+                    {% else %}
+                            <div class="replied-group-message d-flex flex-column mb-3">
+                                <div class="replied-grp-username"><h6 class="replied-group-chat-username" style="color: #d6d6d6;">{{ item.get("sender") }}</h6></div>
+                                <p class="received-group-message">{{ item.get("text") }}</p>
+                                <div class="replied-grp-sent-time">{{ item.get("date") }}</div>
+                            </div>
+                    {% endif %}
+                {% endfor %}
             </section>
         </div>
         <div class="chat-form">
             <form>
                 <div id="input-container">
-                    <textarea class="groupchat-textinput" type="text" placeholder= "Enter a text here ..."></textarea>
+                    <input type="hidden" id="hiddenId" value="{{ ID }}" style="display: none;">
+                    <textarea class="groupchat-textinput" id="groupMsg" type="text" placeholder= "Enter a text here ..."></textarea>
                     <div class="input-group-append">
-                        <button class="groupchat-submit-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
+                        <button class="groupchat-submit-btn" id="send-groupMsg" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content" id="clear-modal">
                     <div class="modal-header">

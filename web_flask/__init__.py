@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_socketio import SocketIO
+#from flask_socketio import SocketIO
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
@@ -12,7 +12,11 @@ from flask_caching import Cache
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _l
 from datetime import timedelta
+#from flask_socketio import SocketIO
 import models 
+#import eventlet
+#eventlet.monkey_patch()
+
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -21,7 +25,7 @@ jwt = JWTManager()
 csrf = CSRFProtect()
 login_manager = LoginManager()
 babel = Babel()
-socketio = SocketIO()
+#socketio = SocketIO(async_mode='eventlet')
 cors = CORS()
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
                       "CACHE_DEFAULT_TIMEOUT": 300})
@@ -35,9 +39,9 @@ def create_app(config_name):
     from .main import Main as main_blueprint
     app = Flask(__name__)
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+    #app.config['FLASK_SOCKETIO_ASYNC_MODE'] = 'eventlet'
     #app.config['SERVER_NAME'] = 'localhost.localdomain:5000'
     app.register_blueprint(main_blueprint)
-    socketio.init_app(app, async_mode='eventlet', cors_allowed_origins='*', manage_session=False)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     bootstrap.init_app(app)
@@ -53,5 +57,5 @@ def create_app(config_name):
     login_manager.login_message = _l('Please log in to access this page.')
     moment.init_app(app)
     mail.init_app(app)
-    # attach routes and custom error pages here
+    #socketio.init_app(app, cors_allowed_origins="*")
     return app

@@ -60,7 +60,11 @@ def create_community(ID, **kwargs):
             str(ID): {
                 "name": kwargs.get('name'),
                 "users": [admin_user.User_name],
-                "chat": [],
+                "chat": [{
+                          "text": "",
+                          "sender": "",
+                          "date": ""
+                          }],
                 "admin": kwargs.get('admin'),
                 "code": generate_unique_code(6),
                 "date": kwargs.get('date'),
