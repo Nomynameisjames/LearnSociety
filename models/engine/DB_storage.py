@@ -17,7 +17,7 @@ class DBstorage:
         Mysql_User = os.getenv('MYSQL_USR')
         Mysql_Host = os.getenv('MYSQL_HOST')
         Mysql_Pass = os.getenv('MYSQL_PASS')
-        Mysql_Db = os.getenv('MYSQL_TEST_DB')
+        Mysql_Db = None#os.getenv('MYSQL_TEST_DB')
         port = os.getenv('PORT')
         if Mysql_Db is None:
             Mysql_Db = os.getenv('MYSQL_DB')

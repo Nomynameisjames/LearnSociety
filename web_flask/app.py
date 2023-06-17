@@ -24,7 +24,7 @@ socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*")
 @socketio.on('connect')
 def test_connect():
     print('\n\nClient connected\n\n')
-    emit('connected', {'data': 'Connected'})
+    emit('connected', {'data': 'Online'})
   
 
 @socketio.on('message')
@@ -83,6 +83,31 @@ def handle_send_message(data):
                     return
     print("\n\nuser not in room\n\n")
     emit('MsgFeedBack', {'message': 'error user not in room'})
+
+
+@socketio.on('leave')
+def handle_leave(data):
+    '''
+        handle leave event
+    '''
+    username = current_user.User_name
+    community = redis_storage.get_list_dict("community")
+    if community:
+        for idx, item in enumerate(community):
+            for key, value in item.items():
+                if username in value['users'] and data == value['code']:
+                    value['users'].remove(username)
+                    item[key] = value
+                    redis_storage.update_list_dict("community", idx, item)
+                    leave_room(value['code'])
+                    print("\n\nuser removed from room\n\n")
+                    emit('LeaveRoom', {'username': username}, room=value['code'])
+                    return
+                print("\n\ninvalid code or user not in room\n\n")
+                emit('LeaveRoom', {'message': 'error invalid code or user not in room'})
+    else:
+        print('\n\nno community\n\n')
+        emit('LeaveRoom', {'message': 'error no community'})
 
 @socketio.on('disconnect')
 def handle_disconnect():

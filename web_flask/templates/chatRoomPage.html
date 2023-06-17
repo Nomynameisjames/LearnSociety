@@ -8,7 +8,7 @@
         <div class="card-body" style="color: #fff;">
             <h5 class="card-title">{{ user }}</h5>
             <br>
-            <span class="badge rounded-pill bg-primary">Online</span>
+            <span class="badge rounded-pill bg-primary" id="online-status">Online</span>
             <br>
             <p class="card-text">The Gods of Olympus has abandoned me</p>
             <br>
@@ -68,7 +68,7 @@
                     <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Group Info</button></li>
                     <li><button type="button" class="dropdown-item" href="#">clear chat</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Report</button></li>
-                    <li><button type="button" class="dropdown-item" href="#">Leave Group</button></li>
+                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Leave Group</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Delete Group</button></li>
                 </ul>
             </div>
@@ -114,7 +114,7 @@
                     </div>
                     <div class="modal-body">
                         <h2 class="fs-6">Invitation code</h2>
-                        <span class="fs-6">{{ groupinfo.code }}</span>
+                        <span class="fs-6" id="invite-code">{{ groupinfo.code }}</span>
                         <h2 class="fs-6">Group Members</h2>
                         {% for person in groupinfo.users %}
                             <ul class="fs-6">
@@ -132,6 +132,23 @@
                 </div>
             </div>
         </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Exit group</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to leave the group?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
+                    <button type="button" class="btn btn-danger" id="exit-group">Leave group</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
 <footer class="py-4 bg-dark mt-auto">
 {% endblock %}
