@@ -1,1 +1,4 @@
+__pyache__/
+*.swp
+venv/
 var

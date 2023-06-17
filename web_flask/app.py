@@ -19,13 +19,14 @@ from models import redis_storage
 
 app = create_app('default')
 socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*")
-#migrate = Migrate(app, db)
+# migrate = Migrate(app, db)
+
 
 @socketio.on('connect')
 def test_connect():
     print('\n\nClient connected\n\n')
     emit('connected', {'data': 'Online'})
-  
+
 
 @socketio.on('message')
 def handle_message(message):
