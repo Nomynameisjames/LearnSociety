@@ -1,6 +1,7 @@
 #!/usr/bin/python3i
 from models.Schedule import Create_Schedule
 from .baseModel import user_id
+from .Update_Profile import update_redis_profile
 import os
 import models
 import openai
@@ -8,6 +9,21 @@ import json
 import yaml
 import logging
 
+
+def query_redis(ID):
+    """
+        function queries the redis database to get the user profile
+    """
+    try:
+        data = models.redis_storage.get_list_dict("Users-Profile")
+        if data:
+            for idx, item in enumerate(data):
+                for key, value in item.items():
+                    if key == ID:
+                        return idx, item, value
+        return None, None, None
+    except Exception as e:
+        return f"Error querying redis database {e}"
 
 class Checker:
     """
@@ -116,12 +132,10 @@ class Checker:
         """
         try:
             usr = models.storage.access(self.my_id, 'id', user_id)
+            #idx, item, value = query_redis(self.my_id)
+            uploader = update_redis_profile(self.my_id)
             opt = message
-            cache_key = f"conv_ID_{self.my_id}"
-            conversation_history = models.redis_storage.get_list(cache_key)
-
-            conversation_history.append({"role": "user", "content": opt,
-                                         "ID": self.my_id})
+            uploader.save_chatbot_history({"role": "user", "content": opt})
             messages = [
                         {"role": "system", "content": f"{opt}"}
                 ]
@@ -130,9 +144,7 @@ class Checker:
                 returns a JSON value of the API response
             """
             if not usr.save_history:
-                conversation_history.append({"role": "bot", "content": answer,
-                                        "ID": self.my_id})
-                models.redis_storage.set_dict(cache_key, conversation_history, ex=86400)
+                uploader.save_chatbot_history({"role": "bot", "content": answer})
             return answer.strip()
         except Exception as e:
             raise Exception(f"Error invoking chatbot {e}")

@@ -4,6 +4,7 @@ from flask import abort, jsonify, request
 from models.Schedule import Create_Schedule as cs
 from models import redis_storage
 from models.checker import Checker
+from models.Update_Profile import update_redis_profile
 from .tasks import token_required, limit_request_frequency
 from web_flask.Performance_logger import performance_logger
 from .update_data import Settings, create_community
@@ -24,6 +25,7 @@ quiz_answers = {} # temp storage for quiz answers
 def help(current_user):
     ID = current_user.id
     bot = Checker(ID)
+    uploader = update_redis_profile(ID)
     req_data = request.get_json()
     if request.method == 'POST':
         for text in req_data.values():
@@ -31,8 +33,7 @@ def help(current_user):
             message = {text: data}
             return jsonify(message), 200
     if request.method == 'DELETE':
-        cache_key = f"conv_ID_{ID}"
-        redis_storage.delete_list_dict_item(cache_key, ID)
+        uploader.clear_chatbot_history()
         return jsonify({"message": "successfully removed"}), 200
     else:
         abort(400, description='Failed to perform request')
@@ -198,3 +199,43 @@ def community(current_user):
     else:
         return jsonify({"message": "Can't create room"}), 400
 
+@main_app.route('/community/', methods=['PUT', 'DELETE'])
+@token_required
+@limit_request_frequency(num_requests=3, per_seconds=10)
+@performance_logger
+def Update_community(current_user):
+    """
+        function handles the community functionality which enables the admin user
+        to clear a room chat history
+    """
+    username = current_user.User_name
+    data = request.get_json()
+    room_code = data.get('room_code')
+    edit_description = data.get('description')
+    new_room_name = data.get('new_name')
+    community = redis_storage.get_list_dict("community")
+    if community:
+        for idx, item in enumerate(community):
+            for key, value in item.items():
+                if value.get("code") == room_code.strip() and value.get("admin") == username.strip():
+                    print("inside condition code active")
+                    if request.method == 'PUT':
+                        print("inside put request")
+                        value["description"] = edit_description
+                        value["name"] = new_room_name
+                        item[key] = value
+                        redis_storage.update_list_dict("community", idx, item)
+                        return jsonify({"message": "successfully updated room info"}), 200
+                    elif request.method == 'DELETE':
+                        print("inside delete request")
+                        value.get("chat").clear()
+                        item[key] = value
+                        redis_storage.update_list_dict("community", idx, item)
+                        return jsonify({"message": "successfully deleted"}), 200
+                    else:
+                        print("inside else request")
+                        abort(400, description='invalid request')
+                else:
+                    print("inside else request invalid permission")
+                    return jsonify({"description": "you don't have admin privileges to modify room data"}), 400
+        return jsonify({"description": "some error occured"}), 400

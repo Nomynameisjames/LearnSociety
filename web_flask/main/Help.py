@@ -5,6 +5,7 @@ from .form import SearchBar
 from models.Schedule import Create_Schedule as Schedule
 from flask_login import current_user, login_required
 from ..Performance_logger import performance_logger
+from models.Update_Profile import update_redis_profile
 import models
 
 """
@@ -17,12 +18,15 @@ def help():
     form = SearchBar()
     ID = current_user.id
     user = current_user.User_name
-    cache_key = f"conv_ID_{ID}"
-    history = models.redis_storage.get_list(cache_key)
+    uploader = update_redis_profile(ID)
+    #cache_key = f"conv_ID_{ID}"
+    #history = models.redis_storage.get_list(cache_key)
+    history = uploader.get
+    print(f"this is your chat: {history['chat_bot']}")
     if not ID:
         flash('Please login to access this page', 'danger')
         return redirect(url_for('Main.login'))
-    return render_template('help.html', user=user, data=history, form=form,
+    return render_template('help.html', user=user, data=history["chat_bot"], form=form,
                            ID=ID) 
 
 @Main.route('/settings', methods=['GET', 'PUT'])

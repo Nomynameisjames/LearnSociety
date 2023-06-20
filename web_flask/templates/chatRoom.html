@@ -9,6 +9,7 @@
         <h5 class="card-title">{{ user }}</h5>
         <br>
         <span class="badge rounded-pill bg-primary">Online</span>
+        <span style="margin-left: 100px;"><button id="edit-profile"><iconify-icon icon="mdi:account-edit" height="20" width="20"></iconify-icon></button></span>
         <br>
         <p class="card-text">The Gods of Olympus has abandoned me</p>
         <br>
@@ -47,9 +48,9 @@
             <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:add-12-filled" height='20' width='20' style="color: #fff;"></iconify-icon></div>
             Add Friend
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ url_for('Main.friends_page') }}">
             <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
-            Friends List
+            Friends
         </a>
     </nav>
 </div>

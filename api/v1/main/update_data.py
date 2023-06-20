@@ -3,6 +3,7 @@ from models import storage, redis_storage
 from models.Schedule import Create_Schedule as cs
 from models.baseModel import user_id
 from models.RequestModule import Notifications
+from models.Update_Profile import update_redis_profile
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import request
 from datetime import datetime, timedelta
@@ -117,6 +118,7 @@ class Settings:
         self.data = request.get_json()
         self.usr = storage.access(self.ID, 'id', user_id)
         self.course_list = cs(self.ID)
+        self.uploader = update_redis_profile(self.ID)
 
 
     def check_credentials(self, password: str):
@@ -260,13 +262,8 @@ class Settings:
         if self.ID != self.data.get('id'):
             return False
         else:
-            cache_key = f"conv_ID_{self.ID}"
-            history = redis_storage.get_list(cache_key)
-            if history:
-                redis_storage.delete(cache_key)
-                return f"chat history deleted"
-            else:
-                return f"no chat history found"
+            self.uploader.clear_chatbot_history()
+            return f"chat history deleted"
 
     def delete_auto_course(self):
         """

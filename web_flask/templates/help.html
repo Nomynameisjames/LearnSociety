@@ -1,4 +1,7 @@
 {% extends 'index.html' %}
+{% block title %}
+    <title>Chatbot</title>
+{% endblock %}
 {% block content %}
 <div id="layoutSidenav_content" class="chatbot-container">
     <main>
@@ -11,18 +14,14 @@
             <section class="chat-conversation">
                 {% for message in data %}
                     {% if message.role == 'user' %}
-                        {% if message.ID == ID %}
                             <div class="sent-message">
                                 <p class="sent-message">{{ message.content }}</p>
                             </div>
-                        {% endif %}
                     {% endif %}
                     {% if message.role == 'bot' %}
-                        {% if message.ID == ID %}
                             <div class="replied-message">
                                 <p class="received-message">{{ message.content }}</p>
                             </div>
-                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </section>

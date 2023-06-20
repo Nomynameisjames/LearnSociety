@@ -19,14 +19,13 @@ from models import redis_storage
 
 app = create_app('default')
 socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*")
-# migrate = Migrate(app, db)
-
+#migrate = Migrate(app, db)
 
 @socketio.on('connect')
 def test_connect():
     print('\n\nClient connected\n\n')
     emit('connected', {'data': 'Online'})
-
+  
 
 @socketio.on('message')
 def handle_message(message):
@@ -67,22 +66,18 @@ def handle_send_message(data):
     community = redis_storage.get_list_dict("community")
     message = data.get('message')
     room_id = data.get('id')
-    print(f'\n\n{message} {room_id}\n\n')
     if community:
         for idx, item in enumerate(community):
             for key, value in item.items():
                 if username in value['users'] and  str(room_id) == key:
-                    print("yea made it here")
                     value['chat'].append({'text': message,
                                           'sender': username, 'date': datetime.now().strftime("%d/%m/%Y %H:%M:%S")})
                     item[key] = value
                     join_room(value['code'])
                     redis_storage.update_list_dict("community", idx, item)
                     data = {'message': message, 'username': username, 'id': ID, 'date': datetime.now().strftime("%d/%m/%Y %H:%M:%S")}
-                    print(f"\n\n {data} \n\n")
                     emit('MsgFeedBack', data, room=value['code'])
                     return
-    print("\n\nuser not in room\n\n")
     emit('MsgFeedBack', {'message': 'error user not in room'})
 
 

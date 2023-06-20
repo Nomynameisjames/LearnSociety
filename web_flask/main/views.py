@@ -2,6 +2,7 @@ from flask import (Flask, render_template, abort, url_for, redirect,
                     flash, request, jsonify, make_response)
 from models.Schedule import Create_Schedule
 from models.checker import Checker
+from models.Update_Profile import update_redis_profile
 from flask_login import login_required, current_user
 from ..Performance_logger import performance_logger
 from . import Main
@@ -321,3 +322,21 @@ def ChatRoomID(room_id):
                                             user=username, ID=ID, chats=chat_history)
     response = make_response(rendered_template)
     return response
+
+@Main.route('/friends/', methods=['GET', 'POST'])
+@login_required
+@performance_logger
+def friends_page():
+    """
+        This route enables user to view the friends page
+    """
+    username = current_user.User_name
+    ID = current_user.id
+    community = []
+    form = SearchBar()
+    get_community = models.redis_storage.get_list_dict('community')
+    if get_community:
+        community = get_community
+    return render_template('friendsPage.html', form=form,
+                           communities=community, user=username, ID=ID)
+

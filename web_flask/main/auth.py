@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, make_response
 from . import Main
 from models.baseModel import user_id
+from models.Update_Profile import update_redis_profile
 from .form import RegisterForm, LoginForm, RequestResetForm, ResetPasswordForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
@@ -22,6 +23,30 @@ import jwt
 def load_user(User_id):
     return models.storage.access(User_id, 'id', user_id)
 
+def create_user_profile(ID, name):
+    """
+        function creates a user profile for new users and saves in redisDB
+    """
+    data = [
+            { ID: {
+                'username': name,
+                "status": "",
+                "friends": [],
+                "friend_requests": [],
+                "blocked": [],
+                "profile_pic": "",
+                "messages": [{
+                    "sender": "",
+                    "message": [],
+                    "time": []
+                    }],
+                "chat_bot": [],
+                "last_seen": ""
+                }
+            }]
+    models.redis_storage.set_list_dict("Users-Profile", data)
+    return True
+    
 
 def new_user_token(ID):
     """
@@ -119,6 +144,7 @@ def confirm_email(token, ID):
         if i['id'] == ID and user:
             user = user_id(id=i['id'], User_name=i['Username'],
                            Email=i['Email'], Password=i['Password'])
+            create_user_profile(ID, i['Username'])
             models.storage.new(user)
             models.storage.save()
             models.storage.close()
@@ -155,11 +181,13 @@ def login():
         if user and check_password_hash(user.Password, form.password.data):
             login_user(user, remember=form.remember.data)
             my_id = current_user.id
+            uploader = update_redis_profile(my_id)
             token = jwt.encode({'user_id': my_id, 'exp': 
                                 datetime.datetime.utcnow() 
                                 + datetime.timedelta(minutes=60)},
                                app.config['SECRET_KEY'])
             flash(_('You are logged in!'), 'success')
+            uploader.update_last_seen()
             next_page = request.args.get('next')
             response = redirect(next_page) if next_page\
                                 else redirect(url_for('Main.view'))

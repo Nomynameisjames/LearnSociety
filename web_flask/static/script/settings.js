@@ -38,8 +38,9 @@ export const RequestCall = function(type, url, data, btn, text, callback) {
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error', textStatus, errorThrown);
             $(btn).html(text).find('span').remove();
-            var errorMessage = jqXHR.responseJSON.description;
-            flashMsg(errorMessage +' ' + errorThrown, 'fail');
+            var errorMessage = jqXHR.responseText;
+            //var jsonObject = JSON.parse(errorMessage);
+            flashMsg(errorMessage + ' ' + errorThrown, 'fail');
         }
     });
 }
@@ -390,4 +391,42 @@ $(document).ready(function() {
                 });
             }
     });
+});
+
+$(document).ready(function() {
+    let room_id = $("#hiddenId").val();
+    let room_code = $("#invite-code").text();
+    let addr = 'http://127.0.0.1:5001/api/v1/community/';
+    $('#clear-group-history').click(function() {
+        if (room_id === '' || room_code === '') {
+            return;
+        }
+        console.log(`${room_id} ${room_code}`);
+        let data = {
+            'room_id': room_id,
+            'room_code': room_code,
+        }
+        RequestCall('DELETE', addr, data, null, null, function(response) {
+            flashMsg(response.message, 'success');
+        }
+        );
+    });
+
+    $('#edit-group-info').click(function() {
+        if (room_id === '' || room_code === '') {
+            return;
+        }
+        let description = $('#message-text').val();
+        let new_name = $('#group-name').val();
+        let data = {
+            'room_id': room_id,
+            'room_code': room_code,
+            'description': description,
+            'new_name': new_name
+        }
+        RequestCall('PUT', addr, data, null, null, function(response) {
+            flashMsg(response.message, 'success');
+        }
+        );
+    });   
 });

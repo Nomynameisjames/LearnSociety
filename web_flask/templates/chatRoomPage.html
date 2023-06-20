@@ -47,9 +47,9 @@
               <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:add-12-filled" height='20' width='20' style="color: #fff;"></iconify-icon></div>
               Add Friend
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{{ url_for('Main.friends_page') }}">
               <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
-              Friends List
+              Friends
           </a>
       </nav>
   </div>
@@ -66,7 +66,7 @@
                 <button type="button"  class="group-title-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="30" height="50"></iconify-icon></button>
                 <ul class="dropdown-menu">
                     <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Group Info</button></li>
-                    <li><button type="button" class="dropdown-item" href="#">clear chat</button></li>
+                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal2">clear chat</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Report</button></li>
                     <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Leave Group</button></li>
                     <li><button type="button" class="dropdown-item" href="#">Delete Group</button></li>
@@ -128,6 +128,33 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalToggle2" data-bs-dismiss="modal">Edit group info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Edit group info</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Change group name</label>
+                                <input type="text" class="form-control" id="group-name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">New description</label>
+                                <textarea class="form-control" id="message-text"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">Back</button>
+                        <button type="button" class="btn btn-success" id="edit-group-info">Save</button>
                     </div>
                 </div>
             </div>
@@ -149,6 +176,22 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Clear chat history</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to clear the chat history?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="clear-group-history">Proceed</button>
+                </div>
+            </div>
+        </div>
     </main>
 <footer class="py-4 bg-dark mt-auto">
 {% endblock %}
