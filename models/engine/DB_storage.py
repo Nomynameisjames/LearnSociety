@@ -64,6 +64,20 @@ class DBstorage:
                     }
         return my_dict, tasks
 
+
+    def find_user_by(self, **kwargs):
+        """finds a user based on the kwargs provided in DB"""
+
+        try:
+            value = self._session.query(user_id) \
+                                 .filter_by(**kwargs) \
+                                 .first()
+        except TypeError:
+            raise InvalidRequestError("Missing some parameters")
+
+        return value
+
+
     """
         access method gets the users data from the database it takes 3 args
         obj, key, arg. arg is the user_id class object, key is the column name

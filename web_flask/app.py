@@ -154,6 +154,6 @@ if __name__ == '__main__':
     process = psutil.Process()
     print(f'Initial memory usage: {process.memory_info().rss / 1024 / 1024} MB')
     #app.run(port=5000, debug=False)
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
     #cProfile.run('main()', filename='myapp_profile.out')
     #app.server.serve_forever()
