@@ -1,5 +1,6 @@
-__pycache__/
+*.bkp
 *.swp
 *_secrets.json
+__pycache__/
 venv/
 var

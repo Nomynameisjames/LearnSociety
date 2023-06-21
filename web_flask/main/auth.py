@@ -214,14 +214,9 @@ def login():
                                app.config['SECRET_KEY'])
             flash(_('You are logged in!'), 'success')
             uploader.update_last_seen()
-            response = None
             next_page = request.args.get('next')
-
-            if next_page:
-                response = redirect(next_page)
-            else:
-                redirect(url_for('Main.view'))
-
+            response = redirect(next_page) if next_page\
+                            else redirect(url_for('Main.view'))
             tok = token.encode('UTF-8').decode()
             response.set_cookie('access_token', tok)
             return response
@@ -324,6 +319,7 @@ def save_user_to_db(user):
         return redirect(url_for('Main.signup'))
     auth_user = None
     check_email = models.storage.find_user_by(Email=user.get("user_email"))
+
     if not check_email:
         hashed_sub = generate_password_hash(user.get("user_id"))
         auth_user = user_id(id=str(uuid.uuid4()),
@@ -334,6 +330,7 @@ def save_user_to_db(user):
         models.storage.new(auth_user)
         models.storage.save()
         models.storage.close()
+
 
     else:
         login_user(check_email)
