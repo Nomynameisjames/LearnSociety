@@ -2,3 +2,4 @@ __pyache__/
 *.swp
 venv/
 var
+web_flask/main/client_secrets.json

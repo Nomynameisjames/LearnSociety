@@ -22,7 +22,9 @@ class update_redis_profile:
 
     @property
     def get(self):
-        return self.value
+        if self.value:
+            return self.value
+        return {}
 
     def save(self):
         models.redis_storage.update_list_dict("Users-Profile", self.idx, self.item)
@@ -47,3 +49,8 @@ class update_redis_profile:
         self.value["last_seen"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.item[self.id] = self.value
         self.save()
+
+    def delete_user_profile(self):
+        data = models.redis_storage.delete_list_dict_item("Users-Profile", self.idx, self.id)
+        return data
+

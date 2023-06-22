@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="static/styles/styles_2.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="a    nonymous">
-
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +26,7 @@
             {% block content %}{% endblock %}
 
   <div class="align-center">
-      <div class="card-body" id='chart-body' style="max-width: 600px; height:600px;">
+      <div class="card-body" id='chart-body' style="max-width: 600px; height: auto;">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <input type="hidden" name="ID" value="{{ ID }}">
@@ -89,12 +89,22 @@
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group" id="frm-btn">
-                {{ form.submit(class="btn btn-outline-success") }}
+            <div class="login-btn">
+                {{ form.submit(class="btn-success frm-btn") }}
             </div>
-    
-        <br>
-        <br>
+              <br>
+                 <div class="separator">
+                      <hr class="line">
+                      <span>OR</span>
+                      <hr class="line">
+                 </div>
+                 <br>
+                 <div class="login-btn">
+                      <a href="{{ url_for('Main.google_oauth2') }}" role="button" class="btn-outline-primary" style="text-decoration: none; width: 75%; border-radius: 25px; box-shadow: 0 8px 16px 0 rgba(0,0,    0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); text-align: center;">
+                          <span><iconify-icon icon="devicon:google" height="20" width="20"></iconify-icon>&nbsp Continue with Google</span>
+                      </a>
+                  </div>
+                  <br>
         <span class="bottom_text" style="font-size:small;"><label class="swtich" for="register_toggle" style="color: #130486;font-size: small;">Have an account? <a style="font-size: small;" href="{{ url_for('Main.login') }}"> Login </a></label></span>
 
       <!-- <button class="form--submit">

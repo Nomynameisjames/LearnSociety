@@ -22,11 +22,13 @@ def help():
     #cache_key = f"conv_ID_{ID}"
     #history = models.redis_storage.get_list(cache_key)
     history = uploader.get
-    print(f"this is your chat: {history['chat_bot']}")
+    chat_history = history.get("chat_bot")
+    if chat_history is None:
+        chat_history = []
     if not ID:
         flash('Please login to access this page', 'danger')
         return redirect(url_for('Main.login'))
-    return render_template('help.html', user=user, data=history["chat_bot"], form=form,
+    return render_template('help.html', user=user, data=chat_history, form=form,
                            ID=ID) 
 
 @Main.route('/settings', methods=['GET', 'PUT'])

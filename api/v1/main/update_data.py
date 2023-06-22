@@ -294,7 +294,8 @@ class Settings:
         user = storage.view(self.ID)[0].get(self.ID)
         Delete_auto_courses = self.course_list.DeleteAll(self.ID, Auto_courses)
         Delete_custom_courses = self.course_list.Delete(self.ID, None)
-        if Delete_auto_courses and Delete_custom_courses:
+        delete_redis_data = self.uploader.delete_user_profile()
+        if Delete_auto_courses and Delete_custom_courses and delete_redis_data:
             if user.id == self.ID and confirmDelete:
                 storage.delete(user)
                 storage.save()

@@ -121,13 +121,13 @@ def view():
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(user_id)
     dic = bot.View(user_id)
-    cache_key = f'user_{user_id}_{user}'
-    cached_data = models.redis_storage.get_dict(cache_key)
-    if cached_data:
-        data = cached_data
-    else:
-        data = dic
-        models.redis_storage.set_dict(cache_key, data, ex=200)
+    #cache_key = f'user_{user_id}_{user}'
+    #cached_data = models.redis_storage.get_dict(cache_key)
+    #if cached_data:
+    #    data = cached_data
+    #else:
+    data = dic
+    #models.redis_storage.set_dict(cache_key, data, ex=200)
     auto = False
     response = make_response(render_template('index.html', data=data, status=auto, user=user,
                            form=form))
@@ -157,14 +157,6 @@ def upcoming():
         return render_template('task_status.html', data=dic, form=form,
                                user=user)
 
-@Main.route('/new')
-@login_required
-def new():
-    """
-        This route enables user to create a new task on a seperate page
-    """
-    form = SearchBar()
-    return render_template('table.html', form=form)
 
 @Main.route('/quiz')
 @login_required

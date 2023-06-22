@@ -84,33 +84,23 @@ $(document).ready(function() {
     var myTopic = $('.Topic').val();
     var myReminder = $('.Reminder').val();
     if (myDay && myCourse && myTopic && myReminder) {
-      // Add save button
-      $('<button/>', {
-        text: 'Save',
-        class: 'add',
-        click: function() {
-          // Save the data and remove the save button
-          $(this).fadeOut('fast', function() {
-            $(this).remove();
-          });
+        var postDate = {
+            "Day": myDay,
+            "Course": myCourse,
+            "Topic": myTopic,
+            "Reminder": myReminder
+        };
+        $('.Day').val('');
+        $('.Course').val('');
+        $('.Topic').val('');
+        $('.Reminder').val('');
+        let url = 'http://127.0.0.1:5001/api/v1/tasks/';
+        RequestCall('POST', url, postDate, null, null, function(response) {
+            console.log(response);
+            flashMsg('Table data created successfully!', 'success');
+            });
+        } else {
+            flashMsg('Please fill all fields!', 'fail');
         }
-      }).appendTo('#card-header');
-
-      var postDate = {
-        "Day": myDay,
-        "Course": myCourse,
-        "Topic": myTopic,
-        "Reminder": myReminder
-      };
-      $('.Day').val('');
-      $('.Course').val('');
-      $('.Topic').val('');
-      $('.Reminder').val('');
-      let url = 'http://127.0.0.1:5001/api/v1/tasks/';
-      RequestCall('POST', url, postDate, null, null, function(response) {
-        console.log(response);
-        flashMsg('Table data created successfully!', 'success');
-        });
-    }
   });
 });

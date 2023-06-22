@@ -43,11 +43,18 @@ class Cache:
         Methods for retreiving a data from the cache dictionary object
         based on the key.
     """
-    def get_dict(self, key) -> Dict:
-        value = self.get(key)
-        if value is None:
+    def get_dict(self, redis_key, inner_key) -> Dict:
+        value = self._cache.hget(redis_key, inner_key)
+        if value:
+            try:
+                # Parse the JSON value
+                json_value = json.loads(value)
+                return json_value
+            except json.JSONDecodeError:
+                return {}
+        else:
             return {}
-        return json.loads(value)
+        
     
     """
         Methods for retreiving a data from the cache list object
@@ -84,25 +91,40 @@ class Cache:
         method deletes an item key from the cache dictionary object
         by access the data via its key and then deleting the item key.
     """
-    def delete_list_dict_item(self, key, item_key):
-        list_of_dicts = self.get_list(key)
-        for d in list_of_dicts:
-            if item_key in d:
-                del d[item_key]
-                self.set_list(key, list_of_dicts)
-                return True
-        return False
+    def delete_list_dict_item(self, key, index, item_key):
+        try:
+            item = self._cache.lindex(key, index)
+            if item is None:
+                return False
+            else:
+                item_dict = json.loads(item)
+                if item_key in item_dict:
+                    # Delete the key-value pair from the dictionary
+                    del item_dict[item_key]
+                    # Convert the modified dictionary back to JSON
+                    updated_item = json.dumps(item_dict)
+                    # Update the Redis list with the modified item
+                    self._cache.lset(key, index, updated_item)
+                    return True
+        except Exception as e:
+            print(f"the following error occured: {e}")
+            return False
+
     """
         method deletes an item from the cache list object
         by access the data via its key and then deleting the item.
     """
     def delete_list_item(self, key, item):
-        list_of_items = self.get_list(key)
-        if item in list_of_items:
-            list_of_items.remove(item)
-            self.set_list(key, list_of_items)
-            return True
-        return False
+        try:
+            list_of_items = self.get_list(key)
+            if item in list_of_items:
+                list_of_items.remove(item)
+                self.set_list(key, list_of_items)
+                return True
+            return False
+        except Exception as e:
+            print(f"the following error occured: {e}")
+            return False
 
     """
         method checks if a key exists in the redis database
@@ -141,7 +163,8 @@ class Cache:
     """
     @cached(timeout=86400)
     def set_dict(self, key, value: Dict, ex=86400):
-        self._cache.set(key, json.dumps(value), ex)
+        self._cache.hmset(key, value)
+        self._cache.expire(key, ex)
 
     """
         method creates a new key in the redis database with a value

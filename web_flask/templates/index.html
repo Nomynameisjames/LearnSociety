@@ -219,17 +219,17 @@
                     </div>
                     <div class="card mb-4" id="chart-body">
                         <div class="card-header" id="table-dash">
-                            <i class="fas fa-table me-1" id="tab"></i>
+                            <div class="table-info">
+                                <i class="fas fa-table me-1" id="tab"></i>
                                 Monthly Schedules
-                                <!--  <button id="add-row" href="{{ url_for('Main.new') }}">New</button>  -->
+                            </div>
                             {% block btn %}
-                            <div class='table-btns' style='overflow-x: auto;'> 
-                                <button type="button" title="Delete Task" class="remove-bin" id="my-btn"><iconify-icon icon="fluent:delete-32-filled" height="27" width="35"></iconify-icon></button>
-                                <button type="button" title="set alarm" class="set-alarm" id="my-alarm"><iconify-icon icon="material-symbols:alarm-outline" height="27" width="35"></iconify-icon></button>
-                        	    <button type="button" title="Update Task" class="edit-btn"><iconify-icon icon="material-symbols:edit" height="27" width="35"></iconify-icon></button>
-                                <button type="button" title="create new Task" class="create-btn">
-                                    <iconify-icon icon="material-symbols:create-new-folder-sharp" height="27" width="35"></iconify-icon>
-					                <a class="small text-white stretched-link" id="add-new" href="{{ url_for('Main.new') }}"></a>
+                            <div class='table-btns' id="stub-table"> 
+                                <button type="button" title="Delete Task" class="remove-bin" id="my-btn"><iconify-icon icon="fluent:delete-32-filled" height="25" width="25" class="small-icon"></iconify-icon></button>
+                                <button type="button" title="set alarm" class="set-alarm" id="my-alarm" style="color: #39FF14;"><iconify-icon class="small-icon" icon="material-symbols:alarm-outline" height="25" width="25"></iconify-icon></button>
+                        	    <button type="button" title="Update Task" class="edit-btn" style="color: #00FFFF;"><iconify-icon class="small-icon" icon="material-symbols:edit" height="25" width="25"></iconify-icon></button>
+                                <button type="button" title="create new Task" data-bs-toggle="modal" data-bs-target="#exampleModal9" class="create-btn" style="color: #FFD700;">
+                                    <iconify-icon class="small-icon" icon="material-symbols:create-new-folder-sharp" height="25" width="25"></iconify-icon>
                                 </button>
                             </div>
                             {% endblock %}
@@ -301,6 +301,40 @@
         </div>
     </div>
     {% endblock %}
+    <div class="modal fade" id="exampleModal9" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create new schedule</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Date</label>
+                    <input type="date" class="Day form-control" id="recipient-name">
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Course</label>
+                    <input type="text" class="Course form-control" id="message-text"></input>
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Topic</label>
+                    <input type="text" class="Topic form-control" id="message-text"></input>
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">Reminder</label>
+                    <input class="Reminder form-control" id="message-text" type="time" step="1"></input>
+                </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="create-schedule-modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-success" id="add">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
     </main>
         <footer class="py-4 bg-dark mt-auto">
 		{% endblock %}
