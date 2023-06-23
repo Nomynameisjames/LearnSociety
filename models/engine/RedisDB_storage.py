@@ -46,12 +46,7 @@ class Cache:
     def get_dict(self, redis_key, inner_key) -> Dict:
         value = self._cache.hget(redis_key, inner_key)
         if value:
-            try:
-                # Parse the JSON value
-                json_value = json.loads(value)
-                return json_value
-            except json.JSONDecodeError:
-                return {}
+            return json.loads(value)
         else:
             return {}
         
@@ -162,8 +157,9 @@ class Cache:
         of values and uses the cacheed decorator to set the key with a timeout
     """
     @cached(timeout=86400)
-    def set_dict(self, key, value: Dict, ex=86400):
-        self._cache.hmset(key, value)
+    def set_dict(self, key, value: Dict, ex=400):
+        encoded_value = {k: json.dumps(v) for k, v in value.items()}
+        self._cache.hmset(key, encoded_value)
         self._cache.expire(key, ex)
 
     """

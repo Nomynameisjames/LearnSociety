@@ -20,6 +20,7 @@ import models
 import uuid
 import datetime
 import jwt
+import json
 
 
 
@@ -98,7 +99,7 @@ def verify_new_user_token(token):
         return None
     except (jwt.InvalidTokenError, KeyError):
         return None
-    user = models.redis_storage.get_list(my_id)
+    user = models.redis_storage.get_dict("temp_storage", my_id)
     if not user:
         return None
     return user
@@ -148,7 +149,9 @@ def save_user_to_db(user):
     
     check_email = models.storage.access(user.get("user_email"), 'Email', user_id)
     ID = str(uuid.uuid4())
-    if not check_email:
+    if check_email:
+        response = login_user_and_redirect(check_email)
+    else:
         hashed_sub = generate_password_hash(user.get("user_id"))
         auth_user = user_id(id=ID,
                             User_name=user.get("user_name"),
@@ -163,8 +166,6 @@ def save_user_to_db(user):
         models.storage.save()
         models.storage.close()
         response = login_user_and_redirect(auth_user)
-    else:
-        response = login_user_and_redirect(check_email)
     return response
 
 @Main.route('/signup', methods=['GET', 'POST'])
@@ -179,6 +180,7 @@ def signup():
         redirects the user to the signup page
     """
     form = RegisterForm()
+    cache_file = {}
     mail_app = Notifications()
     ID = None
     if form.validate_on_submit():
@@ -188,8 +190,7 @@ def signup():
         if not is_valid:
             flash(_('Invalid email address'), 'warning')
             return redirect(url_for('Main.signup'))
-        url = f"""{url_for('Main.confirm_email', token=token, ID=ID,
-                    _external=True)}"""
+        url = f"""{url_for('Main.confirm_email', token=token, ID=ID, _external=True)}"""
         temp_file = {
                 'url': url,
                 'message': f'''Kindly click on the link below to
@@ -201,20 +202,20 @@ def signup():
                 'id': ID
                 }
         sent = mail_app.send_Grid(None, **temp_file)
+        print(url)
         if sent:
             flash(_(f"An email has been sent to {form.email.data} to complete your registration"), 'success')
             password = generate_password_hash(form.password.data)
-            cache_file = {
-                    'Username': form.username.data,
-                    'Email': form.email.data,
-                    'Password': password,
-                    'id':  ID
+            cache_file[ID] = {
+                        'Username': form.username.data,
+                        'Email': form.email.data,
+                        'Password': password,
+                        'id':  ID
                     }
-            list_item = models.redis_storage.get_list(ID)
-            list_item.append(cache_file)
-            models.redis_storage.set_dict(ID, list_item)
+            list_item = models.redis_storage.get_dict("temp_storage", ID)
+            if list_item == {}:
+                models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
             return redirect(url_for('Main.signup', ID=ID))
-
     response = make_response(render_template('register.html', form=form, ID=ID))
     return response
 
@@ -228,20 +229,19 @@ def confirm_email(token, ID):
     if user is None:
         flash('Invalid or expired token', 'warning')
         return redirect(url_for('Main.signup'))
-    form = models.redis_storage.get_list(ID)
-    for i in form:
-        if i['id'] == ID and user:
-            user = user_id(id=i['id'], User_name=i['Username'],
-                           Email=i['Email'], Password=i['Password'])
-            create_user_profile(ID, i['Username'])
-            models.storage.new(user)
-            models.storage.save()
-            models.storage.close()
-            username = {'Username': i['Username']}
-            flash(_('Account created successfully for %(user)s',
-                    user=username['Username']), 'success')
-            models.redis_storage.delete(ID)
-            return redirect(url_for('Main.login'))
+    form = models.redis_storage.get_dict('temp_storage', ID)
+    if form['id'] == ID and user:
+        user = user_id(id=form['id'], User_name=form['Username'],
+                       Email=form['Email'], Password=form['Password'])
+        create_user_profile(ID, form['Username'])
+        models.storage.new(user)
+        models.storage.save()
+        models.storage.close()
+        username = {'Username': form['Username']}
+        flash(_('Account created successfully for %(user)s',
+                user=username['Username']), 'success')
+        #models.redis_storage.delete("temp_file")
+        return redirect(url_for('Main.login'))
     return redirect(url_for('Main.signup'))
 
 
