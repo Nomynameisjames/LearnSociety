@@ -25,10 +25,10 @@ jwt = JWTManager()
 csrf = CSRFProtect()
 login_manager = LoginManager()
 babel = Babel()
-#socketio = SocketIO(async_mode='eventlet')
+#socketio = SocketIO()
 cors = CORS()
-cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
-                      "CACHE_DEFAULT_TIMEOUT": 300})
+#cache = Cache(config={'CACHE_TYPE': 'SimpleCache',
+#                      "CACHE_DEFAULT_TIMEOUT": 300})
 
 def create_app(config_name):
     """
@@ -46,7 +46,8 @@ def create_app(config_name):
     config[config_name].init_app(app)
     bootstrap.init_app(app)
     cors.init_app(app)
-    cache.init_app(app)
+    #socketio.init_app(app, cors_allowed_origins="*", async_mode='eventlet')
+#    cache.init_app(app)
     jwt.init_app(app)
     babel.init_app(app)
     csrf.init_app(app)

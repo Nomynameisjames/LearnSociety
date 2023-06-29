@@ -1,120 +1,125 @@
 {% extends 'index.html' %}
+    {% block title %}
+        <title> Library </title>
+    {% endblock %}
 {% block content %}
- <div id="layoutSidenav_content" style="background-color: #212121;">
-    <main>
-<header>
-    <h1 class='course-title'>Javascript Library</h1>
-    <p class="text-center font-monospace" style="color: #fff;">Welcome to our Javascript library, where you can find a variety of resources to help you learn and improve your Javascript programming skills.</p>
-</header>
-<br>
-    <div class="container">
-  <h2 class='course-title'>Books</h2>
-  <div class="row row-cols-3 row-cols-md-4 g-4">
-    <div class="col-6" id="book-col">
-        <div class="card book" style="background-image: url('static/assets/img/es6_pdfcover.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://www.tutorialspoint.com/es6/es6_tutorial.pdf" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-    </div>
-    <div class="col-6" id="book-col">
-        <div class="card book" style="background-image: url('static/assets/img/red_jscourse.png'); height: 250px;  max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://media.pragprog.com/titles/ves6/introduction.pdf" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
+    <div id="layoutSidenav_content" style="background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.8), rgba(255,255, 255, 0.8));">
+        <div id="about-body">
+            <h1 class='text-center' id="library-header">The Javascript Library</h1>
+            <p class="text-center" style="color: #fff;">Welcome to our Javascript library, where you can find a variety of resources to help you learn and improve your Javascript programming skills.</p>
+        </div>
+        <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Books</h2>
+            <div class="row row-cols-4" style="padding: 10px;">
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://drive.google.com/file/d/13gpE0X9pOwkuVsFhSSKJvXLRCs6Cg0U1/preview" data-pdf-redirect="https://www.tutorialspoint.com/es6/es6_tutorial.pdf" data-pdf-title="ES6 Tutorial" >
+                        <img src="{{ url_for('static', filename='assets/img/es6_pdfcover.png') }}" alt="ES6 Tutorial Point" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://media.pragprog.com/titles/ves6/introduction.pdf" data-pdf-redirct="" data-pdf-title="Introduction to ES6">
+                        <img src="{{ url_for('static', filename='assets/img/red_jscourse.png') }}" alt="Introduction to ES6" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://drive.google.com/file/d/1GE4mys2VIGk36mvixWlEJcfZt-XdKVa3/preview" data-pdf-redirect="https://exploringjs.com/impatient-js/downloads/impatient-js-preview-book.pdf" data-pdf-title="Impatient Javascript">
+                        <img src="{{ url_for('static', filename='assets/img/impatient_js.png') }}" alt="impatient Javascript" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://drive.google.com/file/d/1Bm3oF0UjuwxyPY6G479W38XCPgc0jCyc/preview" data-pdf-redirect="" data-pdf-title="ES6 for humans">
+                        <img src="{{ url_for('static', filename='assets/img/Es64humans.png') }}" alt="ES6 for Humans" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://drive.google.com/file/d/1b0877bSYA_Ma72-VCBvsVcIeAEDJf9JR/preview" data-pdf-redirect="" data-pdf-title="JavaScript & jQuery  Interactive Front-End Development">
+                        <img src="https://ucarecdn.com/6c84dcf4-2cab-4c96-a05c-48859841f2c0/" alt="JavaScript & jQuery  Interactive Front-End Development" width="250" height="250">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Video Tutorials</h2>
+            <div class="row row-cols-2" style="padding: 10px;">
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/nZ1DMMsyVyI?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/2LeqilIw-28?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/tt1SkTpHUUU?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/YeFzkC2awTM?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Top Learning Platforms</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="list-group" id="blog-list">
+                        <a  class="list-group-item list-group-item-action" href="https://www.w3schools.com/js/js_es6.asp" target="_blank">W3School</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.sololearn.com/Course/javascript/" target="_blank">SoloLearn</a>
+                        <a  class="list-group-item list-group-item-action" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">MDN</a>
+                        <a  class="list-group-item list-group-item-action" href="https://wesbos.com/courses" target="_blank">LearnES6</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.tutorialspoint.com/es6/index.htm" target="_blank">TutorialPoint</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.edx.org/" target="_blank">EdX</a></li>
+                        <a  class="list-group-item list-group-item-action" href="https://www.alxafrica.com/software-engineering/" target="_blank">ALX Africa</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.geeksforgeeks.org/c-programming-language/" target="_blank">DigitalOcean</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.freecodecamp.org/learn/" target="_blank">FreeCodeCamp</a>
+                        <a  class="list-group-item list-group-item-action" href="https://javascript.info/" target="_blank">programiz</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.codecademy.com/learn/introduction-to-javascript" target="_blank">Codecademy</a>
 
-    </div>
-    <div class="col-6" >
-        <div class="card book" style="background-image: url('static/assets/img/impatient_js.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://exploringjs.com/impatient-js/downloads/impatient-js-preview-book.pdf" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-    </div>
-    <div class="col-6">
-      <div class="card book" style="background-image: url('static/assets/img/Es64humans.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://drive.google.com/file/d/1Bm3oF0UjuwxyPY6G479W38XCPgc0jCyc/view?usp=sharing" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-      </div>
-  </div>
-  <br>
-  <br>
-    <h2 class='course-title'>Videos</h2>
-	<div class="row row-cols-3 row-cols-md-4 g-4">
-		<div class="col-6" id="book-col">
-			<iframe 
- 	 			width="560" 
- 	 			height="315" 
-  				src="https://www.youtube.com/embed/nZ1DMMsyVyI?enablejsapi=1" 
-  				frameborder="0" 
-  				allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-  				allowfullscreen
-			></iframe>
-		</div>
-	</div>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/2LeqilIw-28?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    </div>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/tt1SkTpHUUU?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/YeFzkC2awTM?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    <br>
-    <br>
-    <h2 class='course-title'>Top Learning Platforms</h2>
-    <div class="row row-cols-3 row-cols-md-4 g-4">
-        <div class="col-6" id="book-col">
-            <ul>
-                <li><a href="https://www.w3schools.com/js/js_es6.asp" target="_blank">Codecademy</a></li>
-                <li><a href="https://www.sololearn.com/Course/javascript/" target="_blank">SoloLearn</a></li>
-                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">W3Schools</a></li>
-                <li><a href="https://wesbos.com/courses" target="_blank">LearnES6</a></li>
-                <li><a href="https://www.tutorialspoint.com/es6/index.htm" target="_blank">TutorialsPoint</a></li>
-                <li><a href="https://javascript.info/" target="_blank">Programiz</a></li>
-                <li><a href="https://www.edx.org/" target="_blank">EdX</a></li>
-                <li><a href="https://www.alxafrica.com/software-engineering/" target="_blank">ALX Africa</a></li>
-                <li><a href="https://www.digitalocean.com/community/tutorials/" target="_blank">DigitalOcean</a></li>
-                <li><a href="https://www.freecodecamp.org/learn/" target="_blank">FreeCodeCamp</a></li>
-            </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px; margin-bottom: 20px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Trending Blogs</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="list-group" id="blog-list">
+                        <a class="list-group-item list-group-item-action" href="https://medium.com/dailyjs/tagged/es6" target="_blank">Medium</a>
+                        <a class="list-group-item list-group-item-action" href="https://ponyfoo.com/articles/tagged/es6" target="_blank">PonyFoo</a>
+                        <a class="list-group-item list-group-item-action" href="https://davidwalsh.name/es6" target="_blank">DavidWalsh</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.sitepoint.com/tag/es6/" target="_blank">SitePoint</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.educative.io/blog/javascript-es6-tutorial" target="_blank">EDX</a>
+                        <a class="list-group-item list-group-item-action" href="https://web.dev/" target="_blank">WebDev</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.keithcirkel.co.uk/" target="_blank">KeithCirkel</a>
+                        <a class="list-group-item list-group-item-action" href="https://dev.to/" target="_blank">Dev</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.bennadel.com" target="_blank">Ben</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% block modal %}
+        {{ super() }}
+    {% endblock %}
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <object id="pdf-object" data="" type="application/pdf" width="100%" height="100%">
+                        <p>PDF cannot be displayed. <a id="pdf-download-link" href="#">Download it here</a>.</p>
+                    </object>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
-    <br>
-    <br>
-    <h2 class='course-title'>Trending Blogs</h2>
-    <div class="row row-cols-3 row-cols-md-4 g-4">
-        <div class="col-6" id="book-col">
-            <ul>
-                <li><a href="https://medium.com/dailyjs/tagged/es6" target="_blank">Medium</a></li>
-                <li><a href="https://ponyfoo.com/articles/tagged/es6" target="_blank">PonyFoo</a></li>
-                <li><a href="https://davidwalsh.name/es6" target="_blank">DavidWalsh</a></li>
-                <li><a href="https://www.sitepoint.com/tag/es6/" target="_blank">SitePoint</a></li>
-                <li><a href="https://www.educative.io/blog/javascript-es6-tutorial" target="_blank">EdX</a></li>
-                <li><a href="https://web.dev/" target="_blank">WebDev</a></li>
-                <li><a href="https://www.keithcirkel.co.uk/" target="_blank">KeithCirkel</a></li>
-                <li><a href="https://dev.to/" target="_blank">Dev</a></li>
-                <li><a href="https://www.bennadel.com/" target="_blank">Ben</a></li>
-            </ul>
-        </div>
-</div>
-{% block modal %}
-    {{ super() }}
-        </div>
-{% endblock %}
 </main>
 <footer class="py-4 bg-dark mt-auto">
 {% endblock %}
+

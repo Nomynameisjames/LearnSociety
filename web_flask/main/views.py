@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 from ..Performance_logger import performance_logger
 from . import Main
 from .form import SearchBar
-from .. import cache
+#from .. import cache
 from uuid import uuid4
 import models
 
@@ -58,7 +58,7 @@ def about():
 
 @Main.route('/missed',  methods=['GET'])
 @login_required
-@cache.cached(timeout=100)
+#@cache.cached(timeout=100)
 def missed():
     """
         This route enables user to view missed tasks
@@ -81,7 +81,7 @@ def missed():
 
 @Main.route('/daily', methods=['GET'])
 @login_required
-@cache.cached(timeout=100)
+#@cache.cached(timeout=100)
 def daily():
     """
         This route enables user to view daily tasks
@@ -121,22 +121,22 @@ def view():
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(user_id)
     dic = bot.View(user_id)
+    print(f"\n\n userID: {user_id} data: {dic} \n\n")
     #cache_key = f'user_{user_id}_{user}'
     #cached_data = models.redis_storage.get_dict(cache_key)
     #if cached_data:
     #    data = cached_data
     #else:
-    data = dic
     #models.redis_storage.set_dict(cache_key, data, ex=200)
     auto = False
-    response = make_response(render_template('index.html', data=data, status=auto, user=user,
+    response = make_response(render_template('index.html', data=dic, status=auto, user=user,
                            form=form))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
 
 @Main.route('/upcoming')
 @login_required
-@cache.cached(timeout=200)
+#@cache.cached(timeout=200)
 def upcoming():
     """
         This route enables user to view upcoming tasks

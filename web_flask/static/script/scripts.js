@@ -136,3 +136,24 @@ $(document).ready(function() {
         });
     });
 });
+
+$(document).ready(function() {
+  // Get the buttons that trigger the modal
+  var buttons = $('.btn-trigger-modal');
+
+  // Handle button click event
+  buttons.on('click', function() {
+    // Get the data for the clicked button
+    var pdfUrl = $(this).data('pdf-url');
+    var pdfredirect = $(this).data('pdf-redirect');
+    var pdfTitle = $(this).data('pdf-title');
+
+    // Set the modal content dynamically
+    $('#pdf-object').attr('data', pdfUrl);
+    $('#pdf-download-link').attr('href', pdfredirect);
+    $('#staticBackdropLabel').text(pdfTitle);
+
+    // Show the modal
+    $('#staticBackdrop').modal('show');
+  });
+});

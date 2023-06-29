@@ -1,124 +1,122 @@
 {% extends 'index.html' %}
+    {% block title %}
+        <title> Library </title>
+    {% endblock %}
 {% block content %}
- <div id="layoutSidenav_content" style="background-color: #212121;">
-    <main>
-<header>
-    <h1 class='course-title'>React Library</h1>
-    <p class="text-center font-monospace" style="color: #fff;">Welcome to our React books and tutorial library! Our goal is to provide you with the best resources to learn and master React, one of the most popular JavaScript libraries for building user interfaces..</p>
-    <p class="text-center font-monospace" style="color: #fff";>Whether you are a beginner looking to get started with React, or an experienced developer looking to expand your knowledge, we have something for you. Our library features a wide range of books and tutorials, covering topics such as React basics, advanced concepts, React Native, Redux, and more.</p>
-</header>
-<br>
-    <div class="container">
-  <h2 class='course-title'>Books</h2>
-  <div class="row row-cols-3 row-cols-md-4 g-4">
-    <div class="col-6" id="book-col">
-        <div class="card book" style="background-image: url('static/assets/img/React_tutorialpoint.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://www.tutorialspoint.com/reactjs/reactjs_tutorial.pdf" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-    </div>
-    <div class="col-6" id="book-col">
-        <div class="card book" style="background-image: url('static/assets/img/learning_react.png'); height: 250px;  max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://drive.google.com/file/d/1z_yk_Y2wtg7HqPIhSZE9MtOTWrdaXykX/view?usp=sharing" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-
-    </div>
-    <div class="col-6" >
-        <div class="card book" style="background-image: url('static/assets/img/React-in-action.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://drive.google.com/file/d/1dejEywsgh_VejbYHhMMkmDkdtlf5RaXq/view?usp=share_link" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-    </div>
-    <div class="col-6">
-      <div class="card book" style="background-image: url('static/assets/img/React-ORiley.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://drive.google.com/file/d/1kWXW5h89b4bIZsRGfsP1b6EuUzCfvP2v/view?usp=share_link" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-      </div>
-      <div class="col-6">
-        <div class="card book" style="background-image: url('static/assets/img/roadTo-react.png'); height: 250px; max-width: 200px; border: 1px solid #000000;"></div>
-        <a href="https://sd.blackball.lv/library/the_road_to_react_(2020).pdf" target="_blank"><button type="button" class="btn btn-primary btn-sm" id="book-btn">Read</button></a>
-      </div>
-  </div>
-  <br>
-  <br>
-    <h2 class='course-title'>Videos</h2>
-	<div class="row row-cols-3 row-cols-md-4 g-4">
-		<div class="col-6" id="book-col">
-			<iframe 
- 	 			width="560" 
- 	 			height="315" 
-  				src="https://www.youtube.com/embed/1wZoGFF_oi4?enablejsapi=1" 
-  				frameborder="0" 
-  				allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-  				allowfullscreen
-			></iframe>
-		</div>
-	</div>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/tbvguOj8C-o?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    </div>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/0fYi8SGA20k?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    <br>
-    <div class="col-6" id="book-col">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/QFaFIcGhPoM?enablejsapi=1" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-        ></iframe>
-    <br>
-    <br>
-    <h2 class='course-title'>Top Learning Platforms</h2>
-    <div class="row row-cols-3 row-cols-md-4 g-4">
-        <div class="col-6" id="book-col">
-            <ul>
-                <li><a href="https://react.dev/learn" target="_blank">ReactDev</a></li>
-                <li><a href="https://www.freecodecamp.org/news/search/?query=react" target="_blank">FreeCodeCamp</a></li>
-                <li><a href="https://www.pluralsight.com/courses/react-js-getting-started" target="_blank">PluralSight</a></li>
-                <li><a href="https://scrimba.com/learn/learnreact#" target="_blank">Scrimba</a></li>
-                <li><a href="https://www.tutorialspoint.com/react_native/index.htm" target="_blank">TutorialsPoint</a></li>
-                <li><a href="https://www.educative.io/path/react-front-end-developer" target="_blank">Educative</a></li>
-                <li><a href="https://www.edx.org/" target="_blank">EdX</a></li>
-                <li><a href="https://www.alxafrica.com/software-engineering/" target="_blank">ALX Africa</a></li>
-                <li><a href="https://www.digitalocean.com/community/tutorials/" target="_blank">DigitalOcean</a></li>
-            </ul>
+    <div id="layoutSidenav_content" style="background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.8), rgba(255,255, 255, 0.8));">
+        <div id="about-body">
+            <h1 class='text-center' id="library-header">>React Library</h1>
+            <p class="text-center" style="color: #fff;">Welcome to our React books and tutorial library! Our goal is to provide you with the best resources to learn and master React, one of the most popular JavaScript libraries for building user interfaces.</p>
+            <p class="text-center" style="color: #fff";>Whether you are a beginner looking to get started with React, or an experienced developer looking to expand your knowledge, we have something     for you. Our library features a wide range of books and tutorials, covering topics such as React basics, advanced concepts, React Native, Redux, and more.</p>
+        </div>
+        <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Books</h2>
+            <div class="row row-cols-4" style="padding: 10px;">
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://cloudpdf.io/view/3DH5rwepR" data-pdf-redirect="https://www.tutorialspoint.com/reactjs/reactjs_tutorial.pdf" data-pdf-title="React Tutorial" >
+                        <img src="{{ url_for('static', filename='assets/img/React_tutorialpoint.png') }}" alt="ES6 Tutorial Point" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://cloudpdf.io/view/AfUhCVqUe" data-pdf-redirect="https://drive.google.com/file/d/1z_yk_Y2wtg7HqPIhSZE9MtOTWrdaXykX/view?usp=sharing" data-pdf-title="A Hands-On Guide to Building Web Applications Using React and Redux">
+                        <img src="{{ url_for('static', filename='assets/img/learning_react.png') }}" alt="Learning React" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://cloudpdf.io/view/3u4pfu0Vz" data-pdf-redirect="https://drive.google.com/file/d/1dejEywsgh_VejbYHhMMkmDkdtlf5RaXq/view?usp=share_link" data-pdf-title="React in Action">
+                        <img src="{{ url_for('static', filename='assets/img/React-in-action.png') }}" alt="React In Action" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://cloudpdf.io/view/CuCZJonSL" data-pdf-redirect="https://drive.google.com/file/d/1kWXW5h89b4bIZsRGfsP1b6EuUzCfvP2v/view?usp=share_link" data-pdf-title="Functional Web Development with React and Redux">
+                        <img src="{{ url_for('static', filename='assets/img/React-ORiley.png') }}" alt="ORiley" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" type="button" class="btn-trigger-modal" data-pdf-url="https://sd.blackball.lv/library/the_road_to_react_(2020).pdf" data-pdf-redirect="https://sd.blackball.lv/library/the_road_to_react_(2020).pdf" data-pdf-title="Road to learn React">
+                        <img src="{{ url_for('static', filename='assets/img/roadTo-react.png') }}" alt="ORiley" width="250" height="250">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Video Tutorials</h2>
+            <div class="row row-cols-2" style="padding: 10px;">
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/1wZoGFF_oi4?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/tbvguOj8C-o?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/0fYi8SGA20k?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/QFaFIcGhPoM?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Top Learning Platforms</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="list-group" id="blog-list">
+                        <a  class="list-group-item list-group-item-action" href="https://react.dev/learn" target="_blank">ReactDev</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.freecodecamp.org/news/search/?query=react" target="_blank">FreeCodeCamp</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.pluralsight.com/courses/react-js-getting-started" target="_blank">PluralSight</a>
+                        <a  class="list-group-item list-group-item-action" href="https://scrimba.com/learn/learnreact#" target="_blank">Scrimba</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.tutorialspoint.com/react_native/index.htm" target="_blank">TutorialPoint</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.edx.org/" target="_blank">EdX</a></li>
+                        <a  class="list-group-item list-group-item-action" href="https://www.educative.io/path/react-front-end-developer" target="_blank">Educative</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.digitalocean.com/community/tutorials/" target="_blank">DigitalOcean</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px; margin-bottom: 20px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Trending Blogs</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="list-group" id="blog-list">
+                        <a class="list-group-item list-group-item-action" href="https://medium.com/dailyjs/" target="_blank">Medium</a>
+                        <a class="list-group-item list-group-item-action" href="https://overreacted.io/a-complete-guide-to-useeffect/" target="_blank">OverReacted</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.joshwcomeau.com/blog/the-end-of-frontend-development/" target="_blank">JoshWComeau</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.robinwieruch.de/blog/" target="_blank">RobinWieruch</a>
+                        <a class="list-group-item list-group-item-action" href="https://blog.isquaredsoftware.com/2021/01/context-redux-differences/" target="_blank">Marks's</a>
+                        <a class="list-group-item list-group-item-action" href="https://web.dev/" target="_blank">WebDev</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.keithcirkel.co.uk/" target="_blank">KeithCirkel</a>
+                        <a class="list-group-item list-group-item-action" href="https://dev.to/" target="_blank">Dev</a>
+                        <a class="list-group-item list-group-item-action" href="https://www.bennadel.com" target="_blank">Ben</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% block modal %}
+        {{ super() }}
+    {% endblock %}
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" id="clear-modal">
+                <div class="modal-header text-center" style="color: #fff;">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <object id="pdf-object" data="" type="application/pdf" width="100%" height="100%">
+                        <p>PDF cannot be displayed. <a id="pdf-download-link" href="#">Download it here</a>.</p>
+                    </object>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
-    <br>
-    <br>
-    <h2 class='course-title'>Trending Blogs</h2>
-    <div class="row row-cols-3 row-cols-md-4 g-4">
-        <div class="col-6" id="book-col">
-            <ul>
-                <li><a href="https://medium.com/dailyjs/tagged/es6" target="_blank">Medium</a></li>
-                <li><a href="https://dev.to/" target="_blank">Dev</a></li>
-                <li><a href="https://www.joshwcomeau.com/blog/the-end-of-frontend-development/" target="_blank">JoshwComeau</a></li>
-                <li><a href="https://www.robinwieruch.de/blog/" target="_blank"> ROBINWIERUCH</a></li>
-                <li><a href="https://kentcdodds.com/courses" target="_blank">Kent_C.Dodds</a></li>
-                <li><a href="https://web.dev/" target="_blank">WebDev</a></li>
-                <li><a href="https://overreacted.io/a-complete-guide-to-useeffect/" target="_blank">Overreacted</a></li>
-                <li><a href="https://blog.isquaredsoftware.com/2021/01/context-redux-differences/" target="_blank">Mark's</a></li>
-                <li><a href="https://www.bennadel.com/" target="_blank">Ben</a></li>
-            </ul>
-        </div>
-</div>
-{% block modal %}
-    {{ super() }}
-        </div>
-{% endblock %}
 </main>
 <footer class="py-4 bg-dark mt-auto">
 {% endblock %}
+

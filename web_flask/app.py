@@ -119,9 +119,9 @@ def handle_disconnect():
     select a language translation to use for that request.
     The function returns the best match language.
 """
-@babel.localeselector
-def get_locale():
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+#@babel.localeselector
+#def get_locale():
+#    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 @app.route('/test')
 def make_shell_context():

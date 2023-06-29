@@ -75,6 +75,429 @@
     scroll-behavior: smooth;
   }
 }
+@keyframes animate {
+         0% {
+             transform: scale(1) rotate(0deg);
+         }
+         50% {
+             transform: scale(1.5) rotate(180deg);
+         }
+         100% {
+             transform: scale(1) rotate(360deg);
+         }
+     }
+/* about page styles */
+
+@media screen and (max-width: 760px) {
+    #About-content {
+        margin-top: 10%;
+    }
+
+    #img-cont {
+        height: auto;
+    }
+    #img-gal {
+        width: 29.9999%;
+        height: auto;
+    }
+    #img-gal img {
+        width: 300px;
+        height: 100px;
+    }
+    #reader-img {
+        width: 250px;
+        height: 250px;
+    }
+    .my-auto-card {
+    margin-left: -400px;
+  }
+  #py-auto-card:hover {
+      transform: translateX(10px);
+      z-index: 1;
+      transition: 0.4s ease-out;
+  }
+  
+  .my-auto-card:hover {
+    transform: translateX(0);
+    z-index: 1;
+    transition: 0.4s ease-out;
+  }
+
+  .youtube-frame {
+      width: 100%;
+      height: auto;
+  }
+
+}
+
+@media screen and (min-width: 760px) and (max-width: 1024px) {
+    #About-content {
+        margin-top: 6%;
+    }
+    #profile-card {
+        width: 100%;
+        height: auto;
+    }
+    .responsive {
+    width: 100%;
+  }
+   .my-auto-card {
+    margin-left: -400px;
+  }
+  #py-auto-card:hover {
+      transform: translateX(10px);
+      z-index: 1;
+      transition: 0.4s ease-out;
+  }
+  
+  .my-auto-card:hover {
+    transform: translateX(0);
+    z-index: 1;
+    transition: 0.4s ease-out;
+  }
+  .youtube-frame {
+      width: 100%;
+      height: auto;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.about-container {
+    width: 100%;
+    height: auto;
+    background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+    padding: 0;
+    margin: 0;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    margin-top: 3.5%;
+}
+#about-intro h1 {
+    text-align: center;
+    text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+    font-size: 30px;
+}
+
+#about-footer a {
+    text-decoration: none;
+}
+#history-text {
+    text-indent: 50px;
+    width: 90%;
+    color: #000;
+    font-size: 17px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+#github {
+    text-decoration: none;
+    font-size: 15px;
+}
+
+#github:hover {
+    color: rgba(0,255, 0, 1);
+}
+
+.nav-item a:hover {
+    color: rgba(255,0,0, 1);
+}
+
+/* landing page styles */
+.company-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-image: repeating-linear-gradient(45deg, #5a5858, #121212, #b9b6b6, #f3e7e7, #493232);
+    padding: 0;
+    margin: 0;
+}
+
+#company-logo {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 3px solid #green;
+    background-image: url("https://ucarecdn.com/fb7a8b77-2fb1-415b-96e3-1fe83def9c9a/-/scale_crop/432x432/center/");
+    background-size: cover;
+}
+
+
+#landpage-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+}
+
+#descript-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  padding: 10px;
+}
+
+.descript-col {
+    margin-right: auto;
+    margin-top: 30px;
+    margin-left: 10px;
+    height: 400px;
+    border-radius: 50%;
+    width: 400px;
+    position: relative;
+    border: 1px solid #fff;
+    background-image: url("https://ucarecdn.com/6471b404-8bc6-48e6-a7ac-5ff988c8103a/");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.descript-col-img {
+    margin-left: auto;
+    margin-top: 20px;
+    margin-right: 20px;
+    height: 400px;
+    border-radius: 58% 89% 42% 33%;
+    width: 400px;
+    position: relative;
+    border: 1px solid #fff;
+    background-image: url("https://ucarecdn.com/f5d2f718-dac2-4b66-8167-55e90957a9cf/");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.descript-col:before,
+.descript-col:after {
+         content: '';
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         left: 0;
+         top: 0;
+         background: #000;
+         z-index: -1;
+         box-shadow: inset 0 0 20px rgba(0,0,0,.6);
+         filter: blur(10px);
+         opacity: .5;
+         animation: animate 5s linear infinite;
+}
+.descript-col:after {
+         animation-delay: 2.5s;
+}
+
+.descript-txt {
+    margin-left: auto;
+    margin-right: 10px;
+    width: 65%;
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+.descript-text p, .descript-txt p {
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    text-indent: 30px;
+    color: #FFFFFF;
+
+}
+
+.descript-text {
+    margin-right: auto;
+    margin-left: 10px;
+    width: 65%;
+    height: 300px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.descript-item-3 {
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+}
+
+.available-courses {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 400px;
+}
+
+.my-auto-card {
+  height: 300px;
+  width: 400px;
+  margin: 10px; 
+  border: 2px solid blue;
+  overflow-y: scroll;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: rgba(41, 41, 41, 0.7);
+  border-radius: 10px;
+  box-shadow: -1rem 0 3rem #000;
+  /*   margin-left: -50px; */
+  transition: 0.4s ease-out;
+  position: relative;
+  left: 5px;
+}
+
+.my-auto-card:not(:first-child) {
+   margin-left: -100px;
+}
+.my-auto-card:hover {
+  /*transform: translateY(-20px); */
+    transform: translateX(-80px);
+    transition: 0.4s ease-out;
+}
+.bar, .card-body-info {
+    overflow-y: scroll;
+}
+.descrip {
+    color: #fff;
+    font-size: 15px;
+    word-wrap: break-word;
+    width: 95%;
+}
+
+.my-auto-card:hover ~ .card {
+    position: relative;
+    left: 90px;
+    transition: 0.4s ease-out;
+}
+
+#img-gal {
+    padding-left: 50px;
+    padding-right: 10px;
+}
+/* end of landingpage style */
+
+
+/*library page*/
+#library-header {
+    font-size: 30px;
+    font-family: 'Pacifico', cursive;
+    color: #fff;
+    text-shadow: 0 1px 0 #ccc,
+                       0 2px 0 #c9c9c9,
+                       0 3px 0 #bbb,
+                       0 4px 0 #b9b9b9,
+                       0 5px 0 #aaa,
+                       0 6px 1px rgba(0,0,0,.1),
+                       0 0 5px rgba(0,0,0,.1),
+                       0 1px 3px rgba(0,0,0,.3),
+                       0 3px 5px rgba(0,0,0,.2),
+                       0 5px 10px rgba(0,0,0,.25),
+                       0 10px 10px rgba(0,0,0,.2),
+                       0 20px 20px rgba(0,0,0,.15);
+}
+
+#books-collection {
+     width: 259px;
+     padding: 0;
+     margin: 10px;
+}
+
+#books-collection:hover {
+    transform: translateY(-20px);
+    transition: 0.4s ease-out;
+}
+
+#blog-list a {
+    background-color: transparent;
+    border: none;
+    color: blue;
+}
+
+#blog-list a:hover {
+    color: rgba(57, 255, 20, 1);
+}
+#auto-card {
+    width: 30%;
+    position: relative;
+    height: 450px;
+    right: 25%;
+    margin: 0 auto;
+    background: rgba( 255, 255, 255, 0.05 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 2px );
+    -webkit-backdrop-filter: blur( 2px );
+    border-radius: 5px;
+    border: 0.5px solid rgba( 255, 255, 255, 0.18 );
+}
+.auto-card-title {
+    font-size: 25px;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(to right, #f12711, #f5af19);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    text-shadow: 0 0 120px rgba(255, 255, 255, 0.2);
+}
+.auto-card-text {
+    word-wrap: break-word;
+    width: 90%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    text-align: justify;
+    color: #fff;
+}
+
+.bd-color{
+    background-color: #171717;/*#162D16; */
+}
+ 
+.auto-container {
+    position: relative; /* add position relative */
+    z-index: 1;
+    height: 50%;
+    width: 50%;
+    left: calc(60% - 300px);
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.my-auto-card-title {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    margin-top: 0;
+    background: linear-gradient(to right, #f12711, #f5af19);
+    color: #fff;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    text-shadow: 0 0 120px rgba(255, 255, 255, 0.2);
+}
+.course-title {
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(to right, #f12711, #f5af19);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    text-shadow: 0 0 120px rgba(255, 255, 255, 0.2);
+}
+
+/*end of about page styles */
 
 .register {
     display: flex;
@@ -201,9 +624,9 @@ td {
     padding: 20px;
     margin: 10px;
     border-radius: 32px;
-    background: linear-gradient(145deg, #333333, #cacaca);
-    box-shadow:  31px 31px 50px #c3c3c3,
-             -31px -31px 50px #fdfdfd;
+    background: linear-gradient(145deg, #3f3f3f, #353535);
+    box-shadow:  20px 20px 37px #3a3a3a,
+             -20px -20px 37px #545454;
 }
 
 #chart-body{

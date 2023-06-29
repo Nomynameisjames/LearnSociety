@@ -24,7 +24,7 @@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
              
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}"><b>LearnSociety</b></a>
+            <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}" style="text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
            	{% with messages = get_flashed_messages(with_categories=true) %}
@@ -235,12 +235,12 @@
                             {% endblock %}
 			            </div>
                     <div class="card-body mb-4" id="table-back">
-                        <table class="table table-hover" id="datatablesSimple">
+                        <table class="table table-hover" id="datatablesSimple" style="white-space: nowrap;">
                             <thead>
                                 <tr>
                                     <th> </th>
                                     <th> ID </th>
-                                    <th> Date </th>
+                                    <th class="text-nowrap"> Date </th>
                                     <th> Course </th>
                                     <th> Topic </th>
                                     <th> Target </th>
@@ -266,7 +266,7 @@
                             {% block table %}
                                 {% for key, value in data.items() %} 
                                     <tr style='overflow: hidden;'>
-                                        <td id="radio-btn" style='overflow-y: auto;'> </td>
+                                        <td id="radio-btn" style="overflow-y: auto;"> </td>
                                         <td id="my-key">{{ key }}</td>
                                         <td>{{ data[key]["Date"] }}</td>
                                         <td>{{ data[key]["Course"] }}</td>
