@@ -69,6 +69,7 @@
 *::after {
   box-sizing: border-box;
 }
+/* Animations */
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
@@ -88,47 +89,81 @@
      }
 /* about page styles */
 
-@media screen and (max-width: 760px) {
+@media only screen and (min-width: 360px) and (max-width: 760px) {
+
     #About-content {
-        margin-top: 10%;
+        margin-top: 11.5555%;
     }
 
     #img-cont {
         height: auto;
-    }
-    #img-gal {
-        width: 29.9999%;
-        height: auto;
-    }
-    #img-gal img {
-        width: 300px;
-        height: 100px;
     }
     #reader-img {
         width: 250px;
         height: 250px;
     }
     .my-auto-card {
-    margin-left: -400px;
-  }
-  #py-auto-card:hover {
-      transform: translateX(10px);
-      z-index: 1;
-      transition: 0.4s ease-out;
-  }
+        margin-left: -400px;
+    }
+    #py-auto-card:hover {
+        transform: translateX(10px);
+        z-index: 1;
+        transition: 0.4s ease-out;
+    }
   
-  .my-auto-card:hover {
-    transform: translateX(0);
-    z-index: 1;
-    transition: 0.4s ease-out;
-  }
+    .my-auto-card:hover {
+        transform: translateX(0);
+        transition: 0.4s ease-out;
+    }
 
-  .youtube-frame {
-      width: 100%;
-      height: auto;
-  }
+    .youtube-frame {
+        width: 100%;
+        height: auto;
+    }
+    #ggl-signin-btn {
+        font-size: 1rem;
+        margin: 10px;
+    }
+    #ggl-signin-icon {
+        width: 17.5px;
+        height: 17.5px;
+    }
+    #no-search {
+        display: flex;
+        float: right;
+    }
 
+    .table-info {
+        display: none;
+    }
+
+    #stub-table {
+        width: 100%;
+    }
+
+    .datatable-dropdown label {
+        display: none;
+    }
+
+    #myPieChart {
+        width: 100%;
+        height: 100%;
+    }
+
+  /*.hidden-search-form {
+      position: relative;
+      margin-right: -95px;
+      left: 18.5%;
+  }*/
 }
+
+/*@media only screen and (min-width: 450px) {
+    .hidden-search-form {
+        position: relative;
+        margin-right: -95px;
+        left: 55.5%;
+    }
+}*/
 
 @media screen and (min-width: 760px) and (max-width: 1024px) {
     #About-content {
@@ -160,7 +195,76 @@
       height: auto;
   }
 }
+/*hidden searchbar */
+/*.input-container {
+  position: relative;
+  display: none;
+  align-items: center;
+}
 
+#search-bar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 18px 16px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+}
+
+#search-bar::placeholder {
+  color: transparent;
+}
+
+#search-bar:focus::placeholder {
+  color: rgb(131, 128, 128);
+}
+
+#search-bar:focus,#search-bar:not(:placeholder-shown) {
+  background-color: #fff;
+  border: 1px solid rgb(98, 0, 255);
+  width: 200px;
+  transform: translateX(-85%);
+  cursor: none;
+  padding: 18px 16px 18px 40px;
+}
+
+
+.icon {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  height: 40px;
+  width: 40px;
+  background-color: #000;
+  border-radius: 5px;
+  z-index: -1;
+  /*fill: rgb(98, 0, 255)
+  border: 1px solid rgb(98, 0, 255);
+}
+
+#search-bar:hover + .icon {
+  transform: rotate(360deg);
+  transition: .2s ease-in-out;
+}
+
+#search-bar:focus + .icon,#search-bar:not(:placeholder-shown) + .icon {
+  z-index: 0;
+  background-color: rgba(0,0,0,0);
+  border: none;
+  left: 20px;
+}
+
+#search-bar:focus + .hidden-search-form {
+  display: flex;
+  margin: 0;
+  transition: .5s ease-in-out;
+}*/
+
+/*end of hidden search bar */
 .clearfix:after {
   content: "";
   display: table;
@@ -384,10 +488,12 @@
 }
 
 #img-gal {
-    padding-left: 50px;
-    padding-right: 10px;
+    padding: 0;
+    margin: 10px;
 }
+
 /* end of landingpage style */
+
 
 
 /*library page*/

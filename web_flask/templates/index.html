@@ -24,7 +24,7 @@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
              
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}" style="text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
+            <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
            	{% with messages = get_flashed_messages(with_categories=true) %}
@@ -55,6 +55,12 @@
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
             </form>
+       <!--     <form class="hidden-search-form" style="border: 2px solid blue;">
+                  <div class="input-container" id="no-search">
+                      <input type="text" id="search-bar" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                      <button class="icon" id="hidden-btn" type="button" style="background-color: rgba(0,0,0,0); border: 2px solid red;"><iconify-icon id="search-icon"icon="icon-park-outline:search" width="30" height="20" style="color: #fff;"></iconify-icon></button>
+                  </div>
+       </form> -->
             {% endblock %}
             {% endblock %}
             <!-- Navbar-->
@@ -201,7 +207,7 @@
                                         Topics focused on most
                                 </div>
                                     <div class="card-body">
-                                        <canvas id="myPieChart" width="100%" height="50"></canvas>
+                                        <canvas id="myPieChart" width="100" height="60"></canvas>
                                     </div>
                             </div>
                         </div>
@@ -212,7 +218,7 @@
                                         Average on Tasks completed
                                 </div>
                                     <div class="card-body">
-                                        <canvas id="myBarChart" width="100%" height="50"></canvas>
+                                        <canvas id="myBarChart" width="100" height="60"></canvas>
                                     </div>
                             </div>
                         </div>

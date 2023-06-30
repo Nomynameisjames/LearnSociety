@@ -1,0 +1,87 @@
+{
+            "1" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − SYNTAX "
+                },
+            "2" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − VARIABLES"
+                },
+            "3" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − OPERATORS"
+                },
+            "4" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − DECISION MAKING and LOOPING"
+                },
+            "5" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − FUNCTIONS "
+                },
+            "6" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − EVENTS"
+                },
+            "7" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − OBJECTS"
+                },
+            "8" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6—Strings and SYMBOL"
+                },
+            "9" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − ARRAYS"
+                },
+            "10" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6−HTMLDOM"
+                },
+            "11" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 Iterators and Generators"
+                },
+            "12" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 Classes"
+                },
+            "13" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6−PROMISES and Async/Await"
+                },
+            "14" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − MODULES"
+                },
+            "15" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − ERROR HANDLING"
+                },
+            "16" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − API"
+                },
+            "17" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − VALIDATIONS "
+                },
+            "18" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6 − REGULAR EXPRESSIONS"
+                },
+            "19" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6−DEBUGGING"
+                },
+            "20" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6—NEWFEATURES"
+                },
+            "21" : {
+                "Course" : "Javascript",
+                "Topic" : "ES6-Conclusion What Next?"
+                }
+            }
+

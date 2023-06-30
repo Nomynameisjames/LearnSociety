@@ -76,7 +76,7 @@ class Create_Schedule(User):
         else:
             return False
 
-    def View(self, my_id: str, choice: str=None, table: str=None):
+    def View(self, my_id: str, choice=None, table=None):
         """
             class method queries the database and returns a dictionary value
             based on the specified query method

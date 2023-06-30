@@ -258,7 +258,7 @@ def searchBar(current_user):
     if request.method == 'POST':
         try:
 
-            dictionary = redis_storage.get_list("dictionary")
+            dictionary = redis_storage.get_list_dict("dictionary")
             pattern = re.compile(fr"\b{data}\b", re.IGNORECASE)
             # Search the Redis dictionary first
             if dictionary:
@@ -273,7 +273,7 @@ def searchBar(current_user):
                 if doc:
                     temp_dict[data] = doc
                     dictionary.append(temp_dict)
-                    redis_storage.set_dict('dictionary', dictionary)
+                    redis_storage.set_list_dict('dictionary', dictionary)
                     print("using the wikipedia module")
                     return jsonify(doc), 200
             
@@ -283,15 +283,15 @@ def searchBar(current_user):
         if doc is None:
             doc = search_Func.get_wiki_briefs(data)
             if doc:
-                dictionary = redis_storage.get_list("dictionary")
+                dictionary = redis_storage.get_list_dict("dictionary")
                 print("using the get_wiki module")
                 doc = doc.get('summary')
                 doc = ' '.join(doc)
                 temp_dict[data] = doc
                 dictionary.append(temp_dict)
-                redis_storage.set_dict('dictionary', dictionary)
+                redis_storage.set_list_dict('dictionary', dictionary)
                 return jsonify(doc), 200
-        return jsonify({"description" : "No results found"}), 404
+            return jsonify({"description" : "No results found"}), 404
         
         #except:
         #    return jsonify({"description" : "Error occurred while searching"}), 500
