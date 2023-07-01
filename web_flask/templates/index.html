@@ -97,9 +97,9 @@
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ url_for('Main.view') }}">All</a>
-                                    <a class="nav-link" href="{{ url_for('Main.daily') }}">Daily</a>
-                                    <a class="nav-link" href="{{ url_for('Main.upcoming') }}">Upcoming</a>
-                                    <a class="nav-link" href="{{ url_for('Main.missed') }}">Missed</a>
+                                    <a class="nav-link" href="{{ url_for('Main.Tasks', status='daily') }}">Daily</a>
+                                    <a class="nav-link" href="{{ url_for('Main.Tasks', status='upcoming') }}">Upcoming</a>
+                                    <a class="nav-link" href="{{ url_for('Main.Tasks', status='missed') }}">Missed</a>
                                 </nav>
                             </div>
                                  <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -223,14 +223,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4" id="chart-body">
-                        <div class="card-header" id="table-dash">
+                    <div class="card mb-4" id="chart-body" style="border: 2px solid red;">
+                        <div class="card-header" id="table-dash" style="border: 2px solid green;">
                             <div class="table-info">
                                 <i class="fas fa-table me-1" id="tab"></i>
                                 Monthly Schedules
                             </div>
                             {% block btn %}
-                            <div class='table-btns' id="stub-table"> 
+                            <div class='table-btns' id="stub-table" style="border: 2px solid blue;"> 
                                 <button type="button" title="Delete Task" class="remove-bin" id="my-btn"><iconify-icon icon="fluent:delete-32-filled" height="25" width="25" class="small-icon"></iconify-icon></button>
                                 <button type="button" title="set alarm" class="set-alarm" id="my-alarm" style="color: #39FF14;"><iconify-icon class="small-icon" icon="material-symbols:alarm-outline" height="25" width="25"></iconify-icon></button>
                         	    <button type="button" title="Update Task" class="edit-btn" style="color: #00FFFF;"><iconify-icon class="small-icon" icon="material-symbols:edit" height="25" width="25"></iconify-icon></button>
@@ -240,8 +240,8 @@
                             </div>
                             {% endblock %}
 			            </div>
-                    <div class="card-body mb-4" id="table-back">
-                        <table class="table table-hover" id="datatablesSimple" style="white-space: nowrap;">
+                    <div class="card-body mb-4" id="table-back" style="border: 2px solid green;">
+                        <table class="table table-hover" id="datatablesSimple" style="white-space: nowrap; border: 2px solid brown;">
                             <thead>
                                 <tr>
                                     <th> </th>

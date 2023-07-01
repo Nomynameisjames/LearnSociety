@@ -56,12 +56,12 @@ def about():
     return render_template('about.html')
 
 
-@Main.route('/missed',  methods=['GET'])
+@Main.route('/tasks/<status>',  methods=['GET'])
 @login_required
 #@cache.cached(timeout=100)
-def missed():
+def Tasks(status: str):
     """
-        This route enables user to view missed tasks
+        This route enables user to view status of tasks
     """
     my_id = current_user.id
     user = current_user.User_name
@@ -71,34 +71,11 @@ def missed():
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(my_id)
     if auto:
-        dic = bot.View(my_id, 'missed', course)
+        dic = bot.View(my_id, status, course)
         return render_template('task_status.html', data=dic, form=form,
                                state=auto, user=user)
     else:
-        dic = bot.View(my_id, 'missed')
-        return render_template('task_status.html', data=dic, form=form,
-                               user=user)
-
-@Main.route('/daily', methods=['GET'])
-@login_required
-#@cache.cached(timeout=100)
-def daily():
-    """
-        This route enables user to view daily tasks
-    """
-    my_id = current_user.id
-    form = SearchBar()
-    user = current_user.User_name
-    if not my_id:
-        flash('You need to be logged in to view this page', 'danger')
-        return redirect(url_for('Main.login'))
-    bot = Create_Schedule(my_id)
-    if auto:
-        dic = bot.View(my_id, 'daily', course)
-        return render_template('task_status.html', data=dic, form=form,
-                               state=auto, user=user)
-    else:
-        dic = bot.View(my_id, 'daily')
+        dic = bot.View(my_id, status)
         return render_template('task_status.html', data=dic, form=form,
                                user=user)
 
@@ -115,13 +92,11 @@ def view():
     form = SearchBar()
     user_id = current_user.id
     user = current_user.User_name
-    data = None
     if not user_id:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(user_id)
     dic = bot.View(user_id)
-    print(f"\n\n userID: {user_id} data: {dic} \n\n")
     #cache_key = f'user_{user_id}_{user}'
     #cached_data = models.redis_storage.get_dict(cache_key)
     #if cached_data:
@@ -133,30 +108,6 @@ def view():
                            form=form))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
-
-@Main.route('/upcoming')
-@login_required
-#@cache.cached(timeout=200)
-def upcoming():
-    """
-        This route enables user to view upcoming tasks
-    """
-    my_id = current_user.id
-    user = current_user.User_name
-    form = SearchBar()
-    if not my_id:
-        flash('You need to be logged in to view this page', 'danger')
-        return redirect(url_for('Main.login'))
-    bot = Create_Schedule(my_id)
-    if auto:
-        dic = bot.View(my_id, 'upcoming', course)
-        return render_template('task_status.html', data=dic, form=form,
-                               state=auto, user=user)
-    else:
-        dic = bot.View(my_id, 'upcoming')
-        return render_template('task_status.html', data=dic, form=form,
-                               user=user)
-
 
 @Main.route('/quiz')
 @login_required

@@ -32,8 +32,8 @@
             <input type="hidden" name="ID" value="{{ ID }}">
             <fieldset  class="form-group">
                 {% block formm %}
-                <legend class="border-bottom mb-4 signup">Sign Up</legend>
-                <div class="mb-6" id="reg-form-label">
+                <legend class="border-bottom mb-2 signup">Sign Up</legend>
+                <div class="mb-4" id="reg-form-label">
                     {{ form.username.label(for="exampleFormControlInput1", class="form-control-label") }}
                     {% if form.username.errors %}
                         {{ form.username(class="form-control form-control is-invalid") }}

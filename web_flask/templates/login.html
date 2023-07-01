@@ -31,8 +31,8 @@
         <form method='POST' action=''>
         {{ form.hidden_tag() }}
             <fieldset  class="form-group">
-                <legend class="border-bottom mb-4 signup">LOGIN</legend> 
-                    <div class="mb-3" style="color: #000000;">
+                <legend class="border-bottom mb-2 signup">LOGIN</legend> 
+                    <div class="mb-2" style="color: #000000;">
                         <!-- <div class="input-group-prepend" style="margin-right: 5px;"> -->
                             {{ form.email.label(for="exampleFormControlInput1", class="form-label login-label") }}
                             {% if form.email.errors %}
@@ -46,8 +46,7 @@
                         <div  id="exampleFormControlInput1"> {{ form.email(type="text", autocomplete="email", class="form-control") }}</div>
                         {% endif %}
                         </div>
-                    <br>
-                    <div class=" mb-3" style="color: #000000;">
+                    <div class=" mb-2" style="color: #000000;">
                         <!--    <div class="input-group-prepend"> -->
                     {{ form.password.label(for="inputPassword5", class="form-label login-label") }} 
                     {% if form.password.errors %}
@@ -66,7 +65,6 @@
                         {{ form.remember.label(class="form-check-label") }}
                     </div>
             </fieldset>
-                <br>
                 <div class="login-btn">
                     {{ form.submit(class="frm-btn btn-success") }}
                 </div>
