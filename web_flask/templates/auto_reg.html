@@ -1,23 +1,25 @@
 {% extends 'index.html' %}
+{% block title %}
+    <title> Library </title>
+{% endblock %}
 {% block content %}
-<div id="layoutSidenav_content">
-    <main>
-    <div class="card" style="width: 18rem; left: 40%; bottom: -50%" id="about-body">
-        <div class="card-body">
-            <div class="card-title" style="text-align:center;">
-                <iconify-icon icon="icon-park-outline:error" width="50" height="50" style="color: red;"></iconify-icon>
+    <div id="layoutSidenav_content" style="background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.8), rgba(255,255, 255, 0.8));">
+        <div class="container text-center" id="reg-course">
+            <div class="card" style="width: 20rem; border: 1px solid red;" id="about-body">
+                <div class="card-body">
+                    <div class="card-title" style="text-align:center;">
+                        <iconify-icon icon="icon-park-outline:error" width="50" height="50" style="color: red;"></iconify-icon>
+                    </div>
+                    <h6 class="card-subtitle mb-2" style="text-align:center; color: red;">Record Not Found</h6> 
+                    <p class="text-center font-monospace">Get Started</p>
+                    <div class="mb-3 text-start">
+                        <label for="font-monospace" class="form-label text-start">Enter start date</label>
+                        <input class="form-control" type="date"  id="auto-input"></input>
+                    </div>
+                        <button type="button" class="btn btn-outline-success" id="auto-btn">submit</button>
+                </div>
             </div>
-            <h6 class="card-subtitle mb-2" style="text-align:center; color: red;">Record Not Found</h6>
-
-            <p class="text-center font-monospace">Get Started</p>
-        <div class="mb-3">
-            <label for="font-monospace" class="form-label">Date</label>
-            <input class="form-control" type="date"  id="auto-input"></input>
         </div>
-            <button type="button" class="btn btn-success" id="auto-btn">submit</button>
-        </div>
-    </div>
-</main>
-<footer class="py-4 bg-dark mt-auto">
-
+    </main>
+    <footer class="py-4 bg-dark mt-auto">
 {% endblock %}

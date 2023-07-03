@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,6 +27,17 @@
             <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+           <!-- <div class="container text-center Hidden-Search-Btn" id="hidden-search-btn">
+           <div class="row row-cols-auto"> -->
+            <button type="button" class="hidden-search-btn" id="hidden-search" style="background-color: rgba(0,0,0,0);"><iconify-icon icon="icon-park-outline:search" width="30" height="20" style="color:#fff;"></iconify-icon></button>
+                    <div id="hidden-search-input">
+                        <form style="display: flex;">
+                            <input type="text" class="search-send search-bar" placeholder="Search for..." style="flex: 1;">
+                            <button  class="hidden-search-send"><iconify-icon icon="icon-park-outline:search" height="20" width="30" style="color: #fff;"></iconify-icon></button>
+                        </form>
+                    </div>
+               <!--   </div>
+           </div> -->
            	{% with messages = get_flashed_messages(with_categories=true) %}
                 	{% if messages %}
                         	{% for category, message in messages %}
@@ -55,6 +66,7 @@
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
             </form>
+
        <!--     <form class="hidden-search-form" style="border: 2px solid blue;">
                   <div class="input-container" id="no-search">
                       <input type="text" id="search-bar" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
@@ -223,14 +235,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4" id="chart-body" style="border: 2px solid red;">
-                        <div class="card-header" id="table-dash" style="border: 2px solid green;">
+                    <div class="card mb-4" id="chart-body" style="border: 1px solid red;">
+                        <div class="card-header" id="table-dash">
                             <div class="table-info">
                                 <i class="fas fa-table me-1" id="tab"></i>
                                 Monthly Schedules
                             </div>
                             {% block btn %}
-                            <div class='table-btns' id="stub-table" style="border: 2px solid blue;"> 
+                            <div class='table-btns' id="stub-table"> 
                                 <button type="button" title="Delete Task" class="remove-bin" id="my-btn"><iconify-icon icon="fluent:delete-32-filled" height="25" width="25" class="small-icon"></iconify-icon></button>
                                 <button type="button" title="set alarm" class="set-alarm" id="my-alarm" style="color: #39FF14;"><iconify-icon class="small-icon" icon="material-symbols:alarm-outline" height="25" width="25"></iconify-icon></button>
                         	    <button type="button" title="Update Task" class="edit-btn" style="color: #00FFFF;"><iconify-icon class="small-icon" icon="material-symbols:edit" height="25" width="25"></iconify-icon></button>
@@ -240,8 +252,8 @@
                             </div>
                             {% endblock %}
 			            </div>
-                    <div class="card-body mb-4" id="table-back" style="border: 2px solid green;">
-                        <table class="table table-hover" id="datatablesSimple" style="white-space: nowrap; border: 2px solid brown;">
+                    <div class="card-body mb-4" id="table-back">
+                        <table class="table table-hover" id="datatablesSimple" style="white-space: nowrap;">
                             <thead>
                                 <tr>
                                     <th> </th>

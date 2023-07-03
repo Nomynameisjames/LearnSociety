@@ -149,11 +149,49 @@ $(document).ready(function() {
     var pdfTitle = $(this).data('pdf-title');
 
     // Set the modal content dynamically
-    $('#pdf-object').attr('data', pdfUrl);
+    $('#pdf-object').attr('src', pdfUrl);
     $('#pdf-download-link').attr('href', pdfredirect);
     $('#staticBackdropLabel').text(pdfTitle);
 
     // Show the modal
     $('#staticBackdrop').modal('show');
   });
+});
+
+
+$(document).ready(function() {
+  // Store the state of the input field
+  var isInputVisible = false;
+
+  $('#hidden-search').click(function() {
+    console.log('I have been clicked');
+    
+    // Toggle the visibility of the input field
+    if (isInputVisible) {
+      hideInputField();
+    } else {
+      showInputField();
+    }
+    
+    // Toggle the state
+    isInputVisible = !isInputVisible;
+  });
+
+  function showInputField() {
+    $('#hidden-search-input')
+      .css('transition', 'transform 0.5s ease-in-out')
+      //.css('max-width', '100%')
+      .css('display', 'flex')
+      .css('transform', 'translateX(0)');
+    $('#hidden-search-input input[type="search"]').focus();
+  }
+  
+  function hideInputField() {
+    $('#hidden-search-input')
+      .css('transition', 'transform 0.5s ease-in-out')
+      //.css('max-width', '0')
+      .css('transform', 'translateX(100%)')
+      .css('display', 'none');
+    $('#hidden-search-input input[type="search"]').blur();
+  }
 });

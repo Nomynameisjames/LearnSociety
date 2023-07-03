@@ -336,14 +336,16 @@ $(document).ready(function() {
 $(document).ready(function() {
     let RandomSearchBtn = "#btnNavbarSearch";
     let RandomSearchCourseBtn = ".CourseSearch";
+    let hiddenBtn = ".hidden-search-send";
     let btnClicked = ''
     let data;
     var Topic;
     var url;
-    $(RandomSearchBtn + ', ' + RandomSearchCourseBtn).click(function() {
+    $(RandomSearchBtn + ', ' + RandomSearchCourseBtn + ', ' + hiddenBtn).click(function(event) {
+        event.preventDefault();
         Topic = $(this).val();
         let text = $('.search-bar').val();
-        if ($(this).is(RandomSearchBtn)) {
+        if ($(this).is(RandomSearchBtn) || $(this).is(hiddenBtn)) {
             url = 'http://127.0.0.1:5001/api/v1/search';
             btnClicked = 'RandomSearchBtn'
         } else {
