@@ -4,7 +4,13 @@
 {% endblock %}
 {% block sideNav %}
 <div class="card mb-3" style="background-color: #100f0f; border-bottom: 0.5px solid white;">
-    <img src="https://ucarecdn.com/5f9b227f-e22b-4b90-846c-9fecd07b7a1b/" class="card-img-top" alt="..."  style="border-radius: 50%; height: auto; width: 50%;">
+    <!--<form id="uploadForm" method="POST" enctype="multipart/form-data">
+        <label class="input-group-text" id="upload-pic" for="fileInput">
+            <iconify-icon id="upload-icon" icon="material-symbols:file-upload" width="30" height="25" style="color: white;"></iconify-icon>
+        </label>
+         <button type="submit">Upload</button>
+    </form> -->
+    <img src="{{ dp }}" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
     <div class="card-body" style="color: #fff;">
         <h5 class="card-title">{{ user }}</h5>
         <br>
@@ -56,11 +62,12 @@
 </div>
 {% endblock %}
 {% block content %}
+    {% block newblock %}
 <div id="layoutSidenav_content" class="chatbot-container">
     <main>
-        <div class="grp-chat-home-icon">
-            <div class="group-img">
-                <img src="https://ucarecdn.com/dab69544-878c-45d5-a6d2-c1117b74e261/" class="card-img-top" alt="..."  style="height: 100%; width: 100%;">
+        <div class="grp-chat-home-icon" style="border: 2px solid red;">
+            <div class="group-img" style="border: 2px solid blue;">
+                <!-- <img src="https://ucarecdn.com/dab69544-878c-45d5-a6d2-c1117b74e261/" class="card-img-top" alt="..."  style="height: 100%; width: 100%; border: 2px solid green;">-->
             </div>
         </div>
         <div class="community-note">
@@ -115,6 +122,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" id="send-RoomCode-btn">Join</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<div class="modal fade" id="staticBackdrop4" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="clear-modal">
+      <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel" style="text-shadow: 0 0 3px #FF0000;">{{ user }}</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img  class="img-thumbnail" id="img01" alt="Profile Picture" style="border: none;">
+      </div>
+      <div class="modal-footer">
+        <form id="MyForm" method="POST" enctype="multipart/form-data" style="margin-top: 20px;">
+            {{ Form.hidden_tag() }}
+            {{ Form.image.label(class="input-group-text", id="upload-pic", for="fileInput") }}
+            {{ Form.image(class_='form-control-file', id='fileInput') }}
+            <button type="submit" id="upload-submit" class="btn btn-success">Upload</button>
+        </form>
       </div>
     </div>
   </div>

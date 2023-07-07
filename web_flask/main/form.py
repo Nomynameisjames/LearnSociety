@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField, BooleanField
+from wtforms import PasswordField, StringField, SubmitField, BooleanField, FileField
 from wtforms.validators import (Email, DataRequired, Length, EqualTo,
                                 ValidationError, Optional)
+from flask_wtf.file import FileAllowed, FileRequired
 import models
 from models.RequestModule import Notifications
 from models.baseModel import user_id
@@ -45,6 +46,12 @@ class RegisterForm(FlaskForm):
         if not any(char.isdigit() for char in password.data):
             raise ValidationError(_l('Password must contain at least 1 number'))
 
+
+class UploadForm(FlaskForm):
+    image = FileField('Image', validators=[
+        FileRequired(message='Please select an image file.'),
+        FileAllowed(['jpg', 'jpeg', 'png'], message='Only JPG, JPEG, and PNG images are allowed.')
+    ])
 
 
 class LoginForm(FlaskForm):

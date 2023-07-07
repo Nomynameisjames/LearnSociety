@@ -97,20 +97,10 @@
         width: 250px;
         height: 250px;
     }
-    .my-auto-card {
-        margin-left: -400px;
-    }
-    #py-auto-card:hover {
-        transform: translateX(10px);
-        z-index: 1;
-        transition: 0.4s ease-out;
+    #MySwiper {
+        width: 100%;
     }
   
-    .my-auto-card:hover {
-        transform: translateX(0);
-        transition: 0.4s ease-out;
-    }
-
     .youtube-frame {
         width: 100%;
         height: auto;
@@ -160,6 +150,7 @@
     }
 }
 
+#myImg:hover {opacity: 0.7;}
 
   /*.hidden-search-form {
       position: relative;
@@ -211,6 +202,23 @@
     #input-container {
         width: 65%
     }
+}
+#upload-pic {
+    width: 35px;
+    text-align: center;
+    height: auto;
+    background-color: transparent;
+    position: absolute;
+    top: 120px; 
+    padding: 0;
+    border: none;
+    margin: 0;
+    right: 14px;
+}
+
+#upload-icon:hover {
+    cursor: pointer;
+    color: red;
 }
 /*hidden searchbar */
 /*.input-container {
@@ -490,22 +498,64 @@
     padding: 10px;
 }
 
-.descript-item-3 {
-    width: 100%;
+/*.descript-item-3 {
+   width: 60%;
     height: 100%;
+    margin-top: 30px;
+    padding: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+.swiper {
+    width: 50%;
+    height: 100%;
+    padding: 50px;
     margin-top: 30px;
 }
 
-.available-courses {
+/*.available-courses {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 50%;
+    height: 100%;
+}*/
+
+.swiper-slide {
     width: 100%;
     height: 400px;
+    padding: 8px 16px;
+    border: 2px solid orange;
+    text-align: center;
+    font-size: 18px;
+    background-color: rgba(41, 41, 41, 0.7);
+    border-radius: 10px;
+    box-shadow: -1rem 0 3rem #000;
+    color: #fff;
+    overflow-y: scroll;
+      /*display: flex;
+      flex-direction: column;
+      align-items: center;*/
+    }
+#swiper-btn {
+    font-size: 35px;
+    color: rgba(0,255, 0, 1);
+}
+#swiper-btn::before,
+#swiper-btn::after {
+    font-size: 35px;
+}
+#swiper-btn:hover {
+    color: rgba(255,255,255, 1);
+}
+  
+.swiper-pagination-bullet {
+    background-color: #333;
 }
 
-.my-auto-card {
+
+/*.my-auto-card {
   height: 300px;
   width: 400px;
   margin: 10px; 
@@ -516,17 +566,17 @@
   background-color: rgba(41, 41, 41, 0.7);
   border-radius: 10px;
   box-shadow: -1rem 0 3rem #000;
-  /*   margin-left: -50px; */
+  /*   margin-left: -50px;
   transition: 0.4s ease-out;
   position: relative;
   left: 5px;
-}
+}*/
 
-.my-auto-card:not(:first-child) {
+/*.my-auto-card:not(:first-child) {
    margin-left: -100px;
 }
 .my-auto-card:hover {
-  /*transform: translateY(-20px); */
+  /*transform: translateY(-20px); 
     transform: translateX(-80px);
     transition: 0.4s ease-out;
 }
@@ -544,7 +594,7 @@
     position: relative;
     left: 90px;
     transition: 0.4s ease-out;
-}
+}*/
 
 #img-gal {
     padding: 0;
@@ -820,7 +870,11 @@ td {
 .group-img {
     padding: 5px;
     width: 60%;
-    height: auto;
+    height: 400px;
+    background-image: url("https://ucarecdn.com/dab69544-878c-45d5-a6d2-c1117b74e261/");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .community-note {

@@ -1,3 +1,4 @@
+import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.mjs'
 import { flashMsg, RequestCall } from './settings.js';
 
 window.addEventListener('DOMContentLoaded', event => {
@@ -30,6 +31,22 @@ $('#my-btn').click(function() {
     }
 });
 });
+
+$(document).ready(function() {
+  var swiper = new Swiper(".mySwiper", {
+    effect: "flip",
+    grabCursor: true,
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+});
+
 
 // function aUpdates a users Schedule in the database via the API endpoint
 $(document).ready(function() {

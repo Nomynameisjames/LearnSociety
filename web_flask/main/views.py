@@ -3,14 +3,17 @@ from flask import (Flask, render_template, abort, url_for, redirect,
 from models.Schedule import Create_Schedule
 from models.checker import Checker
 from models.Update_Profile import update_redis_profile
+from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+from pyuploadcare import Uploadcare
 from ..Performance_logger import performance_logger
 from . import Main
-from .form import SearchBar
+from .form import SearchBar, UploadForm
+
 #from .. import cache
 from uuid import uuid4
 import models
-
+import os
 
 """
     This file contains all the routes for the application
@@ -21,6 +24,18 @@ quiz_data = {}
 auto = False
 course = None
 
+def Upload_file(file):
+    pub_key = os.environ.get('UploadCare_PUBLIC_KEY')
+    secret_key = os.environ.get('UploadCare_SECRET_KEY')
+    uploadcare = Uploadcare(public_key=pub_key, secret_key=secret_key)
+    ucare_file = uploadcare.upload(file)
+    return ucare_file.cdn_url
+
+def get_display_picture(user_id):
+    """ gets the users display picture from the database """
+    uploader = update_redis_profile(user_id)
+    dp = uploader.get
+    return dp.get('profile_picture')
 
 #@cache.memoize(timeout=200, make_name=lambda user_id: 'get_last_update_time_v1_uid' + str(user_id))
 #def get_last_update_time(user_id):
@@ -214,7 +229,7 @@ def articles():
         return render_template('auto_reg.html', form=form)
 
 
-@Main.route('/community', methods=['GET'])
+@Main.route('/community', methods=['GET', 'POST'])
 @login_required
 @performance_logger
 def ChatRoom():
@@ -223,12 +238,26 @@ def ChatRoom():
     """
     username = current_user.User_name
     community = []
-    Form = SearchBar()
+    uploader = update_redis_profile(current_user.id)
+    display_picture = get_display_picture(current_user.id)
+    Form = UploadForm()
+    form = SearchBar()
+    if Form.validate_on_submit():
+        images = Form.image.data
+        if images:
+            data = Upload_file(images)
+            if data:
+                uploader.save_profile_picture(data)
+                flash('Profile picture updated', 'success')
+                return redirect(url_for('Main.ChatRoom'))
+            else:
+                flash('Profile picture not updated', 'danger')
+                return redirect(url_for('Main.ChatRoom'))
     get_community = models.redis_storage.get_list_dict('community')
     if get_community:
         community = get_community
-    return render_template('chatRoom.html', form=Form, communities=community,
-                           user=username)
+    return render_template('chatRoom.html', Form=Form, form=form, communities=community,
+                           user=username, dp=display_picture)
 
 @Main.route('/ChatRoom/<room_id>', methods=['GET', 'POST'])
 @login_required
@@ -241,6 +270,7 @@ def ChatRoomID(room_id):
         return redirect(url_for('Main.ChatRoom'))
     username = current_user.User_name
     ID = current_user.id
+    Form = UploadForm()
     chat_history = []
     community = []
     groupinfo = {}
@@ -262,7 +292,9 @@ def ChatRoomID(room_id):
     rendered_template = render_template('chatRoomPage.html', form=form,
                                             communities=community,
                                             groupinfo=groupinfo,
-                                            user=username, ID=ID, chats=chat_history)
+                                            user=username, ID=ID,
+                                            Form=Form, dp=get_display_picture(ID),
+                                            chats=chat_history)
     response = make_response(rendered_template)
     return response
 
@@ -282,4 +314,3 @@ def friends_page():
         community = get_community
     return render_template('friendsPage.html', form=form,
                            communities=community, user=username, ID=ID)
-

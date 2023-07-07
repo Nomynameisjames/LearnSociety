@@ -60,6 +60,7 @@ def create_user_profile(ID, name):
                 'username': name,
                 "status": "",
                 "friends": [],
+                "profile_picture": "",
                 "friend_requests": [],
                 "blocked": [],
                 "profile_pic": "",
