@@ -152,20 +152,6 @@
 
 #myImg:hover {opacity: 0.7;}
 
-  /*.hidden-search-form {
-      position: relative;
-      margin-right: -95px;
-      left: 18.5%;
-  }*
-
-/*@media only screen and (min-width: 450px) {
-    .hidden-search-form {
-        position: relative;
-        margin-right: -95px;
-        left: 55.5%;
-    }
-}*/
-
 @media screen and (min-width: 760px) and (max-width: 1024px) {
     #About-content {
         margin-top: 7%;
@@ -176,20 +162,6 @@
     }
     .responsive {
     width: 100%;
-  }
-   .my-auto-card {
-    margin-left: -400px;
-  }
-  #py-auto-card:hover {
-      transform: translateX(10px);
-      z-index: 1;
-      transition: 0.4s ease-out;
-  }
-  
-  .my-auto-card:hover {
-    transform: translateX(0);
-    z-index: 1;
-    transition: 0.4s ease-out;
   }
   .youtube-frame {
       width: 100%;
@@ -203,6 +175,7 @@
         width: 65%
     }
 }
+
 #upload-pic {
     width: 35px;
     text-align: center;
@@ -220,57 +193,6 @@
     cursor: pointer;
     color: red;
 }
-/*hidden searchbar */
-/*.input-container {
-  position: relative;
-  display: none;
-  align-items: center;
-}
-
-#search-bar {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  box-sizing: border-box;
-  border: none;
-  outline: none;
-  padding: 18px 16px;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all .5s ease-in-out;
-}
-
-#search-bar::placeholder {
-  color: transparent;
-}
-
-#search-bar:focus::placeholder {
-  color: rgb(131, 128, 128);
-}
-
-#search-bar:focus,#search-bar:not(:placeholder-shown) {
-  background-color: #fff;
-  border: 1px solid rgb(98, 0, 255);
-  width: 200px;
-  transform: translateX(-85%);
-  cursor: none;
-  padding: 18px 16px 18px 40px;
-}
-
-
-.icon {
-  position: absolute;
-  left: 10px;
-  top: 0;
-  height: 40px;
-  width: 40px;
-  background-color: #000;
-  border-radius: 5px;
-  z-index: -1;
-  /*fill: rgb(98, 0, 255)
-  border: 1px solid rgb(98, 0, 255);
-}
-*/
  
 #hidden-search-input {
     display: none;
@@ -316,20 +238,6 @@
     padding:10px 5px 10px 5px;
     font-size: 15px;
 }
-
-/*
-#search-bar:focus + .icon,#search-bar:not(:placeholder-shown) + .icon {
-  z-index: 0;
-  background-color: rgba(0,0,0,0);
-  border: none;
-  left: 20px;
-}
-
-#search-bar:focus + .hidden-search-form {
-  display: flex;
-  margin: 0;
-  transition: .5s ease-in-out;
-}*/
 
 /*end of hidden search bar */
 .clearfix:after {
@@ -498,30 +406,12 @@
     padding: 10px;
 }
 
-/*.descript-item-3 {
-   width: 60%;
-    height: 100%;
-    margin-top: 30px;
-    padding: 50px;
-    margin-left: auto;
-    margin-right: auto;
-}*/
 .swiper {
     width: 50%;
     height: 100%;
     padding: 50px;
     margin-top: 30px;
 }
-
-/*.available-courses {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    height: 100%;
-}*/
-
 .swiper-slide {
     width: 100%;
     height: 400px;
@@ -534,9 +424,6 @@
     box-shadow: -1rem 0 3rem #000;
     color: #fff;
     overflow-y: scroll;
-      /*display: flex;
-      flex-direction: column;
-      align-items: center;*/
     }
 #swiper-btn {
     font-size: 35px;
@@ -553,48 +440,6 @@
 .swiper-pagination-bullet {
     background-color: #333;
 }
-
-
-/*.my-auto-card {
-  height: 300px;
-  width: 400px;
-  margin: 10px; 
-  border: 2px solid blue;
-  overflow-y: scroll;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: rgba(41, 41, 41, 0.7);
-  border-radius: 10px;
-  box-shadow: -1rem 0 3rem #000;
-  /*   margin-left: -50px;
-  transition: 0.4s ease-out;
-  position: relative;
-  left: 5px;
-}*/
-
-/*.my-auto-card:not(:first-child) {
-   margin-left: -100px;
-}
-.my-auto-card:hover {
-  /*transform: translateY(-20px); 
-    transform: translateX(-80px);
-    transition: 0.4s ease-out;
-}
-.bar, .card-body-info {
-    overflow-y: scroll;
-}
-.descrip {
-    color: #fff;
-    font-size: 15px;
-    word-wrap: break-word;
-    width: 95%;
-}
-
-.my-auto-card:hover ~ .card {
-    position: relative;
-    left: 90px;
-    transition: 0.4s ease-out;
-}*/
 
 #img-gal {
     padding: 0;
