@@ -52,6 +52,10 @@ class UploadForm(FlaskForm):
         FileRequired(message='Please select an image file.'),
         FileAllowed(['jpg', 'jpeg', 'png'], message='Only JPG, JPEG, and PNG images are allowed.')
     ])
+    image_name = StringField(_l("Image Name"), validators=[Optional()])
+    def validate_image(self, image):
+        if image.data == '':
+            raise ValidationError(_l('Please select an image file.'))
 
 
 class LoginForm(FlaskForm):

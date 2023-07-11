@@ -1,5 +1,7 @@
- import { flashMsg } from './settings.js';
+import { flashMsg } from './settings.js';
 // file implements all socketio connection logic
+
+
 
 $(document).ready(function() {
     var socketio = io.connect();

@@ -1,6 +1,7 @@
 // loader icon logic 
 import { flashMsg, RequestCall, getCookie } from './settings.js';
 
+
 // function that animates the chatbot header div 
 function ShowBox() {
     $("#nav-id").css("background-color", "black")

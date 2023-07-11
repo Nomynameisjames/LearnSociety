@@ -27,9 +27,13 @@ course = None
 def Upload_file(file):
     pub_key = os.environ.get('UploadCare_PUBLIC_KEY')
     secret_key = os.environ.get('UploadCare_SECRET_KEY')
-    uploadcare = Uploadcare(public_key=pub_key, secret_key=secret_key)
-    ucare_file = uploadcare.upload(file)
-    return ucare_file.cdn_url
+    try:
+        uploadcare = Uploadcare(public_key=pub_key, secret_key=secret_key)
+        ucare_file = uploadcare.upload(file)
+        return ucare_file.cdn_url
+    except Exception as e:
+        print(f"\nfollwing error occured: {e}\n")
+        return
 
 def get_display_picture(user_id):
     """ gets the users display picture from the database """
@@ -119,7 +123,8 @@ def view():
     #else:
     #models.redis_storage.set_dict(cache_key, data, ex=200)
     auto = False
-    response = make_response(render_template('index.html', data=dic, status=auto, user=user,
+    response = make_response(render_template('index.html', data=dic,
+                                             status=auto, user=user,
                            form=form))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
@@ -244,7 +249,9 @@ def ChatRoom():
     form = SearchBar()
     if Form.validate_on_submit():
         images = Form.image.data
-        if images:
+        image_desc = Form.image_name.data
+        print(image_desc)
+        if images and image_desc == "User":
             data = Upload_file(images)
             if data:
                 uploader.save_profile_picture(data)

@@ -5,11 +5,13 @@ from models.baseModel import user_id
 from models.RequestModule import Notifications
 from models.Update_Profile import update_redis_profile
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from flask import request
 from datetime import datetime, timedelta
 from typing import Union, Dict
 from uuid import uuid4
 from string import ascii_uppercase
+import os
 import random
 
 def generate_unique_code(length):
@@ -27,7 +29,7 @@ def generate_unique_code(length):
         if code not in rooms:
             break
     
-    return code
+    return code 
 
 def compose_message(user: user_id) -> Dict[str, str]:
     token = user.generate_confirmation_code()
@@ -61,6 +63,7 @@ def create_community(ID, **kwargs):
             str(ID): {
                 "name": kwargs.get('name'),
                 "users": [admin_user.User_name],
+                "group_picture": kwargs.get('group_picture'),
                 "chat": [{
                           "text": "",
                           "sender": "",

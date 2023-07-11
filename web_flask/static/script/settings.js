@@ -62,6 +62,50 @@ export function getCookie(cname) {
     return "";
  }    
 
+$(document).ready(function() {
+   $("#create-groupchat").click(function(e) {
+     e.preventDefault();
+ 
+     var formData = new FormData();
+     var fileInput = $("#fileInput")[0];
+     var file = fileInput.files[0];
+     formData.append("image", file);
+ 
+     let room = $('#new-community-name').val();
+     let desc = $('#new-community-desc').val();
+ 
+     var data = {
+       'room': room,
+       'description': desc
+     };
+ 
+     // Add the data to the FormData object
+     for (var key in data) {
+       formData.append(key, data[key]);
+     }
+     let url = 'http://127.0.0.1:5001/api/v1/community/';
+      $.ajax({
+      url: url,
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('x-access-token', getCookie('access_token'));
+        },
+      success: function(response) {
+        flashMsg(response.message, 'success');
+      },
+      error: function(error) {
+        console.log("Error:", error);
+          flashMsg("error", 'fail');
+      }
+        });
+    });
+});
+
+
+
 // function updates a user's username via the api endpoint
 $(document).ready(function () {
         const exampleModal = $('#exampleModal');
@@ -86,48 +130,6 @@ $(document).ready(function () {
       });
     })
 
-/*$(document).ready(function () {
-    $('#fileInput').change(function() {
-    var file = this.files[0];
-    var allowedTypes = ['image/jpeg', 'image/png'];
-    var maxSize = 5 * 1024 * 1024; // 5MB
-    
-    if (allowedTypes.includes(file.type) && file.size <= maxSize) {
-        var formData = new FormData();
-        formData.append('file', file);
-        formData.append('option', 'updatePicture');
-        console.log(formData);
-        if (formData.has('file') && formData.has('option')) {
-            RequestCall('PUT', url, formData, null, null, function(response) {
-                flashMsg(response.message, 'success');
-                location.reload();
-                 });
-      } else {
-        flashMsg('Form data is empty', 'fail');
-      }
-    } else {
-        flashMsg('File must be either JPEG or PNG and less than 5MB', 'fail');
-    }
-    });
-});*/
-/*$(document).ready(function() {
-    $('#uploadForm').submit(function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        formData.append('option', 'updatePicture');
-        console.log(formData);
-        if (formData.get('file') && formData.get('option')) {
-            RequestCall('PUT', url, formData, null, null, function(response) {
-                flashMsg(response.message, 'success');
-                location.reload();
-            });
-        } else {
-            flashMsg('Form data is incomplete', 'fail');
-        }
-    });
-});
-*/
-
 $(document).ready(function () {
     var Modal = $('#staticBackdrop4');
     var img  = $('#myImg');
@@ -137,39 +139,6 @@ $(document).ready(function () {
         modalImg.attr('src', img.attr('src'));
     });
 });
-/*    $('#upload-submit').on("click", function(e) {
-        e.preventDefault();
-        var formData = new FormData($("#MyForm")[0]);
-        formData.append('option', 'updatePicture');
-
-        var fileInput = $('#fileInput');
-        var file = fileInput[0].files[0];
-
-        if (file) {
-            formData.set('file', file);
-            var allowedTypes = ['image/jpeg', 'image/png'];
-            var maxSize = 5 * 1024 * 1024; // 5MB
-            console.log(formData.file)
-
-            if (allowedTypes.includes(file.type) && file.size <= maxSize) {
-                var reader = new FileReader();
-
-                reader.onload = function() {
-                $('#img01').attr('src', reader.result);
-                    RequestCall('POST', url, formData, null, null, function(response) {
-                        flashMsg(response.message, 'success');
-                        location.reload();
-                    });
-                }
-                reader.readAsDataURL(file);
-            } else {
-                flashMsg('File must be either JPEG or PNG and less than 5MB', 'fail');
-            }
-        } else {
-            flashMsg('File is empty', 'fail');
-        }
-    });
-});*/
 
 // function updates a user's email via the api endpoint 
 $(document).ready(function () {

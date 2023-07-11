@@ -9,8 +9,9 @@
         <title>About - LearnSociety</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-        <link href="static/styles/styles.css" rel="stylesheet" />
-        <link href="static/styles/styles_2.css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='styles/styles_2.css') }}" rel="stylesheet"/>
+        <link href="{{ url_for('static', filename='styles/swiper.css') }}" rel="stylesheet"/>
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://code.iconify.design/iconify-icon/1.0.4/iconify-icon.min.js"></script>
@@ -91,7 +92,7 @@
             </div>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script type="module" src="{{ url_for('static', filename='script/scripts.js') }}"></script>
+        <script type="module" src="{{ url_for('static', filename='script/swiper.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>

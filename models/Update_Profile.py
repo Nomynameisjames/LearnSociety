@@ -36,6 +36,13 @@ class update_redis_profile:
         self.item[self.id] = self.value
         self.save()
 
+    def save_profile_picture(self, picture):
+        if self.value is None: 
+            return
+        self.value["profile_picture"] = picture
+        self.item[self.id] = self.value
+        self.save()
+
     def clear_chatbot_history(self):
         if self.value is None: 
             return

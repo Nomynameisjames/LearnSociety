@@ -4,13 +4,11 @@
 {% endblock %}
 {% block sideNav %}
 <div class="card mb-3" style="background-color: #100f0f; border-bottom: 0.5px solid white;">
-    <!--<form id="uploadForm" method="POST" enctype="multipart/form-data">
-        <label class="input-group-text" id="upload-pic" for="fileInput">
-            <iconify-icon id="upload-icon" icon="material-symbols:file-upload" width="30" height="25" style="color: white;"></iconify-icon>
-        </label>
-         <button type="submit">Upload</button>
-    </form> -->
-    <img src="{{ dp }}" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+    {% if dp == "" %}
+        <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+    {% else %}
+        <img src="{{ dp }}" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+    {% endif %}
     <div class="card-body" style="color: #fff;">
         <h5 class="card-title">{{ user }}</h5>
         <br>
@@ -35,10 +33,12 @@
         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
             {% for community in communities %}
                 {% for key, value in community.items() %}
-                <a class="nav-link" href="{{ url_for('Main.ChatRoomID', room_id=key) }}">
-                    <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
-                    {{ value['name'] }}
-                </a>
+                    {% if user in value["users"] %}
+                        <a class="nav-link" href="{{ url_for('Main.ChatRoomID', room_id=key) }}">
+                        <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
+                        {{ value['name'] }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </nav>
@@ -65,15 +65,34 @@
     {% block newblock %}
 <div id="layoutSidenav_content" class="chatbot-container">
     <main>
-        <div class="grp-chat-home-icon" style="border: 2px solid red;">
-            <div class="group-img" style="border: 2px solid blue;">
-                <!-- <img src="https://ucarecdn.com/dab69544-878c-45d5-a6d2-c1117b74e261/" class="card-img-top" alt="..."  style="height: 100%; width: 100%; border: 2px solid green;">-->
+        <div class="grp-chat-home-icon">
+            <div class="group-img">
             </div>
         </div>
         <div class="community-note">
             <h2 class="group-title">Welcome to the community</h2>
             <p class="text-center" style="font-size: 18px;">Easily Organize your related groups and send announcements, find study peers and share perspective with those undergoing similar learning experience as you!</p>
             <button type="button" class="btn btn-success btn-lg" id="com-btn" style="border-radius: 20px; width: 350px; white-space: nowrap;" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join Community</button>
+        </div>
+        <h2 class="group-title"  style="color: #fff; margin-top: 20px;">Discover new Communities</h2>
+        <div class="swiper mySwiper" id="MySwiper">
+            <div class="swiper-wrapper">
+                {% for community in communities %}
+                    {% for key, value in community.items() %}
+                        <div class="swiper-slide" id="MySwiper-slide">
+                            <div class="card" id="community-card">
+                                <img src="{{ value["group_picture"] }}" class="card-img-top" id="community-image"  alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF">{{ value["name"] }}</h5>
+                                    <p class="text-center">{{ value["users"] | length }} Members</p>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
         </div>
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -84,7 +103,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="">
+        <form id="MyForm" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Community Name</label>
                 <input type="text" name="room" value="" class="form-control" id="new-community-name">
@@ -93,7 +112,11 @@
                 <label for="message-text" class="col-form-label">Description</label>
                 <input type="text" name="description" value="" class="form-control" id="new-community-desc">
             </div>
-        </form>
+        <div class="input-group mb-3">
+             {{ Form.hidden_tag() }}
+             {{ Form.image.label(class="input-group-text", id="upload-pic", for="fileInput") }}
+             {{ Form.image(class_='form-control-file', id='fileInput') }}
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -142,6 +165,7 @@
             {{ Form.hidden_tag() }}
             {{ Form.image.label(class="input-group-text", id="upload-pic", for="fileInput") }}
             {{ Form.image(class_='form-control-file', id='fileInput') }}
+            <span style="display: none;">{{ Form.image_name(class_='form-control', value='User') }}</span>
             <button type="submit" id="upload-submit" class="btn btn-success">Upload</button>
         </form>
       </div>

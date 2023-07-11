@@ -33,18 +33,36 @@ $('#my-btn').click(function() {
 });
 
 $(document).ready(function() {
-  var swiper = new Swiper(".mySwiper", {
-    effect: "flip",
-    grabCursor: true,
-    pagination: {
+     var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      freeMode: true,
+      pagination: {
         el: ".swiper-pagination",
         clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-  });
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '">' + (index + 1) + "</span>";
+        },
+      },
+        breakpoints: {
+        360: {
+            slidesPerView: 1.2,
+            spaceBetween: 15,
+        },
+        640: {
+          slidesPerView: 2.3,
+          spaceBetween: 25,
+        },
+        768: {
+          slidesPerView: 2.3,
+          spaceBetween: 25,
+        },
+        1024: {
+          slidesPerView: 3.3,
+          spaceBetween: 30,
+        },
+      },
+    });
 });
 
 
@@ -136,7 +154,7 @@ $(document).ready(function() {
     });
   });
 
-$(document).ready(function() {
+/*$(document).ready(function() {
    var url = 'http://127.0.0.1:5001/api/v1/community/';
     $("#create-groupchat").click(function() {
         let room = $('#new-community-name').val();
@@ -153,6 +171,37 @@ $(document).ready(function() {
         });
     });
 });
+
+$(document).ready(function() {
+  $("#create-groupchat").click(function(e) {
+    e.preventDefault();
+
+    var formData = new FormData();
+    var fileInput = $("#fileInput")[0];
+    var file = fileInput.files[0];
+    formData.append("image", file);
+
+    let room = $('#new-community-name').val();
+    let desc = $('#new-community-desc').val();
+
+    var data = {
+      'room': room,
+      'description': desc
+    };
+
+    // Add the data to the FormData object
+    for (var key in data) {
+      formData.append(key, data[key]);
+    }
+
+    var url = 'http://127.0.0.1:5001/api/v1/testing/';
+    RequestCall('POST', url, formData, null, null, function(data) {
+        console.log(data);
+        flashMsg(data.message, 'success');
+    });
+    });
+});*/
+
 
 $(document).ready(function() {
   // Get the buttons that trigger the modal

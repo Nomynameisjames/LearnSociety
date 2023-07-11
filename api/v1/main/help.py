@@ -5,6 +5,7 @@ from models.Schedule import Create_Schedule as cs
 from models import redis_storage
 from models.checker import Checker
 from models.Update_Profile import update_redis_profile
+from web_flask.main.views import Upload_file
 from .tasks import token_required, limit_request_frequency
 from web_flask.Performance_logger import performance_logger
 from .update_data import Settings, create_community
@@ -183,21 +184,44 @@ def community(current_user):
     """
     ID = current_user.id
     username = current_user.User_name
-    data = request.get_json()
-    room = data.get('room')
-    description = data.get('description')
+    #data = request.get_json()
+    room = request.form.get('room')
+    description = request.form.get('description')
+    image = request.files.get('image')
+    image_file = Upload_file(image)
+    if image_file:
+        image_file = image_file
+    else:
+        image_file = None
     #if current_user.Rooms:
     #    return jsonify({"message": "You already have a room"}), 200
     new_room = {
             'name': room,
             'description': description,
-            'admin': username
+            'admin': username,
+            "group_picture": image_file
             }
     Community = create_community(ID, **new_room)
     if Community:
         return jsonify({"message": "successfully created"}), 201
     else:
         return jsonify({"message": "Can't create room"}), 400
+
+@main_app.route('/testing/', methods=['POST'])
+@token_required
+@limit_request_frequency(num_requests=3, per_seconds=10)
+@performance_logger
+def testing(current_user):
+    room = request.form.get("room")
+    description = request.form.get("description")
+    file = request.files.get("image")
+    print(file)
+    print(room)
+    print(description)
+
+    # Process the received data
+    
+    return "Success"
 
 @main_app.route('/community/', methods=['PUT', 'DELETE'])
 @token_required
