@@ -1,85 +1,25 @@
-{% extends 'index.html' %}
-{% block title %}
-<title>Friends</title>
+{% extends 'chatRoom.html' %}
+{% block newblock %}
+    <div id="layoutSidenav_content" class="chatbot-container">
+        <main>
+            <div class="group-intro" id="friendsGroup-bar">
+                <ul class="navbar-nav" id="friendsNav">
+                    <li class="nav-item" id="Nav-item">
+                        <a class="nav-link active" aria-current="page" href="#"><iconify-icon icon="fa-solid:user-friends" style="color: #fff;"></iconify-icon>&nbsp Friends</a>
+                    </li>
+                    <li class="nav-item" id="Nav-item">
+                        <a class="nav-link" href="#">Online</a>
+                    </li>
+                    <li class="nav-item" id="Nav-item">
+                        <a class="nav-link" href="#">All</a>
+                    </li>
+                    <li class="nav-item" id="Nav-item">
+                        <a class="nav-link" href="#">Pending</a>
+                    </li>
+                    <li class="nav-item" id="Nav-item">
+                        <a class="nav-link" href="#">Blocked</a>
+                    </li>
+                </ul>
+            </div>
 {% endblock %}
-{% block horizontalNav %}
-<div class="container-fluid">
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#"><iconify-icon icon="fa-solid:user-friends" style="color: #fff;"></iconify-icon>&nbsp Friends</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Online</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">All</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pending</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Blocked</a>
-            </li>
-        </ul>
-    </div>
-</div>
-{% endblock %}
-{% block sideNav %}
-<div class="card mb-3" style="background-color: #100f0f; border-bottom: 0.5px solid white;">
-    <img src="https://ucarecdn.com/5f9b227f-e22b-4b90-846c-9fecd07b7a1b/" class="card-img-top" alt="..."  style="border-radius: 50%; height: auto; width: 50%;">
-    <div class="card-body" style="color: #fff;">
-        <h5 class="card-title">{{ user }}</h5>
-        <br>
-        <span class="badge rounded-pill bg-primary">Online</span>
-        <br>
-        <p class="card-text">The Gods of Olympus has abandoned me</p>
-        <br>
-        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-    </div>
-</div>
-    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-        <div id="chat-link"><iconify-icon icon="fluent:people-community-16-regular" height="30" width="30" style="color: #fff;"></iconify-icon></div>&nbsp&nbsp
-        Your Communities
-        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-    </a>
-     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-         <a class="nav-link" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-             <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:add-12-filled" height='20' width='20' style="color: #fff;"></iconify-icon></div>
-                Create Community
-        </a>
-        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            {% for community in communities %}
-                {% for key, value in community.items() %}
-                <a class="nav-link" href="{{ url_for('Main.ChatRoomID', room_id=key) }}">
-                    <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
-                    {{ value['name'] }}
-                </a>
-                {% endfor %}
-            {% endfor %}
-        </nav>
-    </div>
- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-     <div id="chat-link"><iconify-icon icon="carbon:friendship" height="30" width="30" style="color: #fff;"></iconify-icon></div>&nbsp&nbsp
-     Friends
-     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-</a>
-<div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-    <nav class="sb-sidenav-menu-nested nav">
-        <a class="nav-link" href="#">
-            <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:add-12-filled" height='20' width='20' style="color: #fff;"></iconify-icon></div>
-            Add Friend
-        </a>
-        <a class="nav-link" href="#">
-            <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
-            Friends
-        </a>
-    </nav>
-</div>
-{% endblock %}
-{% block content %}
-<div id="layoutSidenav_content" class="chatbot-container">
-    <main>
-    </main>
-    <footer class="py-4 bg-dark mt-auto">
-{% endblock %}
+       

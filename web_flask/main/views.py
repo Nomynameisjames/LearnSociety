@@ -250,7 +250,6 @@ def ChatRoom():
     if Form.validate_on_submit():
         images = Form.image.data
         image_desc = Form.image_name.data
-        print(image_desc)
         if images and image_desc == "User":
             data = Upload_file(images)
             if data:
@@ -316,8 +315,10 @@ def friends_page():
     ID = current_user.id
     community = []
     form = SearchBar()
+    Form = UploadForm()
+    display_picture = get_display_picture(current_user.id)
     get_community = models.redis_storage.get_list_dict('community')
     if get_community:
         community = get_community
-    return render_template('friendsPage.html', form=form,
+    return render_template('friendsPage.html', form=form, Form=Form, dp=display_picture,
                            communities=community, user=username, ID=ID)

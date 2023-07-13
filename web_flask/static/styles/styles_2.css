@@ -64,6 +64,33 @@
   --bs-body-bg: #fff;
 }
 
+#friendsNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+}
+
+#Nav-item {
+    margin: 0 10px;
+    white-space: nowrap;
+}
+#Nav-item a {
+    color: var(--bs-light);
+}
+
+#Nav-item a:hover {
+    color: var(--bs-primary);
+}
+#friendsGroup-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+    background-color: var(--bs-dark);
+}
 /* Animations */
 
 @media (prefers-reduced-motion: no-preference) {
