@@ -38,9 +38,10 @@ export const RequestCall = function(type, url, data, btn, text, callback) {
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error', textStatus, errorThrown);
             $(btn).html(text).find('span').remove();
-            var errorMessage = jqXHR.responseText;
+            var errorMessage =  jqXHR.responseText;
+            console.log(errorMessage);
             //var jsonObject = JSON.parse(errorMessage);
-            flashMsg(errorMessage + ' ' + errorThrown, 'fail');
+            flashMsg(errorMessage, 'fail'); // + ' ' + errorThrown, 'fail');
         }
     });
 }
@@ -321,6 +322,7 @@ $('#flexSwitchCheckReverse').change(function() {
         
         RequestCall('POST', url, data, null, null, function(response) {
             flashMsg(response.message, 'success');
+
         });
     });
  
@@ -388,23 +390,28 @@ $(document).ready(function() {
 
 // function that activates the search bar and displays the search results 
 $(document).ready(function() {
-    let RandomSearchBtn = "#btnNavbarSearch";
+    let RandomSearchBtn =  "#btnNavbarSearch";
     let RandomSearchCourseBtn = ".CourseSearch";
     let hiddenBtn = ".hidden-search-send";
     let btnClicked = ''
     let data;
     var Topic;
     var url;
+    var text;
     $(RandomSearchBtn + ', ' + RandomSearchCourseBtn + ', ' + hiddenBtn).click(function(event) {
         event.preventDefault();
         Topic = $(this).val();
-        let text = $('.search-bar').val();
+        console.log(text)
         if ($(this).is(RandomSearchBtn) || $(this).is(hiddenBtn)) {
-            url = 'http://127.0.0.1:5001/api/v1/search';
+            console.log('random')
+            text = $("#rand-search").val();
+            url = 'http://127.0.0.1:5001/api/v1/wikisearch';
             btnClicked = 'RandomSearchBtn'
         } else {
+            text = $("#course-search").val();
             url = 'http://127.0.0.1:5001/api/v1/search/' + Topic;
         }
+        console.log(text)
         data = {
             'text': text,
             'option': 'search'

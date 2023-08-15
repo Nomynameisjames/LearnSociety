@@ -2,18 +2,18 @@
 <html lang="en">
     <head>
          <link href="{{ url_for('static', filename='styles/styles_3.css') }}" rel="stylesheet" />
-        <link rel="stylesheet" href="static/styles/styles_2.css">
+         <link rel="stylesheet" href="{{ url_for('static', filename='/styles/styles_2.css') }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Password Reset</title>
     </head>
-    <body>
+    <body style="background-color: #474747;">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
             <div class="container">
                 <div class="align-center">
-                    <div class="card-body" id='chart-body' style="max-width: 550px; height:550px;">
+                    <div class="card-body" id='chart-body' style="max-width: 550px; height:550px; border: 0.5px solid red;">
                         <form method="POST" action="">
                              {{ form.hidden_tag() }}
                             <fieldset class="form-group">

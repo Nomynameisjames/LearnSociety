@@ -1,83 +1,97 @@
+#!/usr/bin/env python3
 from flask import (render_template, flash, redirect, url_for, request,
                    make_response, abort, session)
-from . import Main
-from models.baseModel import user_id
-from models.Update_Profile import update_redis_profile
-from .form import RegisterForm, LoginForm, RequestResetForm, ResetPasswordForm
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
-from web_flask import login_manager, mail
 from flask_mail import Message
-from models.RequestModule import Notifications
-from ..Performance_logger import performance_logger
-from datetime import timedelta
+from flask_babel import _
 from flask_wtf.csrf import validate_csrf
 from wtforms import ValidationError
-from flask_babel import _
-from pathlib import Path, os
+from werkzeug.security import generate_password_hash, check_password_hash
 from google_auth_oauthlib.flow import Flow
-import models
+from typing import Union, Any
+from datetime import timedelta
+from pathlib import Path
+from models.baseModel import user_id
+from models.Update_Profile import update_redis_profile
+from models.RequestModule import Notifications
+from web_flask import login_manager, mail
+from . import Main
+from .form import (RegisterForm, LoginForm, RequestResetForm,
+                   ResetPasswordForm, DefaultUserForm)
+from ..Performance_logger import performance_logger
 import uuid
 import datetime
 import jwt
-import json
+import os
+import models
 
-
-
+# Google OAuth2 Configurations and settings
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-try:
-    GOOGLE_CALLBACK_URL = os.getenv('GOOGLE_CALLBACK_URL')
-
-except KeyError as err:
-    abort(404)
-
+GOOGLE_CALLBACK_URL = os.getenv('GOOGLE_CALLBACK_URL')
 client_secrets = os.path.join(Path(__file__).parent,
                               'client_secrets.json')
-
 scopes = ["openid",
           "https://www.googleapis.com/auth/userinfo.profile",
           "https://www.googleapis.com/auth/userinfo.email"]
 
-flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets,
-                                     scopes=scopes,
-                                     redirect_uri=GOOGLE_CALLBACK_URL)
 
-"""
-    login manager keeps the user authenticated and stores info in session
-"""
+def flow() -> Flow:
+    """
+        function creates a flow object for google oauth2 authentication
+    """
+    flow = Flow.from_client_secrets_file(client_secrets_file=client_secrets,
+                                         scopes=scopes,
+                                         redirect_uri=GOOGLE_CALLBACK_URL)
+    return flow
+
+
 @login_manager.user_loader
-def load_user(User_id):
-    return models.storage.access(User_id, 'id', user_id)
+def load_user(ID: str) -> user_id:
+    """
+        login manager keeps the user authenticated and stores info in session
+    """
+    return models.storage.access(ID, 'id', user_id)
 
 
-def create_user_profile(ID, name):
+def create_user_profile(ID: str, name: str) -> bool:
     """
         function creates a user profile for new users and saves in redisDB
     """
     data = [
-            { ID: {
+            {ID: {
                 'username': name,
                 "status": "",
                 "friends": [],
                 "profile_picture": "",
                 "friend_requests": [],
                 "blocked": [],
-                "profile_pic": "",
-                "messages": [{
-                    "sender": "",
-                    "message": [],
-                    "time": []
-                    }],
+                "messages": [],
                 "chat_bot": [],
-                "last_seen": ""
+                "online_id": "",
+                "last_seen": "",
+                "is_active": True
                 }
-            }]
-    models.redis_storage.set_list_dict("Users-Profile", data)
-    return True
-    
+             }]
+    new_user_obj = models.redis_storage.set_list_dict("Users-Profile", data)
+    if new_user_obj:
+        return True
+    return False
 
-def new_user_token(ID):
+
+def username_availability(username: str, email: str) -> bool:
+    """
+        function checks if username is available i the mysql database and
+        returns True if available else False
+    """
+    all_profile = models.storage.search(username, user_id)
+    if all_profile:
+        for item in all_profile:
+            if username == item.User_name and email != item.Email:
+                return True
+    return False
+
+
+def new_user_token(ID: str) -> str:
     """
         function generates a jwt token for new users
     """
@@ -87,7 +101,8 @@ def new_user_token(ID):
     token = jwt.encode(token_payload, app.config['SECRET_KEY'])
     return token.encode('utf-8').decode()
 
-def verify_new_user_token(token):
+
+def verify_new_user_token(token: str) -> Union[dict, None]:
     """
         function verifies the jwt token sent to the user's email address
     """
@@ -106,11 +121,11 @@ def verify_new_user_token(token):
     return user
 
 
-def validate_csrf_token(token):
+def validate_csrf_token(token: str) -> bool:
     from ..app import app
     """
-    Validate the CSRF token against the app's secret key.
-    Return True if valid, False otherwise.
+        Validate the CSRF token against the app's secret key.
+        Return True if valid, False otherwise.
     """
     try:
         validate_csrf(token, secret_key=app.secret_key, time_limit=None)
@@ -118,19 +133,19 @@ def validate_csrf_token(token):
     except ValidationError:
         return False
 
-def login_user_and_redirect(user, remember=False):
+
+def login_user_and_redirect(user: user_id, remember=False) -> Any:
     from ..app import app
     """
         Log in the user and redirect to the appropriate page sending neccessary
         auth token alongside
     """
     login_user(user, remember=remember)
-    my_id = user.id
-    uploader = update_redis_profile(my_id)
-    token = jwt.encode({'user_id': my_id, 'exp':
+    uploader = update_redis_profile(str(user.ID))
+    token = jwt.encode({'user_id': user.ID, 'exp':
                        datetime.datetime.utcnow()
                        + datetime.timedelta(minutes=60)},
-                      app.config['SECRET_KEY'])
+                       app.config['SECRET_KEY'])
     flash(_('You are logged in!'), 'success')
     uploader.update_last_seen()
     next_page = request.args.get('next')
@@ -140,37 +155,47 @@ def login_user_and_redirect(user, remember=False):
     response.set_cookie('access_token', tok)
     return response
 
-def save_user_to_db(user):
+
+def save_user_to_db(user) -> Any:
     """
         Save a user object to the database.
         If the user already exists, log them in.
     """
+    cache_file = {}
     if not user:
         return redirect(url_for('Main.signup'))
-    
-    check_email = models.storage.access(user.get("user_email"), 'Email', user_id)
+    response = None
+    check_email = models.storage.access(user.get("user_email"),
+                                        'Email', user_id)
     ID = str(uuid.uuid4())
     if check_email:
         response = login_user_and_redirect(check_email)
+    elif username_availability(user.get("user_name"), user.get("user_email")):
+        cache_file[ID] = {
+                    'Email': user.get("user_email"),
+                    'user_id': user.get("user_id")
+                }
+        list_item = models.redis_storage.get_dict("temp_storage", ID)
+        if list_item == {}:
+            models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
+        flash(_("Username already taken"), 'danger')
+        response = redirect(url_for('Main.confirm_username', personal_id=ID))
     else:
         hashed_sub = generate_password_hash(user.get("user_id"))
-        auth_user = user_id(id=ID,
+        auth_user = user_id(ID=ID,
                             User_name=user.get("user_name"),
                             Email=user.get("user_email"),
                             Password=hashed_sub)
-        try:
-            create_user_profile(ID, user.get("user_name"))
-        except Exception as e:
-            print(e)
-
-        models.storage.new(auth_user)
-        models.storage.save()
-        models.storage.close()
-        response = login_user_and_redirect(auth_user)
+        if create_user_profile(ID, user.get("user_name")):
+            models.storage.new(auth_user)
+            models.storage.save()
+            models.storage.close()
+            response = login_user_and_redirect(auth_user)
     return response
 
+
 @Main.route('/signup', methods=['GET', 'POST'])
-def signup():
+def signup() -> Any:
     """
         function handles the registration of new users creates an instance of
         the RegisterForm class and validates the form data, creates an instance
@@ -191,21 +216,22 @@ def signup():
         if not is_valid:
             flash(_('Invalid email address'), 'warning')
             return redirect(url_for('Main.signup'))
-        url = f"""{url_for('Main.confirm_email', token=token, ID=ID, _external=True)}"""
+        url = (f"""{url_for('Main.confirm_email', token=token,
+               ID=ID, _external=True)}""")
         temp_file = {
                 'url': url,
-                'message': f'''Kindly click on the link below to
+                'message': '''Kindly click on the link below to
                                 complete your registration''',
                 'subject': 'Email Verification',
-                'header': f'Verification',
+                'header': 'Verification',
                 'username': form.username.data,
                 'email': form.email.data,
                 'id': ID
                 }
         sent = mail_app.send_Grid(None, **temp_file)
-        print(url)
         if sent:
-            flash(_(f"An email has been sent to {form.email.data} to complete your registration"), 'success')
+            flash(_(f"An email has been sent to {form.email.data}"
+                    f"to complete your registration"), 'success')
             password = generate_password_hash(form.password.data)
             cache_file[ID] = {
                         'Username': form.username.data,
@@ -213,15 +239,18 @@ def signup():
                         'Password': password,
                         'id':  ID
                     }
-            list_item = models.redis_storage.get_dict("temp_storage", ID)
-            if list_item == {}:
-                models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
+            prev_cache_file = models.redis_storage.get_dict("temp_storage", ID)
+            if prev_cache_file == {}:
+                models.redis_storage.set_dict("temp_storage", cache_file,
+                                              ex=1800)
             return redirect(url_for('Main.signup', ID=ID))
-    response = make_response(render_template('register.html', form=form, ID=ID))
+    response = make_response(render_template('register.html', form=form,
+                                             ID=ID))
     return response
 
+
 @Main.route('/confirm_email/<ID>/<token>', methods=['GET', 'POST'])
-def confirm_email(token, ID):
+def confirm_email(token: str, ID: str) -> Any:
     """
         function handles the confirmation of new users by validating the token
         sent to the user and saving newly created users to the database
@@ -230,29 +259,28 @@ def confirm_email(token, ID):
     if user is None:
         flash('Invalid or expired token', 'warning')
         return redirect(url_for('Main.signup'))
-    form = models.redis_storage.get_dict('temp_storage', ID)
-    if form['id'] == ID and user:
-        user = user_id(id=form['id'], User_name=form['Username'],
-                       Email=form['Email'], Password=form['Password'])
-        create_user_profile(ID, form['Username'])
+    cache = models.redis_storage.get_dict('temp_storage', ID)
+    if cache['id'] == ID and user:
+        user = user_id(ID=cache['id'], User_name=cache['Username'],
+                       Email=cache['Email'], Password=cache['Password'])
+        create_user_profile(ID, cache['Username'])
         models.storage.new(user)
         models.storage.save()
         models.storage.close()
-        username = {'Username': form['Username']}
+        username = {'Username': cache['Username']}
         flash(_('Account created successfully for %(user)s',
                 user=username['Username']), 'success')
-        #models.redis_storage.delete("temp_file")
         return redirect(url_for('Main.login'))
     return redirect(url_for('Main.signup'))
 
 
 @Main.route("/login", methods=['GET', 'POST'])
 @performance_logger
-def login():
+def login() -> Any:
     """
         function handles the login of users by creating an instance of the
         LoginForm class and validating the form data, validates the CSRF token
-        and also generates a jwt session token sent to the user's browser, 
+        and also generates a jwt session token sent to the user's browser,
         and logs in the user if the user exists in the database
     """
     if current_user.is_authenticated:
@@ -263,17 +291,19 @@ def login():
             user = models.storage.access(form.email.data, 'Email', user_id)
             models.storage.close()
             if user and check_password_hash(user.Password, form.password.data):
-                return login_user_and_redirect(user, remember=form.remember.data)
+                return login_user_and_redirect(user,
+                                               remember=form.remember.data)
             else:
-                flash(_('Login Unsuccessful. Please check username and password'), 'danger')
+                flash(_(f'Login Unsuccessful. Please check username and'
+                        f'password'), 'danger')
         else:
             return render_template('csrf_error.html'), 400
-    
     return render_template('login.html', title='Login', form=form)
+
 
 @Main.route('/logout')
 @login_required
-def logout():
+def logout() -> Any:
     """
         function handles the logout of users by calling the logout_user
         function from flask_login
@@ -283,12 +313,12 @@ def logout():
     return redirect(url_for('Main.front_page'))
 
 
-def send_reset_email(user):
+def send_reset_email(user: user_id) -> Any:
     try:
         token = user.get_reset_token()
         msg = Message('Password Reset Request',
-                    sender='noreply@demo.com',
-                    recipients=[user.Email])
+                      sender='noreply@demo.com',
+                      recipients=[user.Email])
         msg.body = f'''To reset your password, visit the following link:
         {url_for('Main.reset_token', token=token, _external=True)}
         If you did not make this request then simply ignore this email
@@ -296,11 +326,12 @@ def send_reset_email(user):
     '''
         mail.send(msg)
     except Exception as e:
-        return str(e)
+        print(e)
+        return False
 
 
 @Main.route('/reset', methods=['GET', 'POST'])
-def reset():
+def reset() -> Any:
     """
         function handles the reset of user passwords by creating an instance
         of the RequestResetForm class and validating the form data, generates a
@@ -311,18 +342,20 @@ def reset():
     form = RequestResetForm()
     mail_app = Notifications()
     if form.validate_on_submit():
+        token = None
         user = models.storage.access(form.email.data, 'Email', user_id)
-        token = user.get_reset_token()
+        if user:
+            token = user.get_reset_token()
         url = f"""{url_for('Main.reset_token', token=token,
                     _external=True)}"""
         mydict = {
                 'url': url,
-                'message': f'''To reset your password, kindly visit the following link:''',
+                'message': '''To reset your password, kindly visit the
+                            following link:''',
                 'subject': 'Password Reset Request',
                 'header': f'Password Reset'
                 }
         sent = mail_app.send_Grid(user, **mydict)
-        #send_reset_email(user)
         models.storage.close()
         if sent:
             flash(_('''An email has been sent with instructions to reset
@@ -332,7 +365,7 @@ def reset():
 
 
 @Main.route("/reset/<token>", methods=['GET', 'POST'])
-def reset_token(token):
+def reset_token(token: str) -> Any:
     """
         function handles the reset of user passwords by creating an instance
         of the ResetPasswordForm class and validating the form data, validates
@@ -355,8 +388,9 @@ def reset_token(token):
         return redirect(url_for('Main.login'))
     return render_template('reset_pass.html', form=form)
 
+
 @Main.route("/google/Oauth2/users")
-def google_oauth2():
+def google_oauth2() -> Any:
     """This method creates a new session for the user and
        generates the account verification url for users to
        authenticate with google
@@ -364,12 +398,12 @@ def google_oauth2():
        Return: Returns the authentication url for user to verify
                account with google
     """
-
+    Google_Flow = flow()
     new_session = session
-
-    auth_url, state = flow.authorization_url()
+    auth_url, state = Google_Flow.authorization_url()
     new_session["state"] = state
     return redirect(auth_url)
+
 
 @Main.route('/Oauth/google/callback', methods=["GET", "POST"])
 def callback():
@@ -377,9 +411,9 @@ def callback():
     tokens to get the user details
 
     Return: the users details"""
-
-    flow.fetch_token(authorization_response=request.url)
-    credentials = flow.credentials
+    Google_Flow = flow()
+    Google_Flow.fetch_token(authorization_response=request.url)
+    credentials = Google_Flow.credentials
 
     user_info = jwt.decode(credentials.id_token,
                            options={"verify_signature": False})
@@ -388,9 +422,30 @@ def callback():
         user["user_id"] = user_info["sub"]
         user["user_name"] = user_info["name"]
         user["user_email"] = user_info["email"]
-
     except KeyError:
         abort(404)
-
     response = save_user_to_db(user)
     return response
+
+
+@Main.route('/confirm_username/<personal_id>', methods=['GET', 'POST'])
+def confirm_username(personal_id: str) -> Any:
+    usr = models.redis_storage.get_dict("temp_storage", personal_id)
+    form = DefaultUserForm()
+    if form.validate_on_submit():
+        if not usr:
+            flash(_('User not found'), 'danger')
+        else:
+            hashed_sub = generate_password_hash(usr.get("user_id"))
+            auth_user = user_id(ID=personal_id,
+                                User_name=form.username.data,
+                                Email=usr.get("user_email"),
+                                Password=hashed_sub)
+            if create_user_profile(personal_id, form.username.data):
+                models.storage.new(auth_user)
+                models.storage.save()
+                models.storage.close()
+                flash(_('Your account has been created!', 'success'))
+                response = login_user_and_redirect(auth_user)
+                return response
+    return render_template('select_username.html', form=form)

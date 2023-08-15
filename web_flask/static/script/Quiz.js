@@ -34,37 +34,6 @@ $(document).ready(function() {
     }); 
 });
 
-/*
-$(Document).ready(function() {
-    $('#view-correction').click(function() {
-        $.ajax({
-            type: 'GET',
-            url: 'http://127.0.0.1.5001/api/v1/quiz',
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function(data) {
-                console.log(data)
-                $.each(data, function(key, value) {
-                    if (key === "True" || key === "False") {
-                        $.each(value, function(q, a) {
-                            var answer = $('input[name="' + q + '"]');
-                            if (answer.val() === a) {
-                                answer.after('<span class="correct">✔</span>');
-                                } else {
-                                    answer.after('<span class="incorrect">✘</span>');
-                                }
-                        });
-                            }
-                });
-            },
-            error: function(xhr, textstatus, errorThrown) {
-                console.log('Error', errorThrown)
-            }
-        });
-    });
-});
-*/
-
 $(document).ready(function() {
     let auto = $('#status').data('my-var');
     let topicValue = '';

@@ -2,43 +2,96 @@
 {% block title %}
     <title>Chatbot</title>
 {% endblock %}
-{% block content %}
-<div id="layoutSidenav_content" class="chatbot-container">
-    <main>
-        <div class="chat-eyes">
-            <div class="navbar-brand" id ="nav-id">
+{% block navtitle %}
+    <a class="navbar-brand ps-3" id="my-brand" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
+{% endblock %}
+{% block hiddensearch %}
+{% endblock %}
+{% block horizontalNav %}
+    <div class="horizon">
+        <a class="btn btn-sm" href="{{ url_for('Main.view') }}" role="button" style="height: auto;"><iconify-icon icon="ic:sharp-keyboard-backspace" width="35" height="25" style="color: white;"></    iconify-icon></a>
+        <!--<div class="chat-eyes" style="border: 2px solid red;">-->
+            <div class="navbar-brand" id="nav-id">
                 <iconify-icon icon="openmoji:eyes" height="60" width="75"></iconify-icon>
             </div>
+        <!--</div>-->
+        <div class="btn-group dropdown" id="friend-chat-dropdown">
+            <button type="button"  class="group-title-btn dropdown-toggle btn-sm" style="height: auto; width: 30px;"data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="25" height="20" style="color: #fff;"></iconify-icon></button>
+                <ul class="dropdown-menu bg-dark dropdown-menu-end">
+                    <li><button type="button" class="dropdown-item" id="clear-privateChat">clear chat</button></li>
+                </ul>
+            </div>
         </div>
-        <div class="chat-container">
-            <section class="chat-conversation">
-                {% for message in data %}
-                    {% if message.role == 'user' %}
-                            <div class="sent-message">
-                                <p class="sent-message">{{ message.content }}</p>
-                            </div>
-                    {% endif %}
-                    {% if message.role == 'bot' %}
-                            <div class="replied-message">
-                                <p class="received-message">{{ message.content }}</p>
-                            </div>
-                    {% endif %}
-                {% endfor %}
+    </div>
+{% endblock %}
+{% block content %}
+<div id="layoutSidenav_content" class="chatbot-container"  style="background-color: #474747;">
+    <div class="hiddenField" style="display: none;">
+        <input type="text" id="Hidden-user" value="{{ current_user.User_name }}">
+        <input type="text" id="Picture" value="{{ dp }}">
+    </div>
+    <main>
+        <div id="chat-container">
+            <div class="chat-container" id="friends-chat-container">
+                <section class="main-chat-section" id="chat-bot-card">
+                    {% if data %}
+                        {% for item in data %}
+                            {% if item.name != 'user' %}
+                                <div class="sent mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="small mb-1" style="color: #fff;">{{ item["name"] }}</p>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start mb-2 pt-1">
+                                        <img id="friend-img" src="https://ucarecdn.com/4027a3aa-660d-452d-b009-896ab7421143/" alt="avatar 1">
+                                        <div>
+                                            <p class="small p-2 ms-3 mb-3 rounded-3 bg-success round" style="color: #fff;">{{ item["text"] }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-start">
+                                        <p class="small mb-1" id="time-display">{{ item["time"] }}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="recieved mb-3">
+                                    <div class="d-flex justify-content-end">
+                                        <p class="small mb-1" style="color: #fff;">{{ current_user.User_name }}</p>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-end mb-2 pt-1">
+                                        <div>
+                                            <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-primary round">{{ item["text"] }}</p>
+                                        </div>
+                                        <img id="friend-img" src="{{ dp }}" alt="avatar 1">
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <p class="small mb-1" id="time-display">{{ item["time"] }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                    {% endfor %}
+                {% endif %}
             </section>
         </div>
-        <div class="chat-form">
-            <form>
-                <div id="input-container">
-                    <textarea type="text" id="my-chat-input" placeholder= "Enter a prompt here ..."></textarea>
-                    <div class="input-group-append">
-                        <button id="chat-submit" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% block modal %}
-            {{ super() }}
-        {% endblock %}
-    </main>
-    <footer class="py-4 bg-dark mt-auto">
+    </div>
+</main>    <!--   <footer class="py-4 bg-dark mt-auto">-->
 {% endblock %}
+{% block footer %}
+    <footer class="py-4 bg-dark mt-auto">
+        <div class="cont w-100" style="background-color: #474747; margin-top: -20px;">
+            <div class="friends-message-col" style="margin-bottom: 40px;">
+                <textarea type="text" class="form-control" id="my-chat-input" placeholder="Type a message"></textarea>
+                <button class="btn btn-dark mb-4" type="button" id="chat-submit"><iconify-icon class="sender-btn" icon="ic:round-send" width="30" height="30"></iconify-icon></button>
+            </div>
+        </div>
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-white bg-dark">Copyright &copy; LearnSociety 2023</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                        &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+

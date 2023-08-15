@@ -1,140 +1,211 @@
 {% extends 'chatRoom.html' %}
-    {% block newblock %}
-        <div id="layoutSidenav_content" class="chatbot-container">
-            <main>
-                <div class="group-intro">
-                    <div class="grouppie">
-                        <h2 class="group-title">{{ groupinfo.name }}</h2>
-                    </div>
-                    <div class="btn-group dropend" id="group-title-dropdown">
-                        <button type="button"  class="group-title-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="30" height="50"></iconify-icon></button>
-                        <ul class="dropdown-menu">
-                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Group Info</button></li>
-                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal2">clear chat</button></li>
-                            <li><button type="button" class="dropdown-item" href="#">Report</button></li>
-                            <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Leave Group</button></li>
-                            <li><button type="button" class="dropdown-item" href="#">Delete Group</button></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="chat-container" style="margin-top: 80px;">
-                    <section class="group-chat-conversation">
+{% block title %}
+    <title>Group Chat</title>
+{% endblock %}
+{% block navtitle %}
+    <a class="navbar-brand ps-3" id="my-brand" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
+{% endblock %}
+{% block hiddensearch %}
+{% endblock %}
+{% block profile %}
+    {% if groupinfo.group_picture == "" %}
+        <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer;transition: 0.3s;">
+    {% else %}
+        <img src="{{ groupinfo.group_picture }}" class="card-img-top" id="myimg" alt="Profile Picture" style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+    {% endif %}
+        <div class="card-body" style="color: #fff;">
+            <h5 class="card-title">{{ groupinfo.name }}</h5>
+            <br>
+            {% if groupinfo.description == "" %}
+                <p class="card-text">No status</p>
+            {% else %}
+            <h6 class="card-subtitle mb-2 text-muted">Status</h6>
+                <p class="card-text">{{ groupinfo.description }}</p>
+            {% endif %}
+                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+            </div>
+        </div> 
+{% endblock %}
+{% block horizontalNav %}
+    <div class="horizon">
+        <a class="btn btn-sm" href="{{ url_for('Main.ChatRoom') }}" role="button" style="height: auto;">
+            <iconify-icon icon="ic:sharp-keyboard-backspace" width="35" height="25" style="color: white;"></iconify-icon>
+        </a>
+        <div class="name_tag">
+            <h5 class="group-title" style="margin-left: 15px; margin-top: 10px;">{{ groupinfo.name }}</h5>
+        </div>
+        <div class="btn-group dropdown" id="friend-chat-dropdown">
+            <button type="button"  class="group-title-btn dropdown-toggle btn-sm" style="height: auto; width: 30px;"data-bs-toggle="dropdown" aria-expanded="false">
+                <iconify-icon icon="entypo:dots-three-vertical" width="25" height="20" style="color: #fff;"></iconify-icon>
+            </button>
+            <ul class="dropdown-menu bg-dark dropdown-menu-end">
+                <li><button type="button" class="dropdown-item text-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Group Info</button></li>
+                <li><button type="button" class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">clear chat</button></li>
+                <li><button type="button" class="dropdown-item text-light" href="#">Report</button></li>
+                <li><button type="button" class="dropdown-item text-danger" id="danger-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Leave Group</button></li>
+                <li><button type="button" class="dropdown-item text-danger" id="danger-btn" href="#">Delete Group</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block newblock %}
+    <div id="layoutSidenav_content" class="chatbot-container" style="background-color: #474747;">
+        <main>
+            <div id="chat-container">
+                <div class="chat-container" id="friends-chat-container">
+                    <section class="group-chat-conversation" id="">
+                    {% if chats %}
                         {% for item in chats %}
-                            {% if item.sender == user %}
-                                <span id="joinMessage" style="text-align: center; font-size: 15px;"></span>
-                                    <div class="sent-group-message d-flex flex-column  mb-3">
-                                        <div class="grp-username"><h6 class="sent-group-chat-username" style="color: #d6d6d6;">{{ item.sender }}</h6></div>
-                                            <p class="sent-group">{{ item.text }}</p>
-                                        <div class="grp-sent-time">{{ item.date }}</div>
-                                    </div>
+                            {% if item["name"] != current_user.User_name %}
+                                {% for mem in members %}
+                                    {% if item["name"] == mem.get("username") %}
+                                        <div class="sent mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="small mb-1" style="color: #fff;">{{ mem.get("username") }}</p>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-start mb-3">
+                                                <img id="friend-img" src={{ mem.get("profile_picture") }} alt="avatar 1">
+                                                <div>
+                                                    <p class="small p-2 ms-3 mb-3 rounded-3 bg-success round" style="color: #fff;">{{ item.text }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <p class="small mb-1" id="time-display">{{ item["time"] }}</p>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             {% else %}
-                                <div class="replied-group-message d-flex flex-column mb-3">
-                                    <div class="replied-grp-username"><h6 class="replied-group-chat-username" style="color: #d6d6d6;">{{ item.get("sender") }}</h6></div>
-                                        <p class="received-group-message">{{ item.get("text") }}</p>
-                                    <div class="replied-grp-sent-time">{{ item.get("date") }}</div>
+                                <div class="recieved mb-3">
+                                    <div class="d-flex justify-content-end">
+                                        <p class="small mb-1" style="color: #fff;">{{ item.get("name") }}</p>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-end mb-3 pt-1">
+                                        <div>
+                                            <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-primary round">{{ item.get("text") }}</p>
+                                        </div>
+                                        <img id="friend-img" src={{ dp }} alt="avatar 1">
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <p class="small mb-1" id="time-display">{{ item.get("time") }}</p>
+                                    </div>
                                 </div>
                             {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </section>
+                <div class="text-center" id="group-notification" style="color: rgba(0,255,0,1); text-shadow: 0 0 3px #FF000;"></div>
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ groupinfo.name }}</h1>&nbsp&nbsp&nbsp
+                        <span class="fs-6">{{ groupinfo.users | length }} Participants</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="fs-6">Invitation code</h2>
+                        <span class="fs-6" id="invite-code">{{ groupinfo.code }}</span>
+                        <h2 class="fs-6">Group Members</h2>
+                        {% for person in groupinfo.users %}
+                            <ul class="fs-6">
+                                <li class="fs-6">{{ person }}</li>
+                            </ul>
                         {% endfor %}
-                    </section>
-                </div>
-                <div class="chat-form">
-                    <form>
-                        <div id="input-container">
-                            <input type="hidden" id="hiddenId" value="{{ ID }}" style="display: none;">
-                            <textarea class="groupchat-textinput" id="groupMsg" type="text" placeholder= "Enter a text here ..."></textarea>
-                            <div class="input-group-append">
-                                <button class="groupchat-submit-btn" id="send-groupMsg" type="button" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Send message"><i class="fa fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content" id="clear-modal">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ groupinfo.name }}</h1>&nbsp&nbsp&nbsp
-                                <span class="fs-6">{{ groupinfo.users | length }} Participants</span>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <h2 class="fs-6">Invitation code</h2>
-                                <span class="fs-6" id="invite-code">{{ groupinfo.code }}</span>
-                                <h2 class="fs-6">Group Members</h2>
-                                {% for person in groupinfo.users %}
-                                    <ul class="fs-6">
-                                        <li class="fs-6">{{ person }}</li>
-                                    </ul>
-                                {% endfor %}
-                                <h2 class="fs-6">Group Admin</h2>
-                                <p class="fs-6">{{ groupinfo.admin }}</p>
-                                <h2 class="fs-6">Description</h2>
-                                <p class="fs-6">{{ groupinfo.description }}</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalToggle2" data-bs-dismiss="modal">Edit group info</button>
-                            </div>
-                        </div>
+                        <h2 class="fs-6">Group Admin</h2>
+                        <p class="fs-6">{{ groupinfo.admin }}</p>
+                        <h2 class="fs-6">Description</h2>
+                        <p class="fs-6">{{ groupinfo.description }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalToggle2" data-bs-dismiss="modal">Edit group info</button>
                     </div>
                 </div>
-                <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content" id="clear-modal">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Edit group info</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Edit group info</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Change group name</label>
+                                <input type="text" class="form-control" id="group-name">
                             </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="recipient-name" class="col-form-label">Change group name</label>
-                                        <input type="text" class="form-control" id="group-name">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="message-text" class="col-form-label">New description</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
-                                    </div>
-                                </form>
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">New description</label>
+                                <textarea class="form-control" id="message-text"></textarea>
                             </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-primary" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">Back</button>
-                                <button type="button" class="btn btn-success" id="edit-group-info">Save</button>
-                            </div>
-                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">Back</button>
+                        <button type="button" class="btn btn-success" id="edit-group-info">Save</button>
                     </div>
                 </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content" id="clear-modal">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Exit group</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="text-center">Are you sure you want to leave the group?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
-                                <button type="button" class="btn btn-danger" id="exit-group">Leave group</button>
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Exit group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Are you sure you want to leave the group?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
+                        <button type="button" class="btn btn-danger" id="exit-group">Leave group</button>
                     </div>
                 </div>
-                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content" id="clear-modal">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Clear chat history</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="text-center">Are you sure you want to clear the chat history?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-danger" id="clear-group-history">Proceed</button>
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Clear chat history</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Are you sure you want to clear the chat history?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id="clear-group-history">Proceed</button>
                     </div>
                 </div>
-            {% endblock %}
+            </div>
+        </div>
+{% endblock %}
+{% block footer %}
+    <footer class="py-4 bg-dark mt-auto">
+        <div class="cont w-100" style="background-color: #474747; margin-top: -20px;">
+            <div class="friends-message-col" style="margin-bottom: 40px;">
+                <input type="hidden" id="hiddenId" value="{{ current_user.ID }}" style="display: none;">
+                <textarea type="text" class="form-control" id="groupMsg" placeholder="Type a message"></textarea>
+                <button class="btn btn-dark mb-4" type="button" id="send-groupMsg"><iconify-icon class="sender-btn" icon="ic:round-send" width="30" height="30"></iconify-icon></button>
+            </div>
+        </div>
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-white bg-dark">Copyright &copy; Nomynameisjamees 2023</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

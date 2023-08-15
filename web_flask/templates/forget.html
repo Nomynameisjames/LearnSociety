@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<body>
+<body style="background-color: #474747;">
   <!-- <div class="logo">
   <img src="static/assets/img/lloo.png" alt="">
   </div> -->
@@ -30,8 +30,8 @@
             <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4 signup">Reset Password</legend>
-                <div class="input-group mb3">
+                <legend class="border-bottom mb-4 signup" id="reset-password-header">Reset Password</legend>
+                <div class="input-group input-group-sm  mb3">
                     <div class="input-group-prepend" style="margin-right: 5px;">
                         <span class="input-group-text mb-1" id="label-log">{{ form.email.label(class="form--label") }}</span>
                     </div>
@@ -43,12 +43,12 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
+                        {{ form.email(class="form-control form-control-lg rounded", autocomplete="email") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group" id="frm-btn">
-                {{ form.submit(class="btn btn-outline-info") }}
+            <div class="form-group forgot-btn">
+                {{ form.submit(class="btn btn-outline-success text-dark", id="frm-btn") }}
             </div>
         </form>
     </div>

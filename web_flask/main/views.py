@@ -1,30 +1,32 @@
-from flask import (Flask, render_template, abort, url_for, redirect,
-                    flash, request, jsonify, make_response)
+from flask import (render_template, abort, url_for, redirect,
+                   flash, request, make_response)
+from flask_login import login_required, current_user
+from pyuploadcare import Uploadcare
+from typing import Union, Any
 from models.Schedule import Create_Schedule
 from models.checker import Checker
 from models.Update_Profile import update_redis_profile
-from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user
-from pyuploadcare import Uploadcare
+from models.community_data import CommunityData
 from ..Performance_logger import performance_logger
+from .. import cache
 from . import Main
 from .form import SearchBar, UploadForm
-
-#from .. import cache
-from uuid import uuid4
-import models
 import os
+import models
 
 """
     This file contains all the routes for the application
     this enables user to query the database to view Schedules
     based on the status of the task
 """
-quiz_data = {}
 auto = False
 course = None
 
-def Upload_file(file):
+
+def Upload_file(file: str) -> Union[str, None]:
+    """
+        uploads file to uploadcare and returns the cdn url
+    """
     pub_key = os.environ.get('UploadCare_PUBLIC_KEY')
     secret_key = os.environ.get('UploadCare_SECRET_KEY')
     try:
@@ -35,68 +37,53 @@ def Upload_file(file):
         print(f"\nfollwing error occured: {e}\n")
         return
 
-def get_display_picture(user_id):
-    """ gets the users display picture from the database """
+
+def get_display_picture(user_id: str, file: str) -> Union[str, None]:
+    """
+        gets the users display picture or file from the redis database
+    """
     uploader = update_redis_profile(user_id)
     dp = uploader.get
-    return dp.get('profile_picture')
+    return dp.get(str(file))
 
-#@cache.memoize(timeout=200, make_name=lambda user_id: 'get_last_update_time_v1_uid' + str(user_id))
-#def get_last_update_time(user_id):
-#    bot = Create_Schedule(user_id)
-#    dic = bot.View(user_id)
-#    last_update = ''
-#    recent_delta = timedelta(hours=1)
-#    recent_time = datetime.now() - recent_delta
-#    last_update = [value for key, value in dic.items() if key == 'Created'
-#                   and value is not None and datetime.strptime(value,
-#                                        '%Y-%m-%d %H:%M:%S') >= recent_time]
-#    
-#    if last_update:
-#        last_update = last_update
-#    else:
-#        last_update = ''
-#
-#    return last_update
 
 @Main.route('/')
-def front_page():
+def front_page() -> Any:
     """
-        This is the landing page of the application
+        landing page view route of application
     """
     return render_template('landing_page.html')
 
 
 @Main.route('/about')
-def about():
+def about() -> Any:
     """
-        about page of the application
+        about page  view route of application
     """
     return render_template('about.html')
 
 
 @Main.route('/tasks/<status>',  methods=['GET'])
 @login_required
-#@cache.cached(timeout=100)
-def Tasks(status: str):
+@cache.cached(timeout=200)
+def Tasks(status: str) -> Any:
     """
         This route enables user to view status of tasks
     """
-    my_id = current_user.id
-    user = current_user.User_name
+    my_id = current_user.ID
     form = SearchBar()
     if not my_id:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(my_id)
     if auto:
-        dic = bot.View(my_id, status, course)
+        dic = bot.View(status, course)
         return render_template('task_status.html', data=dic, form=form,
-                               state=auto, user=user)
+                               state=auto)
     else:
-        dic = bot.View(my_id, status)
-        return render_template('task_status.html', data=dic, form=form,
-                               user=user)
+        dic = bot.View(status, None)
+        return render_template('task_status.html', data=dic, form=form)
+
 
 @Main.route('/View', methods=['GET'])
 @login_required
@@ -109,37 +96,28 @@ def view():
     """
     global auto
     form = SearchBar()
-    user_id = current_user.id
-    user = current_user.User_name
+    user_id = current_user.ID
     if not user_id:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
     bot = Create_Schedule(user_id)
-    dic = bot.View(user_id)
-    #cache_key = f'user_{user_id}_{user}'
-    #cached_data = models.redis_storage.get_dict(cache_key)
-    #if cached_data:
-    #    data = cached_data
-    #else:
-    #models.redis_storage.set_dict(cache_key, data, ex=200)
+    dic = bot.View()
     auto = False
     response = make_response(render_template('index.html', data=dic,
-                                             status=auto, user=user,
-                           form=form))
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+                                             status=auto, form=form))
     return response
+
 
 @Main.route('/quiz')
 @login_required
 @performance_logger
-def quiz():
+@cache.cached(timeout=500)
+def quiz() -> Any:
     """
         This route enables user to take a quiz and serves each question
         in the quiz_data global variable
     """
-    global quiz_data # declare global variable
-    ID = current_user.id
-    user = current_user.User_name
+    ID = current_user.ID
     if not ID:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
@@ -150,62 +128,43 @@ def quiz():
         bot = Checker(ID)
         data_id = bot.task_ID
     if not bot.task or not data_id:
-        return f"Sorry, there are no tasks available at the moment."
-    if not quiz_data: # check if global variable is not empty
-        dic = bot.Question()
-        quiz_data = dic # store results in global variable
-        return render_template('quiz.html', data=dic, data_ID=data_id,
-                               user=user)
-    else:
-        return render_template('quiz.html', data=quiz_data, data_ID=data_id,
-                               user=user)
+        flash('Sorry, there are no tasks available at the moment.', 'danger')
+        return redirect(url_for('Main.view'))
+    dic = bot.Question()
+    return render_template('quiz.html', data=dic, data_ID=data_id)
+
 
 @Main.route('/auto_dash', methods=['GET'])
 @login_required
 @performance_logger
-def dashboard():
+def dashboard() -> Any:
     """
         This route enables user to view the auto schedule dashboard
         also updates specific tasks a user views by updating the auto
         global variable and the course global variable
     """
     global auto, course
-    ID = current_user.id
-    user = current_user.User_name
+    ID = current_user.ID
     form = SearchBar()
+    user_file = Create_Schedule(ID)
     files = None
     if not ID:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
-    data = models.storage.view(ID)[0].get(ID)
-    if data:
-        files = {
-                "Python" : data.auto_schedules,
-                "Javascript" : data.JScourse,
-                "React" : data.Reactcourse,
-                "C" : data.C_course
-            }
+    files = user_file.coursefile
     course = request.args.get('myID')
     doc = {}
     key = None
-    #cache_key = f'user_{ID}_{course}'
-    #cached_data = models.redis_storage.get_dict(cache_key)
     if course in files:
-       # data = Create_Schedule(ID)
-        doc =  files.get(course)
+        doc = files.get(course)
     else:
         abort(404, description="Resource not found")
-    #if cached_data:
-    #    doc = cached_data
-    #else:
-    #    doc = files.get(course)
-    #    models.redis_storage.set_dict(cache_key, doc, ex=200)
     if doc:
         key = [i for i in doc if i.user_ID == ID]
     if key:
         auto = True
         return render_template('auto_dash.html', data=doc, status=auto,
-                               form=form, user=user)
+                               form=form)
     else:
         return render_template('auto_reg.html', form=form)
 
@@ -213,23 +172,24 @@ def dashboard():
 @Main.route('/articles', methods=['GET'])
 @login_required
 @performance_logger
-def articles():
+def articles() -> Any:
     """
         This route enables user library page
     """
-    ID = current_user.id
+    ID = current_user.ID
     form = SearchBar()
     if not ID:
         flash('You need to be logged in to view this page', 'danger')
         return redirect(url_for('Main.login'))
     if auto and course == 'Python':
-        return render_template('articles.html', status=auto, form=form)
+        return render_template('Python_library.html', status=auto, form=form)
     elif auto and course == 'Javascript':
-        return render_template('JSarticles.html', status=auto, form=form)
+        return render_template('Javascript_library.html', status=auto,
+                               form=form)
     elif auto and course == 'React':
-        return render_template('Reactarticles.html', status=auto, form=form)
+        return render_template('React_library.html', status=auto, form=form)
     elif auto and course == 'C':
-        return render_template('C_articles.html', status=auto, form=form)
+        return render_template('The_C_library.html', status=auto, form=form)
     else:
         return render_template('auto_reg.html', form=form)
 
@@ -237,14 +197,13 @@ def articles():
 @Main.route('/community', methods=['GET', 'POST'])
 @login_required
 @performance_logger
-def ChatRoom():
+def ChatRoom() -> Any:
     """
         This route enables user to view the chat room
     """
-    username = current_user.User_name
-    community = []
-    uploader = update_redis_profile(current_user.id)
-    display_picture = get_display_picture(current_user.id)
+    uploader = update_redis_profile(current_user.ID)
+    display_picture = get_display_picture(current_user.ID, "profile_picture")
+    status = get_display_picture(current_user.ID, "status")
     Form = UploadForm()
     form = SearchBar()
     if Form.validate_on_submit():
@@ -259,66 +218,104 @@ def ChatRoom():
             else:
                 flash('Profile picture not updated', 'danger')
                 return redirect(url_for('Main.ChatRoom'))
-    get_community = models.redis_storage.get_list_dict('community')
-    if get_community:
-        community = get_community
-    return render_template('chatRoom.html', Form=Form, form=form, communities=community,
-                           user=username, dp=display_picture)
+    data = CommunityData()
+    return render_template('chatRoom.html', Form=Form, form=form,
+                           communities=data.get_all_community,
+                           dp=display_picture, status=status)
+
 
 @Main.route('/ChatRoom/<room_id>', methods=['GET', 'POST'])
 @login_required
 @performance_logger
-def ChatRoomID(room_id):
+def ChatRoomID(room_id: str) -> Any:
     """
         This route enables user to view the chat room
     """
     if room_id is None:
         return redirect(url_for('Main.ChatRoom'))
-    username = current_user.User_name
-    ID = current_user.id
+    ID = current_user.ID
     Form = UploadForm()
-    chat_history = []
-    community = []
-    groupinfo = {}
-    joinroom = []
-    form = SearchBar()
-    get_community = models.redis_storage.get_list_dict('community')
-    if get_community:
-        community = get_community
-        for item in get_community:
-            for key, value in item.items():
-                if key == room_id:
-                    groupinfo = value
-                    chat_history = value.get('chat')
-                    joinroom = groupinfo.get("users")
-    if groupinfo is None or username not in joinroom:
+    communities = CommunityData(room_id)
+    dp = get_display_picture(ID, "profile_picture")
+    group_info = communities.get_community
+    join_room = communities.get_members()
+    members_profile = communities.get_members_profile(current_user.User_name)
+    if group_info is None or current_user.User_name not in join_room:
         flash('You are not a member of this group get group code to join',
               'danger')
         return redirect(url_for('Main.ChatRoom'))
-    rendered_template = render_template('chatRoomPage.html', form=form,
-                                            communities=community,
-                                            groupinfo=groupinfo,
-                                            user=username, ID=ID,
-                                            Form=Form, dp=get_display_picture(ID),
-                                            chats=chat_history)
+    rendered_template = render_template(
+            'chatRoomPage.html',
+            communities=communities.get_all_community,
+            groupinfo=group_info,
+            Form=Form,
+            chats=communities.get_chat_history(),
+            dp=dp,
+            members=members_profile
+            )
     response = make_response(rendered_template)
     return response
+
 
 @Main.route('/friends/', methods=['GET', 'POST'])
 @login_required
 @performance_logger
-def friends_page():
+def friends_page() -> Any:
     """
         This route enables user to view the friends page
     """
-    username = current_user.User_name
-    ID = current_user.id
+    ID = current_user.ID
+    all_user = update_redis_profile(current_user.ID)
+    user_data = all_user.get
+    friends = user_data.get('friend_requests')
     community = []
     form = SearchBar()
     Form = UploadForm()
-    display_picture = get_display_picture(current_user.id)
+    if friends is None:
+        num_friends = 0
+    else:
+        num_friends = len(friends)
+    display_picture = get_display_picture(current_user.ID, "profile_picture")
     get_community = models.redis_storage.get_list_dict('community')
     if get_community:
         community = get_community
-    return render_template('friendsPage.html', form=form, Form=Form, dp=display_picture,
-                           communities=community, user=username, ID=ID)
+    return render_template(
+            'friendsPage.html',
+            form=form,
+            Form=Form,
+            dp=display_picture,
+            communities=community,
+            status=get_display_picture(ID, "status"),
+            friends_request=num_friends
+            )
+
+
+@Main.route('/friends/<friend_id>', methods=['GET', 'POST'])
+@login_required
+@performance_logger
+def friends_chat(friend_id) -> Any:
+    """
+        route creates a page that displays a users conversation with a friend
+    """
+    user_id = current_user.ID
+    Form = UploadForm()
+    user_data = update_redis_profile(user_id)
+    friends_data = update_redis_profile.find_user(None, friend_id)
+    communities = models.redis_storage.get_list_dict('community')
+    dp = get_display_picture(user_id, "profile_picture")
+    status = get_display_picture(user_id, "status")
+    user_info = user_data.get
+    chat_history = user_info.get('messages')
+    conversation = []
+    friends_list = user_info.get('friends')
+    if chat_history is not None and friend_id in friends_list:
+        for item in chat_history:
+            if friend_id in item.get("sender"):
+                conversation = item.get("messages")
+                break
+    else:
+        conversation = []
+    return render_template('friendsChat.html', chats=conversation,
+                           dp=dp, communities=communities,
+                           status=status, friend_info=friends_data,
+                           Form=Form)

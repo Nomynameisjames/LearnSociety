@@ -1,25 +1,127 @@
 {% extends 'chatRoom.html' %}
 {% block newblock %}
-    <div id="layoutSidenav_content" class="chatbot-container">
+    <div id="layoutSidenav_content" class="chatbot-container" style="background-color: #474747;">
         <main>
             <div class="group-intro" id="friendsGroup-bar">
-                <ul class="navbar-nav" id="friendsNav">
+                <ul class="navbar-nav" id="friendsNav" style="margin-top: 7px;">
                     <li class="nav-item" id="Nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"><iconify-icon icon="fa-solid:user-friends" style="color: #fff;"></iconify-icon>&nbsp Friends</a>
+                        <a class="nav-link" aria-current="page" href="#" style="color: #fff;"><iconify-icon icon="fa-solid:user-friends" style="color: #fff;"></iconify-icon>&nbsp Friends</a>
                     </li>
                     <li class="nav-item" id="Nav-item">
-                        <a class="nav-link" href="#">Online</a>
+                        <button type="button" class="btn btn-link nav-link" id="All-Online">Online</button>
                     </li>
                     <li class="nav-item" id="Nav-item">
-                        <a class="nav-link" href="#">All</a>
+                        <button type="button" class="btn btn-link nav-link" id="All-Friends">All</button>
                     </li>
                     <li class="nav-item" id="Nav-item">
-                        <a class="nav-link" href="#">Pending</a>
+                        <button type="button" class="btn btn-link nav-link position-relative" id="All-Pending">
+                            Pending
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="request_list">
+                                {{ friends_request }}
+                                <span class="visually-hidden">Pending Requests</span>
+                            </span>
+                        </button>
                     </li>
                     <li class="nav-item" id="Nav-item">
-                        <a class="nav-link" href="#">Blocked</a>
+                        <button type="button" class="btn btn-link nav-link" id="All-Blocked">Blocked</button>
+                    </li>
+                    <li class="nav-item" id="Nav-item">
+                        <button type="button" class="btn btn-success btn-sm" id="Add-Friend" style="margin-top: 2px; margin-bottom: 2px;" >Add Friend</button>
                     </li>
                 </ul>
+                <div class="btn-group" id="hidden-friendsGroup-bar">
+                    <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li class="nav-item" id="Nav-item">
+                            <button type="button" class="btn btn-link nav-link" id="All-Online">Online</button>
+                        </li>
+                        <li class="nav-item" id="Nav-item">
+                            <button type="button" class="btn btn-link nav-link" id="All-Friends">All</button>
+                        </li>
+                        <li class="nav-item" id="Nav-item">
+                            <button type="button" class="btn btn-link nav-link" id="All-Pending">Pending</button>
+                        </li>
+                        <li class="nav-item" id="Nav-item">
+                            <button type="button" class="btn btn-link nav-link" id="All-Blocked">Blocked</button>
+                        </li>
+                        <li class="nav-item" id="Nav-item">
+                            <button type="button" class="btn btn-link">Add Friend</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chat-container" style="margin-top: 40px; background-color: transparent;">
+                <section class="group-chat-conversation" id="main-friends-section" style="background-color: transparent; border: none">
+                </section>
+                <div class="friends-search-section">
+                    <h5 class="text-start" style="color: #fff; text-shadow: 2px 2px 4px #000000; margin-top: 10px;">Add friends</h5>
+                    <p class="text-start" style="color: #fff; text-shadow: 2px 2px 4px #000; margin-top: 10px;">Add friends with their LearnSociety Username</p>
+                    <div class="input-group mb-3">
+                        <form method='POST' id="friends-search-bar" action=''>
+                            {{ form.hidden_tag() }}
+                                {{ form.search_user(type="text", class="form-control friends-search", placeholder="search friends") }}
+                                {{ form.submit(class="btn btn-outline-primary find-user", style="margin-left: 5px; border-radius: 5px;") }}
+                        </form>
+                        <span id="Not-Found" style="text-shadow: 2px 2px 4px #000; margin-top: 5px;"></span>
+                    </div>
+                    <h5 class="text-start" style="color: #fff; text-shadow: 2px 2px 4px #000000; margin-top: 10px; margin-right: auto;">Make friends via a community</h5>
+                    <a href="{{ url_for('Main.ChatRoom') }}">
+                        <span class="iconify"><iconify-icon icon="fluent:people-community-20-filled" width="30" height="25" style="color: #fff;"></iconify-icon></span>
+                        <span class="link-text" style="margin-left: 5px;">Explore Communities</span>
+                        <i class="fas fa-angle-right" id="Fas"></i>
+                    </a>
+                    <div class="searching">
+                    </div>
+                    <p class="text-center" id="friends-txt" style="color: #fff; text-shadow: 2px 2px 4px #000000; margin-top: 10px;">Search for friends to play with.</p>
+                </div>
+                <div class="None-Online">
+                    <div class="no-friend">
+                    </div>
+                    <p class="text-center friends-txt" style="color: #fff; text-shadow: 2px 2px 4px #000000; margin-top: 10px;"></p>
+                    <button type="button" class="btn btn-primary" id="Add-Friends-btn">Add friends</button>
+                </div>
+            </div>
+            <div class="modal fade" id="staticBackdrop10" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="clear-modal">
+                        <div class="modal-header friends-modal" style="border-bottom: 1px solid blue;">
+                            <!--<h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>-->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><iconify-icon icon="ic:baseline-close" height="30" width="30" style="color: #fff;"></iconify-icon></button>
+                            <div class="btn-group" role="group" aria-label="Basic example" id="friends-modal-btn">
+                                <a  href="{{ url_for("Main.friends_chat", friend_id='') }}" role="button" class="btn open-chat"><iconify-icon icon="fa6-regular:envelope" width="20" height="20" style="color: #fff;"></iconify-icon></a>
+                                 <button type="button"  class="group-title-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="20" height="20" style="color: #fff;"></iconify-icon></button>
+                                <ul class="dropdown-menu" id="friends-modal-dropdown">
+                                    <li><button type="button" class="dropdown-item" id="modal-dropdown-btn">Block</button></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="friends-modal-dp">
+                                <img src="" alt="logo">
+                            </div>
+                            <div class="card text-bg-dark" style="width: 100%; background-color: rgba(0,0,0,0);">
+                                <div class="card-header modal-username"></div>
+                                    <div class="card-body">
+                                        <h6 class="card-title text-center mb-3">User info</h6>
+                                        <h6 class="card-title"><iconify-icon icon="fluent:status-24-filled" style="color: #fff;"></iconify-icon></iconify-icon>&nbspstatus</h6>
+                                        <p class="card-text text-start modal-status mb-3" style="text-indent: 20px; font-size: 15px;"></p>
+                                        <h6 class="card-title"><iconify-icon icon="bi:calendar-date" style="color: #fff;"></iconify-icon>&nbsp&nbspJoined</h6>
+                                        <small class="card-text modal-joined"></small>
+                                        <br>
+                                        <br>
+                                        <h6 class="card-title"><iconify-icon icon="ion:book-outline"></iconify-icon>&nbspActive Courses</h6>
+                                        <ul class="modal-active-courses mb-3">
+                                        </ul>
+                                        <h6 class="card-title"><iconify-icon icon="fluent:people-community-16-regular" style="color: #fff;"></iconify-icon>&nbsp&nbspCommunities</h6>
+                                        <ul class="modal-communities mb-3">
+                                        </ul>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 {% endblock %}
        

@@ -1,17 +1,22 @@
 #!/usr/bin/python3
-import models
 from datetime import datetime, timedelta
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from flask_login import UserMixin
+from typing import Any, Tuple
 import random
 import time
 import string
 import jwt
-import json
+import models
 
+"""
+    This module contains the base model for the mysql database tables
+    and the classes that map out the tables in the database
+"""
 Base = declarative_base()
+
 
 class Auto_courses:
     Days = Column(DateTime)
@@ -25,7 +30,7 @@ class Auto_courses:
 
     def __str__(self):
         """
-            returns a string representation of the class 
+            returns a string representation of the class
         """
         return f"Date: {self.Days} Course: {self.Course} Topic: {self.Topic}\
                 Average: {self.Average} Reminder: {self.Reminder}\
@@ -35,21 +40,21 @@ class Auto_courses:
 class User(Base, Auto_courses):
     """
         class maps out a table in the mysql database that stores a users self
-        customised task creating an object representation 
+        customised task creating an object representation
     """
-    __tablename__='January'
-    id = Column(Integer, primary_key=True)
-    user_ID = Column(Integer, ForeignKey('user_info.id'))
+    __tablename__ = 'January'
+    ID = Column(Integer, primary_key=True)
+    user_ID = Column(Integer, ForeignKey('user_info.ID'))
 
 
 class AutoSchedule(Base, Auto_courses):
-     """
-         class maps out a table in the mysql database that stores a users
-         Python course info creating an object representation
-     """
-     __tablename__='PythonDB'
-     id = Column(Integer, primary_key=True)
-     user_ID = Column(Integer, ForeignKey('user_info.id'))
+    """
+        class maps out a table in the mysql database that stores a users
+        Python course info creating an object representation
+    """
+    __tablename__ = 'PythonDB'
+    ID = Column(Integer, primary_key=True)
+    user_ID = Column(Integer, ForeignKey('user_info.ID'))
 
 
 class JSCourse(Base, Auto_courses):
@@ -58,8 +63,8 @@ class JSCourse(Base, Auto_courses):
         Javascript course info creating an object representation
     """
     __tablename__ = 'JavascriptDB'
-    id = Column(Integer, primary_key=True)
-    user_ID = Column(Integer, ForeignKey('user_info.id'))  
+    ID = Column(Integer, primary_key=True)
+    user_ID = Column(Integer, ForeignKey('user_info.ID'))
 
 
 class ReactCourse(Base, Auto_courses):
@@ -68,8 +73,8 @@ class ReactCourse(Base, Auto_courses):
         React course info creating an object representation
     """
     __tablename__ = 'ReactDB'
-    id = Column(Integer, primary_key=True)
-    user_ID = Column(Integer, ForeignKey('user_info.id'))
+    ID = Column(Integer, primary_key=True)
+    user_ID = Column(Integer, ForeignKey('user_info.ID'))
 
 
 class C_Course(Base, Auto_courses):
@@ -78,8 +83,8 @@ class C_Course(Base, Auto_courses):
         C course info creating an object representation
     """
     __tablename__ = 'C-DB'
-    id = Column(Integer, primary_key=True)
-    user_ID = Column(Integer, ForeignKey('user_info.id'))
+    ID = Column(Integer, primary_key=True)
+    user_ID = Column(Integer, ForeignKey('user_info.ID'))
 
 
 class user_id(Base, UserMixin):
@@ -87,8 +92,8 @@ class user_id(Base, UserMixin):
         creates a class representation of the user info table in the mysql
         database
     """
-    __tablename__='user_info'
-    id = Column(String(255), primary_key=True)
+    __tablename__ = 'user_info'
+    ID = Column(String(255), primary_key=True)
     User_name = Column(String(100))
     Email = Column(String(100))
     Password = Column(String(300))
@@ -104,36 +109,40 @@ class user_id(Base, UserMixin):
     Reactcourse = relationship('ReactCourse', backref='ReactDB',
                                lazy='dynamic')
     C_course = relationship('C_Course', backref='C-DB', lazy='dynamic')
-   
-    
-    def __str__(self):
+
+    def __str__(self) -> str:
         """
             returns string representation of class objects
         """
-        return f"id : {self.id}, username: {self.User_name} email: {self.Email}"
+        return (f"id : {self.ID}, username:"
+                f"{self.User_name} email: {self.Email}")
 
     """
         Flask-Login integration checks if a user is currently logged in
         to a session
     """
-    def is_active(self):
+    def is_active(self) -> bool:
         return True
 
-    def get_reset_token(self):
+    def get_id(self) -> str:
+        return str(self.ID)
+
+    def get_reset_token(self) -> str:
         """
             generates a jwt token for a user to reset their password
         """
         from web_flask.app import app
-        user = models.storage.access(self.id, 'id', user_id)
+        user = models.storage.access(str(self.ID), 'id', user_id)
         if not user:
             raise Exception('User not found')
-        token = token_payload = {'user_id': self.id, 'exp': datetime.utcnow()
+        token = token_payload = {'user_id': str(self.ID),
+                                 'exp': datetime.utcnow()
                                  + timedelta(minutes=2)}
         token = jwt.encode(token_payload, app.config['SECRET_KEY'])
         return token.encode('utf-8').decode()
 
     @staticmethod
-    def verify_reset_token(token):
+    def verify_reset_token(token: str) -> Any:
         """
             verifies the validity of a jwt token for a user to reset their
             password if true returns an instance of the user
@@ -149,8 +158,8 @@ class user_id(Base, UserMixin):
             return None
         user = models.storage.access(my_id, 'id', user_id)
         return user
-    
-    def generate_confirmation_code(self: str):
+
+    def generate_confirmation_code(self) -> Tuple[str, float]:
         """
             generates a confirmation code for a user to confirm their email
             saves the code to a json file and returns the code and its
@@ -159,37 +168,39 @@ class user_id(Base, UserMixin):
         code = ''.join(random.choices(string.ascii_letters +
                                       string.digits, k=8))
         now = time.time()
+        key = f'{self.ID}:code'
         expiration_time = now + 600
         data = {'code': code, 'expiration_time': expiration_time}
-        print(code)
-        with open('encryptFile.json', 'w') as f:
-            json.dump(data, f)
+        models.redis_storage.set_dict(key, data, 700)
         return (code, expiration_time)
 
-    @staticmethod
-    def verify_confirmation_code(code: str):
+    def verify_confirmation_code(self, code: str) -> bool:
         """
             verifies the validity of a confirmation code for a user to confirm
             their email if true returns true
         """
-        with open('encryptFile.json', 'r') as f:
-            data = json.load(f)
-        timestamp = int(time.time())
-        if data.get('code') == code:
-            if timestamp - data.get('expiration_time') < 600:
+        key = f'{self.ID}:code'
+        confirmation_code = models.redis_storage.get_dict(key, 'code')
+        expiration_time = models.redis_storage.get_dict(key, 'expiration_time')
+        timestamp = float(time.time())
+        try:
+            expiration_time = float(expiration_time)
+            if confirmation_code == code and timestamp - expiration_time < 600:
+                models.redis_storage.delete(key)
                 return True
+        except (ValueError, TypeError):
+            pass
         return False
 
     def active_rooms(self):
         """
             returns the number of active rooms a user has
         """
-        user = models.storage.access(self.id, 'id', user_id)
         community = models.redis_storage.get_list_dict('community')
         if community:
             for items in community:
                 for _, value in items.items():
-                    if value['admin'] == user.User_name and user.Rooms:
+                    if value['admin'] == self.User_name and self.Rooms:
                         return True
         else:
             return False

@@ -14,23 +14,23 @@
                 <div class="card-body">
                     <label for="exampleColorInput" class="form-label" style="color: #fff;">Username</label>
                     <div class="input-group mb-3">
-                        <input type="hidden" name="user ID" value="{{ data.get('ID') }}" id='usr-id'>
-                        <input class="form-control form-control-sm" type="text" value="{{ data.get('user') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <input type="hidden" name="user ID" value="{{ current_user.ID }}" id='usr-id'>
+                        <input class="form-control form-control-sm" type="text" value="{{ current_user.User_name }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="{{ data.get('user') }}">Edit</button>
+                            <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="{{ current_user.User_name }}">Edit</button>
                         </div>
                     </div>
                     <label for="exampleColorInput" class="form-label" style="color: #fff">Email</label>
                     <div class="input-group mb-3">
-                        <input class="form-control form-control-sm" type="text" value="{{ data.get('Email') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        <input class="form-control form-control-sm" type="text" value="{{ current_user.Email }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button class="btn btn-outline-success me-md-2" type="button" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" value="email-reset" id="mail-reset">Edit</button>
                         </div>
                     </div>
                     <label for="exampleColorInput" class="form-label" style="color: #fff">Phone Number</label>
                     <div class="input-group mb-3">
-                        {% if data.get('phone') %}
-                        <input class="form-control form-control-sm" type="text" value="{{ data.get('phone') }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
+                        {% if current_user.Phone_number %}
+                        <input class="form-control form-control-sm" type="text" value="{{ current_user.Phone_number }}" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
                         <button class="btn btn-outline-success me-md-2" type="button" data-bs-toggle='modal' data-bs-target='#exampleModal4'id='add-number'>Edit</button>
                         {% else %}
                             <input class="form-control form-control-sm" type="text" value="Phone Number not provided" style="background-color: #3d3d3d; color: #fff;" aria-label="Disabled input example" disabled readonly>
@@ -97,7 +97,7 @@
 			            <div class="input-group mb-3">
 				            <input class="form-control form-control-sm" type="text" value="Disable chat history" style="background-color: transparent; border: none; color: #fff;" aria-label="Disabled input exam    ple" disabled readonly>
                                 <div class="form-check form-switch form-check-reverse">
-                                    <input class="form-check-input" type="checkbox" style="position: absolute; right: 15px; width: 3rem; max-width: 3rem;" role="switch" value="{{ data['auto'] }}" id="flexSwitchCheckReverse">
+                                    <input class="form-check-input" type="checkbox" style="position: absolute; right: 15px; width: 3rem; max-width: 3rem;" role="switch" value="{{ current_user.save_history }}" id="flexSwitchCheckReverse">
                                 </div>
                         </div>
                     <label for="exampleColorInput" class="form-label mb-3" style="color: #fff;">Course</label>
@@ -156,7 +156,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
                     </div>
                     <div class="modal-body">
-                        <p class="text-center"> We will need to verify your email address {{ data.get('Email') }} real quick.</p>
+                        <p class="text-center"> We will need to verify your email address {{ current_user.Email }} real quick.</p>
                         <p class="text-center"> Lost access to your email address?, please contact your email provider to regain access.</p>
                     </div>
                     <div class="d-grid gap-2">
@@ -198,7 +198,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  style="color: #fff; background-color: #fff;"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center"> We have sent a verification code to this email {{ data.get('Email') }}. Please enter the code below to verify your email address.</p>
+                    <p class="text-center"> We have sent a verification code to this email {{ current_user.Email }}. Please enter the code below to verify your email address.</p>
                     <label for="verify-code" class="col-form-label">Verification code</label>
                     <input type="text" class="form-control" id="verify-code">
                     <small class="text-muted"><a href="#" class="text-decoration-none">Didn't recieve a code or it expired? Resend code</a></small>
@@ -415,5 +415,5 @@
          </div>
     {% endblock %}
     </main>
-<footer class="py-4 bg-dark mt-auto">
+    <!--<footer class="py-4 bg-dark mt-auto">-->
 {% endblock %}

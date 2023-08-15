@@ -1,5 +1,6 @@
 // loader icon logic 
 import { flashMsg, RequestCall, getCookie } from './settings.js';
+import { scrollToBottom } from './socketio.js';
 
 
 // function that animates the chatbot header div 
@@ -14,15 +15,7 @@ function ShowBox() {
 
 // function that toggles the chatbot animated div to show and hide
 $(document).ready(function() {
-    // Get the textarea element
     var textarea = $("#my-chat-input");
-    var container = $('.chat-container');
-    container.scrollTop(container.prop("scrollHeight"));
-    $('#my-chat-input').on('input', function() {
-          $(this).css('height', 'auto');
-          $(this).css('height', $(this)[0].scrollHeight + 'px');
-        });
-    // Attach the focus and blur events
     textarea.on("focus", function() {
         // Slide up the nav element
         $("#nav-id").slideUp();
@@ -41,38 +34,57 @@ $(document).ready(function() {
 
 // function makes a call to the openai api for the chatbot functionality 
 $(document).ready(function() {
+    scrollToBottom();
  $('#chat-submit').click(function() {
   // Get user value from the input field
-  var inputMsg = $("#my-chat-input").val();
-  var postData = { "text": inputMsg };
-  $("#my-chat-input").val("");
-  // Make a GET request to get conversation history and append to the chatbot div
-      $.ajax({
-        url: 'http://127.0.0.1:5001/api/v1/help/',
-        type: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(postData),
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('x-access-token', getCookie('access_token'));
-        },
-        success: function(response) {
-          // upon success get response from request and append response to the chatbot div
-          var outputMsg = Object.values(response);
-          var msg = JSON.stringify(outputMsg).replace(/\n|\[|\]/g, '');
-          $('#nav-id').css('border', '.2em solid #39FF14');
-          var chatLog = "<div class='sent-message'><p id='sent'>" + inputMsg + "</p></div><div class='replied-message'><p id='received'>" + msg + "</p></div>";
-          $(".chat-conversation").append(chatLog);
-          outputMsg = {};
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          // upon error log error message and output a flash message on the chatbot div
-          console.log('Error', textStatus, errorThrown);
-          $('#nav-id').css('border', '.2em solid #FF5349');
-          flashMsg("Bot Server down please help report issue!", 'fail');
-        }
-      })
+    var inputMsg = $("#my-chat-input").val();
+    var postData = { "text": inputMsg };
+    $("#my-chat-input").val("");
+    let username = $("#Hidden-user").val();
+    let picture = $("#Picture").val();
+    let time = moment().format('Do MMM YYYY h:mm:ssa');
+    $("#chat-bot-card").append(`
+        <div class="received mb-3" style="margin-left: auto;">
+            <div class="d-flex justify-content-end">
+                <p class="small mb-1" style="color: #fff;">${username}</p>
+            </div>
+            <div class="d-flex flex-row justify-content-end mb-2 pt-1">
+                <div>
+                    <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-primary round">${inputMsg}</p>
+                </div>
+                <img id="friend-img" src=${picture} alt="avatar 1">
+            </div>
+            <div class="d-flex justify-content-end">
+                <p class="small mb-1" id="time-display">${time}</p>
+            </div>
+        </div>
+    `);
+    scrollToBottom();
+
+    let url = 'http://127.0.0.1:5001/api/v1/chatbot/';
+    RequestCall('POST', url, postData, null, null, function(response) {
+        let outputMsg = response.text;
+        let msg = JSON.stringify(outputMsg).replace(/\n|\[|\]/g, '');
+        let time = response.time
+        let username = "text-davinci-003";
+        let profile_pic = response.picture;
+         $("#chat-bot-card").append(`<div class="sent mb-3" style="margin-right: auto;">
+            <div class="d-flex justify-content-between">
+                <p class="small mb-1" style="color: #fff;">${username}</p>
+            </div>
+            <div class="d-flex flex-row justify-content-start mb-2 pt-1">
+                <img id="friend-img" src="${profile_pic}" alt="avatar 1">
+                <div>
+                    <p class="small p-2 ms-3 mb-3 rounded-3 bg-success round" style="color: #fff;">${msg}</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-start">
+                <p class="small mb-1 " id="time-display">${time}</p>
+            </div>
+        </div>`);
+        $('#nav-id').css('border', '.2em solid #39FF14');
+        scrollToBottom();
+    });
     });
 });
 

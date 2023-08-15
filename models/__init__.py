@@ -12,7 +12,7 @@ if storage_type == 'mysqlDB':
         creates a unique FileStorage instance for your application
         using the mysqlDB storage engine
     """
-    from models.engine.DB_storage import DBstorage
+    from .engine.MysqlDB_storage import DBstorage
     storage = DBstorage()
     storage.reload()
 

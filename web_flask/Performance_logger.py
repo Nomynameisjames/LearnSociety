@@ -2,6 +2,7 @@ import time
 import psutil
 from functools import wraps
 
+
 def performance_logger(func):
     """
         Decorator to log the memory usage and execution time of a function
@@ -20,6 +21,9 @@ def performance_logger(func):
         # Get final memory usage
         final_memory = process.memory_info().rss / 1024 / 1024
         # Log the memory usage and execution time
-        print(f"Route: {func.__name__} \t Memory usage: {final_memory-initial_memory:.2f} MB \t Execution time: {(end_time-start_time)*1000:.2f} ms")
+        print(
+                f"Route: {func.__name__} \t"
+                f"Memory usage: {final_memory-initial_memory:.2f} MB \t"
+                f"Execution time: {(end_time-start_time)*1000:.2f} ms")
         return response
     return wrapper

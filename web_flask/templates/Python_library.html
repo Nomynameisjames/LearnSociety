@@ -1,0 +1,151 @@
+{% extends 'index.html' %}
+{% block title %}
+    <title> Library </title>
+{% endblock %}
+{% block search %}
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="input-group">
+            {% if form.search.errors %}
+            <div class="alert alert-danger">
+                {% for error in form.search.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% else %}
+                {{ form.search(class="form-control search-bar", list="datalistOptions", placeholder="Search concepts", aria_label="Search python topics", aria_describedby="btnNavbarSearch", id="course-search") }}
+            {% endif %}
+            <datalist id="datalistOptions">
+                <option value="Using the Python Interpreter">
+                <option value="An Informal Introduction to Python">
+                <option value="More Control Flow Tools">
+                <option value="Data Structures">
+                <option value="Modules">
+                <option value="Input and Output">
+                <option value="Errors and Exceptions">
+                <option value="Classes">
+                <option value="Brief Tour of the Standard Library">
+                <option value="Python Language Reference">
+                <option value="Python Standard Library">
+                <option value="Virtual Environments and Packages">
+                <option value="Representation Error">
+            </datalist>
+                       <!--<input class="form-control" type="text" id="search-bar" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" /> -->
+            <button class="btn btn-primary CourseSearch" value="Python" type="button"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+{% endblock %}
+{% block content %}
+    <div id="layoutSidenav_content" style="background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.8), rgba(255,255, 255, 0.8));">
+        <div id="about-body">
+            <h1 class='text-center' id="library-header">The Python Library</h1>
+            <p class="text-center" style="color: #fff;">Welcome to our Python library, where you can find a variety of resources to help you learn and improve your Python programming skills.</p>
+         </div>
+         <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Books</h2>
+            <div class="row row-cols-4" style="padding: 10px;">
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://jntukucen.ac.in/ebook_files/93.pdf" data-pdf-redirect="" data-pdf-title="Python Programming By John Zelle" >
+                        <img src="{{ url_for('static', filename='assets/img/John-Zelle.jpeg') }}" alt="Python Programming by John Zelle" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://d.cxcore.net/Python/Python_Cookbook_3rd_Edition.pdf" data-pdf-redirect="" data-pdf-title="Python Cook Book by ORiley" >
+                        <img src="{{ url_for('static', filename='assets/img/ORiley.jpg') }}" alt="Python Cook Book by ORiley" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="http://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/Head-First-Python.pdf" data-pdf-redirect="" data-pdf-title="Headfirst Paul Barry" >
+                        <img src="{{ url_for('static', filename='assets/img/Headfirst.jpg') }}" alt="Headfirst Paul Barry" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/No.Starch.Python.Oct_.2015.ISBN_.1593276036.pdf" data-pdf-redirect="" data-pdf-title="Python Crash Course by Eric Matthes" >
+                        <img src="{{ url_for('static', filename='assets/img/Python-crash.png') }}" alt="Python Crash Course by Eric Matthes" width="250" height="250">
+                    </a>
+                </div>
+                <div class="col" id="books-collection">
+                    <a target="_blank" role="button" class="btn-trigger-modal" data-pdf-url="https://edu.anarcho-copy.org/Programming%20Languages/Python/Automate%20the%20Boring%20Stuff%20with%20Python.pdf" data-pdf-redirect="" data-pdf-title="Automate the boring stuff with Python by Al Sweigart" >
+                        <img src="{{ url_for('static', filename='assets/img/automate-python.png') }}" alt="Automate the boring stuff with python by Al Sweigart" width="250" height="250">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="container text-center" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Video Tutorials</h2>
+            <div class="row row-cols-2" style="padding: 10px;">
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/YYXdXT2l-Gg?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="col">
+                    <iframe class="youtube-frame" width="560" height="315" src="https://www.youtube.com/embed/OFrLs22MDAw?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 30px;">
+            <h2 class='text-center' style="text-shadow: 2px 2px 5px red;">Top Learning Platforms</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="list-group" id="blog-list">
+                        <a class="list-group-item list-group-item-action" href="https://www.codecademy.com/learn/learn-python" target="_blank">Codecademy</a></li>
+                        <a  class="list-group-item list-group-item-action" href="https://www.sololearn.com/" target="_blank">SoloLearn</a></li>
+                        <a  class="list-group-item list-group-item-action" href="https://www.w3schools.com/python/" target="_blank">W3Schools</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.learnpython.org/" target="_blank">LearnPython</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.tutorialspoint.com/python/index.htm" target="_blank">TutorialPoint</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.edx.org/" target="_blank">EdX</a></li>
+                        <a  class="list-group-item list-group-item-action" href="https://www.udemy.com/" target="_blank">Udemy</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.programiz.com/python-programming" target="_blank">Programiz</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.alxafrica.com/software-engineering/" target="_blank">ALX Africa</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.digitalocean.com/community/tutorials/" target="_blank">DigitalOcean</a>
+                        <a  class="list-group-item list-group-item-action" href="https://www.freecodecamp.org/learn/" target="_blank">FreeCodeCamp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% block modal %}
+<div class="modal fade" id="staticBackdrop8" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel8" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content" id="clear-modal">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel8"> </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #fff; background-color: #fff;"></button>
+            </div>
+            <div class="modal-body">
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content" id="clear-modal">
+            <div class="modal-header" style="color: #fff;">
+                <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdf-object" src="" type="application/pdf" width="100%" height="100%">
+                    <p>PDF cannot be displayed. <a id="pdf-download-link" href="#">Download it here</a>.</p>
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<!--<footer class="py-4 bg-dark mt-auto">-->
+{% endblock %}
+
+
+
+
+
+

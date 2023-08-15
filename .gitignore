@@ -1,10 +1,7 @@
 __pyache__/
 __pycache__
 *.swp
+*.json
 venv/
 var
 web_flask/main/client_secrets.json
-JSCourse.json
-Python_resource.json
-React_courses.json
-encryptFile.json

@@ -1,0 +1,128 @@
+{% extends 'chatRoom.html' %}
+{% block title %}
+    <title>Messages</title>
+{% endblock %}
+{% block navtitle %}
+    <a class="navbar-brand ps-3" id="my-brand" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
+{% endblock %}
+{% block hiddensearch %}
+{% endblock %}
+{% block profile %}
+    {% if friend_info.profile_picture == "" %}
+        <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer;transition: 0.3s;">
+    {% else %}
+        <img src="{{ friend_info.profile_picture }}" class="card-img-top" id="myimg" alt="Profile Picture"  data-bs-toggle="modal" data-bs-target="#staticBackdrop13" style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+    {% endif %}
+    <div class="card-body" style="color: #fff;">
+        <h5 class="card-title">{{ friend_info.username }}</h5>
+    {% if friend_info.online %}
+        <span class="badge rounded-pill bg-success" id="presence">Online</span>
+    {% else %}
+        <span class="badge rounded-pill bg-warning mb-3" id="presence" style="color: #000;">Offline</span>
+    {% endif %}
+    <br>
+    {% if friend_info.Status == "" %}
+        <p class="card-text">No status</p>
+    {% else %}
+        <p class="card-text">{{ friend_info.Status }}</p>
+    {% endif %}
+    <br>
+        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+    </div>
+</div>
+{% endblock %}
+{% block horizontalNav %}
+    <div class="horizon">
+        <a class="btn btn-sm" href="{{ url_for('Main.friends_page') }}" role="button" style="height: auto;"><iconify-icon icon="ic:sharp-keyboard-backspace" width="35" height="25" style="color: white;"></iconify-icon></a>
+        <div class="name_tag">
+            <h5 class="group-title" style="margin-left: 15px; margin-top: 10px;">{{ friend_info.username }}</h5>
+        </div>
+            <div class="btn-group dropdown" id="friend-chat-dropdown">
+                <button type="button"  class="group-title-btn dropdown-toggle btn-sm" style="height: auto; width: 30px;"data-bs-toggle="dropdown" aria-expanded="false"><iconify-icon icon="entypo:dots-three-vertical" width="25" height="20" style="color: #fff;"></iconify-icon></button>
+                <ul class="dropdown-menu bg-dark dropdown-menu-end">
+                    <li><button type="button" class="dropdown-item" id="clear-privateChat">clear chat</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block newblock %}
+        <div id="layoutSidenav_content" class="chatbot-container" style="background-color: #474747;">
+            <main>
+                <div id="chat-container">
+                    <div class="chat-container" id="friends-chat-container">
+                        <div id="hidden-id" style="display: none;">{{ current_user.ID }}</div>
+                        <section class="main-chat-section" id="">
+                            {% if chats %}
+                                {% for item in chats %}
+                                    {% if item["name"] == friend_info.username %}
+                                        <div class="sent mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="small mb-1" style="color: #fff;">{{ item["name"] }}</p>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-start">
+                                                <img id="friend-img" src={{ friend_info.profile_picture }} alt="avatar 1">
+                                                <div>
+                                                    <p class="small p-2 ms-3 mb-3 rounded-3 bg-success round" style="color: #fff;">{{ item["text"] }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <p class="small mb-1" id="time-display">{{ item["time"] }}</p>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="recieved mb-3">
+                                            <div class="d-flex justify-content-end">
+                                                <p class="small mb-1" style="color: #fff;">{{ item["name"] }}</p>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-end mb-4 pt-1">
+                                                <div>
+                                                    <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-primary round">{{ item["text"] }}</p>
+                                                </div>
+                                                <img id="friend-img" src={{ dp }} alt="avatar 1">
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <p class="small mb-1" id="time-display">{{ item["time"] }}</p>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </section>
+                    </div>
+                </div>
+        <div class="modal fade" id="staticBackdrop13" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="clear-modal">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel" style="text-shadow: 0 0 3px #FF0000;">{{ friend_info.username }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><iconify-icon icon="ic:baseline-close" height="30" width="30" style="color: #fff;"></iconify-icon></button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="img-thumbnail" src="{{ friend_info.profile_picture }}" id="img11" alt="Profile Picture" style="border: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="py-4 bg-dark mt-auto">
+        <div class="cont w-100" style="background-color: #474747; margin-top: -20px;">
+            <div class="friends-message-col" style="margin-bottom: 40px;">
+                <textarea type="text" class="form-control" id="friends-message-input" placeholder="Type a message"></textarea>
+                <button class="btn btn-dark mb-4" type="button" id="button-addon3"><iconify-icon class="sender-btn" icon="ic:round-send" width="30" height="30"></iconify-icon></button>
+            </div>
+        </div>
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-white bg-dark">Copyright &copy; Nomynameisjamees 2023</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

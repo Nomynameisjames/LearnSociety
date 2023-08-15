@@ -4,22 +4,28 @@
 {% endblock %}
 {% block sideNav %}
 <div class="card mb-3" style="background-color: #100f0f; border-bottom: 0.5px solid white;">
+{% block profile %}
     {% if dp == "" %}
         <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
     {% else %}
         <img src="{{ dp }}" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
     {% endif %}
     <div class="card-body" style="color: #fff;">
-        <h5 class="card-title">{{ user }}</h5>
+        <h5 class="card-title">{{ current_user.User_name }}</h5>
         <br>
-        <span class="badge rounded-pill bg-primary">Online</span>
-        <span style="margin-left: 100px;"><button id="edit-profile"><iconify-icon icon="mdi:account-edit" height="20" width="20"></iconify-icon></button></span>
+        <span class="badge rounded-pill bg-primary" id="online-status">Online</span>
+        <span style="margin-left: 100px;"><button id="edit-profile" data-bs-toggle="modal" data-bs-target="#staticBackdrop5"><iconify-icon icon="mdi:account-edit" height="20" width="20"></iconify-icon></button></span>
         <br>
-        <p class="card-text">The Gods of Olympus has abandoned me</p>
+        {% if status == "" %}
+            <p class="card-text">No status</p>
+        {% else %}
+            <p class="card-text">{{ status }}</p>
+        {% endif %}
         <br>
         <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
     </div>
 </div>
+{% endblock %}
     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
         <div id="chat-link"><iconify-icon icon="fluent:people-community-16-regular" height="30" width="30" style="color: #fff;"></iconify-icon></div>&nbsp&nbsp
         Your Communities
@@ -33,7 +39,7 @@
         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
             {% for community in communities %}
                 {% for key, value in community.items() %}
-                    {% if user in value["users"] %}
+                    {% if current_user.User_name in value["users"] %}
                         <a class="nav-link" href="{{ url_for('Main.ChatRoomID', room_id=key) }}">
                         <div class="sb-nav-link-icon" id="chat-link"><iconify-icon icon="fluent:people-community-28-filled" height="20" width="20" style="color: #00FF00;"></iconify-icon></div>
                         {{ value['name'] }}
@@ -63,34 +69,38 @@
 {% endblock %}
 {% block content %}
     {% block newblock %}
-<div id="layoutSidenav_content" class="chatbot-container">
+<div id="layoutSidenav_content" class="chatbot-container" style="background-color: #474747;">
     <main>
         <div class="grp-chat-home-icon">
-            <div class="group-img">
+            <div class="group-img" id="Group-display">
             </div>
         </div>
         <div class="community-note">
             <h2 class="group-title">Welcome to the community</h2>
-            <p class="text-center" style="font-size: 18px;">Easily Organize your related groups and send announcements, find study peers and share perspective with those undergoing similar learning experience as you!</p>
-            <button type="button" class="btn btn-success btn-lg" id="com-btn" style="border-radius: 20px; width: 350px; white-space: nowrap;" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join Community</button>
+            <p class="text-center text-light" style="">Easily Organize your related groups and send announcements, find study peers and share perspective with those undergoing similar learning experience as you!</p>
+            <button type="button" class="btn btn-success join-community" id="com-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join Community</button>
         </div>
-        <h2 class="group-title"  style="color: #fff; margin-top: 20px;">Discover new Communities</h2>
+        <h2 class="group-title title-header"  style="color: #fff; margin-top: 20px;">Discover new Communities</h2>
         <div class="swiper mySwiper" id="MySwiper">
             <div class="swiper-wrapper">
-                {% for community in communities %}
-                    {% for key, value in community.items() %}
-                        <div class="swiper-slide" id="MySwiper-slide">
-                            <div class="card" id="community-card">
-                                <img src="{{ value["group_picture"] }}" class="card-img-top" id="community-image"  alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title" style="text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF">{{ value["name"] }}</h5>
-                                    <p class="text-center">{{ value["users"] | length }} Members</p>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join</button>
+                {% if communities %}
+                    {% for community in communities %}
+                        {% for key, value in community.items() %}
+                            <div class="swiper-slide" id="MySwiper-slide" style="background-color: transparent; margin-left: 10px;">
+                                <div class="card" id="community-card">
+                                    <img src="{{ value["group_picture"] }}" class="card-img-top" id="community-image"  alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF">{{ value["name"] }}</h5>
+                                        <p class="text-center">{{ value["users"] | length }} Members</p>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Join</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
+                    {% else %}
+                        <p class="text-center" style="color: #000;">No Communities Available</p>
+                {% endif %}
             </div>
             <div class="swiper-pagination"></div>
         </div>
@@ -154,7 +164,7 @@
   <div class="modal-dialog">
     <div class="modal-content" id="clear-modal">
       <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel" style="text-shadow: 0 0 3px #FF0000;">{{ user }}</h1>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel" style="text-shadow: 0 0 3px #FF0000;">{{ current_user.User_name }}</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -172,6 +182,23 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="clear-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Status</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="recipient-name" class="col-form-label">Enter new status</label>
+        <textarea class="form-control" id="status-text" style="height: 70px;" maxlength="100"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="Edit-Status">Save</button>
+      </div>
+    </div>
+  </div>
     </main>
-    <footer class="py-4 bg-dark mt-auto">
 {% endblock %}

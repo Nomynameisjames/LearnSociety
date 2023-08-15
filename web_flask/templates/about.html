@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     </head>
-    <body style="background-image: repeating-radial-gradient(circle, #000, #fffb20%, grey, #121212);">
+    <body>
         <div class="about-container">
             <nav class="navbar fixed-top navbar-expand-lg bg-dark border-bottom border-bottom-dark" data-bs-theme="dark" style="margin-bottom: 70px;">
                 <div class="container-fluid">
@@ -44,8 +44,8 @@
             {% block content %}
             <div class='about-content' id="About-content">
                 <div id="about-intro">
-                    <h1>ABOUT</h1>
-                    <span id="chart-body" style="color: #000; text-shadow: 2px 2px 4px #fff; font-size: 16px;">Meet the team</span>
+                    <h1 class="group-title">ABOUT</h1>
+                    <span class="text-dark" id="chart-body" style="text-shadow: 2px 2px 4px #fff; font-size: 16px; margin-right: 5px;">Meet the team</span>
                 </div>
                 <br>
                 <div class="row row-cols-1 row-cols-md-3 g-4" style="margin-bottom: 10px; width: 100%;">
@@ -54,7 +54,7 @@
                             <img src="static/assets/img/onimisi.png" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">Adava Onimisi</h5>
-                                <p class="card-text fw-semibold">Adava Onimisi is one of the authors of the LearnSociety project, a full-stack developer from Nigeria. If you have any questions or feedback    , you can contact him using the following platform.</p>
+                                <p class="card-text fw-semibold">Adava Onimisi is the author of the LearnSociety project, a full-stack developer from Nigeria. If you have any questions or feedback, you can contact him using the following platform.</p>
                             </div>
                             <div class="card-footer" id="about-footer"style="background-color: rgba(0,0,0,0); border: none; outline: none;">
                                 <a href="https://github.com/Nomynameisjames" class="card-link link-danger" id="github"><iconify-icon icon="logos:github-icon" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>
@@ -66,14 +66,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="card" id="history">
-                    <h3 class="text-center" style="text-shadow: 2px 2px 5px red; font-size: 20px;">
+                <div class="card bg-transparent" id="history">
+                    <h3 class="text-center group-title" style="text-shadow: 2px 2px 5px red; font-size: 20px;">
                         History
                     </h3>
-                    <p class="card-text text-center" id="history-text">The LearnSociety project was inspired by personal experiences gained during our learning phase at the ALX software engineering program, As new students in the field, we were faced with the daunting task of digesting and processing a vast amount of information in various subject areas within a set timeline. It became apparent that effective time management and scheduling were critical to achieving productivity and meeting our deadlines. To solve these problems, we developed the LearnSociety application. The app provides core functionality to organize and plan a daily schedule, including setting reminders for specific tasks, accessing relevant resources for a set topic of the day, embeded chatbot functionality to get suggestions when stuck on certain concepts, taking a daily quiz to test knowledge, and visualizing productivity levels with graphs.</p>
-                    <p class="card-text text-center" id="history-text">LearnSociety is an open source project, and we welcome contributions from anyone interested in making the app better. You can find the public repository on GitHub here:</p>
+                    <p class="card-text text-center text-light" id="history-text">The LearnSociety project was inspired by personal experiences gained during our learning phase at the ALX software engineering program, As new students in the field, we were faced with the daunting task of digesting and processing a vast amount of information in various subject areas within a set timeline. It became apparent that effective time management and scheduling were critical to achieving productivity and meeting our deadlines. To solve these problems, we developed the LearnSociety application. The app provides core functionality to organize and plan a daily schedule, including setting reminders for specific tasks, accessing relevant resources for a set topic of the day, embeded chatbot functionality to get suggestions when stuck on certain concepts, taking a daily quiz to test knowledge, and visualizing productivity levels with graphs.</p>
+                    <p class="card-text text-center text-light" id="history-text">LearnSociety is an open source project, and we welcome contributions from anyone interested in making the app better. You can find the public repository on GitHub here:</p>
                     <div class="card-footer text-center" id="about-footer"style="background-color: rgba(0,0,0,0); border: none; outline: none;">
-                         <a href="https://github.com/Nomynameisjames/LearnSociety.git" class="link-dark text-center" id="github"><iconify-icon icon="bi:github" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>                
+                         <a href="https://github.com/Nomynameisjames/LearnSociety.git" class="text-success text-center" id="github"><iconify-icon icon="bi:github" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>                
                     </div>
                 </div>
             </div> 

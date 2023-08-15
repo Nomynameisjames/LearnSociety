@@ -1,16 +1,19 @@
-#!usr/bin/python3
-
-from api.v1.main import main_app
+#!/usr/bin/python3
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
+from flask_caching import Cache
 from flasgger import Swagger
 from werkzeug.exceptions import HTTPException
+from api.v1.main import main_app
 import psutil
 import os
 import models
 
 
 app = Flask(__name__)
+#cache = Cache(app)
+#app.config['CACHE_TYPE'] = 'redis'
+#app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
 swagger = Swagger(app)
 
 app.url_map.strict_slashes = False
@@ -24,12 +27,13 @@ port = os.getenv('HBNB_API_PORT', '5000')
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
+def teardown_db(e: Exception) -> None:
     models.storage.close()
+    return
 
 
 @app.errorhandler(400)
-def handle_400(exception):
+def handle_400(exception: HTTPException) -> dict:
     """
         handles 400 errros, in the event that global error handler fails
     """
@@ -38,8 +42,9 @@ def handle_400(exception):
     message = {'error': description}
     return make_response(jsonify(message), code)
 
+
 @app.errorhandler(404)
-def handle_404(exception):
+def handle_404(exception: HTTPException) -> dict:
     """
         handles 404 errors, in the event that global error handler fails
     """
@@ -48,8 +53,9 @@ def handle_404(exception):
     message = {'error': description}
     return make_response(jsonify(message), code)
 
+
 @app.errorhandler(Exception)
-def global_error_handler(err):
+def global_error_handler(err: HTTPException) -> dict:
     """
         Global Route to handle All Error Status Codes
     """
@@ -64,7 +70,7 @@ def global_error_handler(err):
     return make_response(jsonify(message), code)
 
 
-def setup_global_errors():
+def setup_global_errors() -> None:
     """
         This updates HTTPException Class with custom error function
     """
@@ -72,15 +78,12 @@ def setup_global_errors():
         app.register_error_handler(cls, global_error_handler)
 
 
-
 if __name__ == '__main__':
     """
       MAIN Flask App
     """
- # initializes global error handling
     setup_global_errors()
-    # start Flask app
     process = psutil.Process()
-    print(f'Initial memory usage: {process.memory_info().rss / 1024 / 1024} MB')
-    app.run(host=host, port= port)
-
+    print(
+        f'Initial memory usage: {process.memory_info().rss / 1024 / 1024} MB')
+    app.run(host=host, port=port)
