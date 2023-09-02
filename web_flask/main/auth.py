@@ -169,7 +169,8 @@ def save_user_to_db(user) -> Any:
                                         'Email', user_id)
     ID = str(uuid.uuid4())
     if check_email:
-        response = login_user_and_redirect(check_email)
+        return login_user_and_redirect(check_email)
+
     elif username_availability(user.get("user_name"), user.get("user_email")):
         cache_file[ID] = {
                     'Email': user.get("user_email"),
@@ -179,7 +180,7 @@ def save_user_to_db(user) -> Any:
         if list_item == {}:
             models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
         flash(_("Username already taken"), 'danger')
-        response = redirect(url_for('Main.confirm_username', personal_id=ID))
+        return redirect(url_for('Main.confirm_username', personal_id=ID))
     else:
         hashed_sub = generate_password_hash(user.get("user_id"))
         auth_user = user_id(ID=ID,
@@ -190,8 +191,8 @@ def save_user_to_db(user) -> Any:
             models.storage.new(auth_user)
             models.storage.save()
             models.storage.close()
-            response = login_user_and_redirect(auth_user)
-    return response
+            return login_user_and_redirect(auth_user)
+        return redirect(url_for('Main.signup'))
 
 
 @Main.route('/signup', methods=['GET', 'POST'])
@@ -295,7 +296,7 @@ def login() -> Any:
                                                remember=form.remember.data)
             else:
                 flash(_(f'Login Unsuccessful. Please check username and'
-                        f'password'), 'danger')
+                        f' password'), 'danger')
         else:
             return render_template('csrf_error.html'), 400
     return render_template('login.html', title='Login', form=form)

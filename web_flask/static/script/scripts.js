@@ -23,7 +23,7 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let friendCard = $("<div>", {
-    class: "card mb-3",
+    class: "card mb-3 fffw",
     style: "max-width: 540px; background-color: rgba(0,0,0,0);",
     id: "main-chat-interface"
   });
@@ -40,7 +40,8 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let imgDiv = $("<div>", {
-    class: "col-md-3",
+    class: "col-md-4 vo",
+      id: "friends-img-div",
   });
 
   let img = $("<img>", {
@@ -50,11 +51,12 @@ let friend_card = (modal, Status, value = {}) => {
   });
 
   let colDiv = $("<div>", {
-    class: "col-md-8",
+    class: "col-md-8 col-12",
   });
 
   let cardBodyDiv = $("<div>", {
     class: "card-body",
+      id: "friends-card-body",
   });
 
   let hiddenField = $("<input>", {
@@ -440,7 +442,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $("#All-Friends").click(function() {
+    $("#All-Friends, #all-Friends").click(function() {
         let option = "All";
         let url = 'http://127.0.0.1:5001/api/v1/friends/' + option;
 
@@ -461,7 +463,7 @@ $(document).ready(function() {
             }
         });
     });
-    $("#All-Pending").click(function () {
+    $("#All-Pending, #all-Pending").click(function () {
         let option = "Pending";
         let url = "http://127.0.0.1:5001/api/v1/friends/" + option;
 
@@ -486,7 +488,7 @@ $(document).ready(function() {
             }
         });
     });
-    $("#All-Blocked").click(function() {
+    $("#All-Blocked, #all-Blocked").click(function() {
         let option = "Blocked";
         let url = "http://127.0.0.1:5001/api/v1/friends/" + option;
         RequestCall("GET", url, null, null, null, function (data) {
@@ -509,7 +511,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#Add-Friend").click(function() {
+    $("#Add-Friend, #add-Friends").click(function() {
         $(".friends-search-section").css("display", "flex");
         $(".None-Online").css("display", "none");
         $("#main-friends-section").css("display", "none");

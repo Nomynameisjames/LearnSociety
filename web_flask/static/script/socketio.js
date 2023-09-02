@@ -138,7 +138,7 @@ $(document).ready(function() {
                 online_friends = response.data;
         }
     });
-       $("#All-Online").on("click", function() { 
+       $("#All-Online, #all-Online").on("click", function() { 
             if (Array.isArray(online_friends) && online_friends.length === 0) {
             $(".friends-search-section").css("display", "none");
             $("#main-friends-section").css("display", "none");

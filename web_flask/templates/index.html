@@ -8,7 +8,7 @@
         <meta name="author" content="" />
         {% block title %}
         <title>
-            Dashboard - LearnSociety
+            Dashboard
         </title>
         {% endblock %}
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
@@ -23,7 +23,6 @@
     </head>
     <body class="sb-nav-fixed" id="status" data-my-var="{{ status }}">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-             
             <!-- Navbar Brand-->
             {% block navtitle %}
                 <a class="navbar-brand ps-3" href="{{ url_for('Main.view') }}" style="width: 150px; text-shadow: 2px 2px red; color: #fff;"><b>LearnSociety</b></a>
@@ -82,7 +81,6 @@
                     </ul>
                 </li>
             </ul>
-        
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -175,7 +173,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as: </div>
-                        {{ _(' %(user)s', user=user) }} 
+                        {{ _(' %(user)s', user=current_user.User_name) }} 
                     </div>
                 </nav>
             </div>
@@ -208,7 +206,7 @@
                      <br>
                     <div class="row">
                         <div class="col-xl-6">
-                            <div class="card mb-4" id="chart-body">
+                            <div class="card mb-4" id="login-card">
                                 <div class="card-header" style="color: #000000">
                                     <i class="fas fa-chart-area me-1" id="tab"></i>
                                         Topics focused on most
@@ -219,10 +217,10 @@
                             </div>
                         </div>
                         <div class="col-xl-6">
-                            <div class="card mb-4" id="chart-body">
+                            <div class="card mb-4" id="login-card">
                                 <div class="card-header" style="color: #000000">
                                     <i class="fas fa-chart-bar me-1" id="tab"></i>
-                                        Average on Tasks completed
+                                        Average on Tasks
                                 </div>
                                     <div class="card-body">
                                         <canvas id="myBarChart" width="100" height="60"></canvas>
@@ -230,7 +228,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4" id="chart-body" style="border: 1px solid red;">
+                    <div class="card mb-4" id="login-card" style="border: 1px solid red;">
                         <div class="card-header" id="table-dash">
                             <div class="table-info">
                                 <i class="fas fa-table me-1" id="tab"></i>
@@ -351,11 +349,11 @@
     </main>
         {% endblock %}
         {% block footer %}
-        <footer class="py-4 bg-dark mt-auto">
+        <footer class="py-4 bg-dark mt-auto text-center" style="padding: 10px; margin-top: 20px;">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-white bg-dark">Copyright &copy; Nomynameisjamees 2023</div>
-                    <div>
+                    <div class="text-white bg-dark" id="about-desc">Copyright &copy; Nomynameisjamees 2023</div>
+                    <div id="about-desc">
                         <a href="#">Privacy Policy</a>
                             &middot;
                         <a href="#">Terms &amp; Conditions</a>

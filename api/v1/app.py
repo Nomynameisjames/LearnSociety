@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
 from flask_caching import Cache
-from flasgger import Swagger
+#from flasgger import Swagger
 from werkzeug.exceptions import HTTPException
 from api.v1.main import main_app
 import psutil
@@ -14,7 +14,7 @@ app = Flask(__name__)
 #cache = Cache(app)
 #app.config['CACHE_TYPE'] = 'redis'
 #app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
-swagger = Swagger(app)
+#swagger = Swagger(app)
 
 app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/api/v1/*": {"origin": "*"}})

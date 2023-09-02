@@ -29,7 +29,7 @@ def SQL_data(ID: str) -> dict:
 
     if user_data:
         profile = {
-                "Created": user_data.Created_at.strftime("%d %B %Y"),
+                "Created": user_data.Created_at,
                 "Active_courses": unique_courses
                 }
         return profile

@@ -77,15 +77,15 @@
 {% block footer %}
     <footer class="py-4 bg-dark mt-auto">
         <div class="cont w-100" style="background-color: #474747; margin-top: -20px;">
-            <div class="friends-message-col" style="margin-bottom: 40px;">
+            <div class="friends-message-col" id="msg-box" style="margin-bottom: 40px;">
                 <textarea type="text" class="form-control" id="my-chat-input" placeholder="Type a message"></textarea>
                 <button class="btn btn-dark mb-4" type="button" id="chat-submit"><iconify-icon class="sender-btn" icon="ic:round-send" width="30" height="30"></iconify-icon></button>
             </div>
         </div>
         <div class="container-fluid px-4">
             <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-white bg-dark">Copyright &copy; LearnSociety 2023</div>
-                <div>
+                <div class="text-white bg-dark" id="about-desc">Copyright &copy; LearnSociety 2023</div>
+                <div id="about-desc">
                     <a href="#">Privacy Policy</a>
                         &middot;
                     <a href="#">Terms &amp; Conditions</a>

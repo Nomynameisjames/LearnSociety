@@ -90,11 +90,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField(_l("Remember Me"))
     submit = SubmitField(_l('Sign in'))
 
-    def validate_email(self, email: FlaskForm) -> None:
-        if not models.storage.access(email.data, 'Email', user_id):
-            raise ValidationError(_l('Incorrect email address'))
-
-
 class RequestResetForm(FlaskForm):
     """
         Request reset form class

@@ -63,9 +63,90 @@
   --bs-body-color: #212529;
   --bs-body-bg: #474747;
 }
-* {
-  box-sizing: border-box;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
+
+
+@media (max-width: 480px) {
+	#login-card {
+		width: 100%;
+		height: auto;
+	}
+    .datatable-search {
+        max-width: 250px;
+    }
+    .datatable-input {
+        width: 100%;
+        border-radius: 10px;
+    }
+    #msg-box {
+        width: 100%;
+    }
+    #friends-search-bar {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 0;
+        margin: 0;
+    }
+    #friends-search-box {
+        max-width: 100%;
+    }
+    .find-user {
+        font-size: 12px;
+        margin-right: auto;
+        margin-top: 5px;
+    }
+    #Not-Found {
+        font-size: 15px;
+    }
+    .fffw {
+        width: 100%;
+        display: flex;
+        border: 2px solid red;
+        flex-direction: row;
+    }
+
+  /*  #friends-sec img {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+    }*/
+}
+/* login page styles */
+.registration-field {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.login-card-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#remember-me {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#rem-me {
+    margin-top: 34px;
+}
+
+/* end login */
+
 #friendsNav {
     display: flex;
     flex-direction: row;
@@ -183,10 +264,6 @@
     color: rgba(0,255,0,1);
 }
 
-/*#button-addon3:active {
-    cursor: pointer;
-    color: var(--bs-red);
-}*/
 #my-chat-input, #groupMsg, #friends-message-input {
     max-width: 70%;
     height: 40px;
@@ -217,19 +294,6 @@
     background-color: var(--bs-danger);
     color: #fff;
 }
-
-/* Define different widths for #friends-bar based on screen size */
-/*@media (max-width: 1200px) {
-    .friends-tag {
-        width: 100%;
-    }
-}
-
-@media (max-width: 992px) {
-    .friends-tag {
-        width: 100%;
-    }
-}*/
 
 /* end of friends chat page */
 #Nav-item {
@@ -279,7 +343,6 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 10px;
     width: 100%;
 }
 
@@ -478,6 +541,7 @@
     #stub-table {
         width: 100%;
         padding: 8px 16px;
+        border: 1px solid red;
     }
 
     .datatable-dropdown label {
@@ -495,6 +559,7 @@
 
   #input-container {
         width: 80%
+
     }
   #hidden-search {
         display: inline-block;
@@ -517,6 +582,9 @@
     .friends-search-section {
         margin-top: 5px;
     }
+    .friends-search-section p {
+        font-size: 15px;
+    }
     .friends-search-section a {
         width: 250px;
     }
@@ -527,21 +595,32 @@
         max-width: 100%;
     }
     #friends-sec {
-        width: 80%;
-        margin: 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
         height: auto;
+        border: 2px solid blue;
     }
     #friends-sec div:first-child { 
         width: 100%;
         border: 2px solid green;
         height: auto;
     }
+    .vo {
+        width: 70px;
+        border: 2px solid red;
+    }
+    #main-chat-interface {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        border: 2px solid red;
+    }
     #friends-img {
-        width: 60%;
-        margin-left: 50px;
-        border-radius: 20px;
+        width: 50px;
+        border-radius: 100%;
         border: 1px solid blue;
-        height: 200px;
+        height: 50px;
     }
     #Group-display {
         width: 300px;
@@ -999,11 +1078,7 @@
     color: #818181;
   }
 
-#reg-form-label {
-     color: #000000;
-     margin-bottom: .5rem;
- }
-  .new-form {
+.new-form {
     display:block;
     position:relative;
     width:550px;
@@ -1120,7 +1195,7 @@ td {
              -20px -20px 37px #545454;
 }
 
-#chart-body{
+#login-card, #chart-body{
     color: #FFFFFF;
     padding: 20px;
     margin: 10px;
@@ -1236,3 +1311,15 @@ td {
     align-items: center;
 }
 
+ .registerpage-body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: var(--bs-body-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

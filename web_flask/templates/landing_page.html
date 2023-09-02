@@ -1,7 +1,7 @@
 {% extends "about.html" %}
 {% block content %}
 <div class="about-content" id="About-content" style="background-image: repeating-radial-gradient(circle, rgba(0, 0, 0, 0.8), rgba(255,255, 255, 0.8));">
-    <div class="company-info">
+    <div class="company-info" id="company-info-body">
         <div id="company-logo">
         </div>
         <div id="company-name">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-4 col-md-4 land-pic" id="img-gal">
                     <img class="img-fluid" src="static/assets/img/2.png" alt="..." width="500" height="600"/>
-                </div>>
+                </div>
                 <div class="col-4 col-md-4 land-pic" id="img-gal">
                     <img class="img-fluid" src="static/assets/img/3.png" alt="..." width="500" height="600"/>
                 </div>
@@ -40,13 +40,12 @@
     </div>
     <div class="descript-item" style="width: 100%; height: 100%;">
         <div class="descript-col" id="reader-img">
-            <!--<img class="img-fluid" src="https://ucarecdn.com/6471b404-8bc6-48e6-a7ac-5ff988c8103a/" alt="automated" height="600" width="600"/> -->
         </div>
-        <div class="descript-txt">
-            <h5 class="text-center" style=" color: #fff; text-shadow: 2px 2px 3px #b03030;">Automation</h5>
-            <p class="text-center">At LearnSociety, we are committed to providing an engaging self customized and fully automated learning experience for our users. Our platform offers a range of subject areas to choose from, and once you select your preferred subject, you will be automatically enrolled in a 30-60 days challenge, depending on the subject area.</p>
-            <p class="text-center">As part of the challenge, you will have access to relevant topics in your chosen subject area, as well as a wealth of resources to help you gain knowledge and improve your skills. Our daily quizzes will test your understanding of each topic area, and a productivity graph will help you visualize your progress based on the average score earned from each quiz.</p>
-            <p class="text-center">With our fully automated learning experience, you can focus on learning and improving, while we take care of the rest.</p>
+        <h5 class="text-center" style=" color: #fff; text-shadow: 2px 2px 3px #b03030; margin-top: 10px;">Automation</h5>
+	<div class="descript-txt">
+            <p class="text-center text-light">At LearnSociety, we are committed to providing an engaging self customized and fully automated learning experience for our users. Our platform offers a range of subject areas to choose from, and once you select your preferred subject, you will be automatically enrolled in a 30-60 days challenge, depending on the subject area.</p>
+            <p class="text-center text-light">As part of the challenge, you will have access to relevant topics in your chosen subject area, as well as a wealth of resources to help you gain knowledge and improve your skills. Our daily quizzes will test your understanding of each topic area, and a productivity graph will help you visualize your progress based on the average score earned from each quiz.</p>
+            <p class="text-center text-light">With our fully automated learning experience, you can focus on learning and improving, while we take care of the rest.</p>
         </div>
     </div>
     <div class="swiper mySwiper" id="MySwiper">
@@ -55,25 +54,25 @@
             <div class="swiper-slide" id="SW">
                 <h3 class="course-title">Python</h3>
                 <div class="bar">
-                    <p class="descrip text-center fw-lighter"> Python is a versatile and popular programming language used in various fields, from web development to data science. By learning Python, you will have access to numerous opportunities and be able to create powerful solutions to everyday problems.</p>
+                    <p class="descrip text-center fw-lighter text-light"> Python is a versatile and popular programming language used in various fields, from web development to data science. By learning Python, you will have access to numerous opportunities and be able to create powerful solutions to everyday problems.</p>
                 </div>
             </div>
             <div class="swiper-slide" id="SW">
                 <h3 class="course-title">Javascript</h3>
                 <div class="bar">
-                    <p class="descrip text-center fw-lighter">Want to learn a language that can make your web pages dance and sing like Beyonce? Well, JavaScript is your go-to choice! Trust me, it's easier than trying to get Beyonce to teach you how to dance.</p>
+                    <p class="descrip text-center fw-lighter text-light">Want to learn a language that can make your web pages dance and sing like Beyonce? Well, JavaScript is your go-to choice! Trust me, it's easier than trying to get Beyonce to teach you how to dance.</p>
                 </div>
             </div>
             <div class="swiper-slide" id="SW">
                 <h3 class="course-title">React</h3>
                 <div class="bar">
-                    <p class="descrip text-center fw-lighter">Want to build amazing web apps and feel like a superhero? Take a course in React! It's like having a superpower for creating dynamic user interfaces. Plus, you'll finally know what all the cool kids are talking about.</p>
+                    <p class="descrip text-center fw-lighter text-light">Want to build amazing web apps and feel like a superhero? Take a course in React! It's like having a superpower for creating dynamic user interfaces. Plus, you'll finally know what all the cool kids are talking about.</p>
                 </div>
             </div>
             <div class="swiper-slide" id="SW">
                 <h3 class="course-title">    C  </h3>
                 <div class="bar">
-                    <p class="descrip text-center fw-lighter">Enter the realm of the unknown, where the only certainty is that there will be bugs. But fear not, for with the power of C, you can slay those bugs and conquer any challenge that comes your way. Don't let the fear of pointers and memory management scare you away - embrace the darkness and become a master of this eerie language.</p>
+                    <p class="descrip text-center fw-lighter text-light">Enter the realm of the unknown, where the only certainty is that there will be bugs. But fear not, for with the power of C, you can slay those bugs and conquer any challenge that comes your way. Don't let the fear of pointers and memory management scare you away - embrace the darkness and become a master of this eerie language.</p>
                 </div>
             </div>
             </div>
@@ -81,11 +80,11 @@
             <div class="swiper-button-prev" id="swiper-btn"></div>
             <div class="swiper-pagination"></div>
   </div>
-    <div class="descript-item" style="background-color: rgba(59, 59, 59, 0.6); width: 100%; height: 100%; margin-bottom: 30px;">
+    <div class="descript-item" style="background-color: rgba(59, 59, 59, 0.6); width: 100%; height: 100%; margin-bottom: 10px;">
         <div class="descript-col-img" id="reader-img">
         </div>
-        <div class="descript-text">
-            <h5 class="text-center" style=" color: #fff; text-shadow: 2px 2px 3px #b03030;">Community Chat: Connect and Collaborate!</h5>
+        <h5 class="text-center text-nowrap" style=" color: #fff; text-shadow: 2px 2px 3px #b03030; margin-top: 10px; ">Connect and Collaborate</h5>
+	<div class="descript-text">
             <p class="text-center">We're excited to help you on your learning journey. Our vibrant community chat is here to connect you with like-minded individuals who share your learning objectives. Engage in discussions, gain fresh perspectives, and foster meaningful connections!</p>
             <p class="text-center"> In addition to our community chat, we offer private chat functionality. This enables you to interact directly with other users who have similar interests and objectives. Share your thoughts, exchange ideas, and support each other on your learning paths</p>
         </div>
