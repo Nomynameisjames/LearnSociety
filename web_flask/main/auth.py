@@ -57,6 +57,11 @@ def create_user_profile(ID: str, name: str) -> bool:
     """
         function creates a user profile for new users and saves in redisDB
     """
+    search_name = models.storage.search(name, user_id)
+    if search_name:
+        for item in search_name:
+            if name == item.User_name:
+                return False
     data = [
             {ID: {
                 'username': name,
@@ -72,6 +77,7 @@ def create_user_profile(ID: str, name: str) -> bool:
                 "is_active": True
                 }
              }]
+    
     new_user_obj = models.redis_storage.set_list_dict("Users-Profile", data)
     if new_user_obj:
         return True
@@ -164,7 +170,6 @@ def save_user_to_db(user) -> Any:
     cache_file = {}
     if not user:
         return redirect(url_for('Main.signup'))
-    response = None
     check_email = models.storage.access(user.get("user_email"),
                                         'Email', user_id)
     ID = str(uuid.uuid4())
