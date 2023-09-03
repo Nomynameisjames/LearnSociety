@@ -23,14 +23,14 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let friendCard = $("<div>", {
-    class: "card mb-3 fffw",
+    class: "card mb-3",
     style: "max-width: 540px; background-color: rgba(0,0,0,0);",
     id: "main-chat-interface"
   });
 
   let rowDiv = $("<div>", {
-    class: "row g-0",
-    id: "friends-sec"
+    class: "row",
+    id: "friends-sec",
   });
 
   // Check if modal is provided
@@ -40,8 +40,7 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let imgDiv = $("<div>", {
-    class: "col-md-4 vo",
-      id: "friends-img-div",
+    class: "col-3",
   });
 
   let img = $("<img>", {
@@ -51,7 +50,7 @@ let friend_card = (modal, Status, value = {}) => {
   });
 
   let colDiv = $("<div>", {
-    class: "col-md-8 col-12",
+    class: "col p-0",
   });
 
   let cardBodyDiv = $("<div>", {
@@ -113,7 +112,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             let friendCard = friend_card(modal, Status, value);
             if (includeButtons) {
                 friendCard.find("#friends-sec").append(`
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
+                    <div class="gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
                         <button class="btn btn-sm me-md-2 decline-request" type="button">
                             <iconify-icon icon="mdi:cancel-bold" width="15" height="15" style="color: red;"></iconify-icon>
                         </button>
@@ -123,6 +122,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
                         </button>
                     </div>
                 `);
+
                 friendCard.find(".decline-request").on("click", function() {
                 // Find the associated username within the same parent element
                 //let username = $(this).closest(".card").find(".card-title").text().trim();
@@ -181,7 +181,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             let friendCard = friend_card(null, Status, value);
             if (includeButtons) {
                 friendCard.find("#friends-sec").append(`
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
+                    <div class="gap-2 justify-content-md-start" id="friends-sec-btn">
                         <button class="btn unblock-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unblock">
                             <iconify-icon icon="fluent-mdl2:block-contact" id="unblock" height="20" width="20"></iconify-icon>
                         </button>
@@ -200,8 +200,6 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             }
             $("#main-friends-section").append(friendCard);
         }
-        // Append the friend card to the friends section
-       // $("#main-friends-section").append(friendCard);
     });
      $('[data-bs-toggle="tooltip"]').each(function() {
         new bootstrap.Tooltip(this);

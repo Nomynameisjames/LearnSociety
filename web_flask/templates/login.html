@@ -24,7 +24,7 @@
             {% endif %}
           {% endwith %}
           <div class="registration-field">
-            <div class="card-body" id='login-card'>
+            <div class="Reg-card" id="login-card">
                 {% block content %}
                 <form method='POST'>
                     {{ form.hidden_tag() }}
@@ -74,7 +74,8 @@
                             </a>
                         </div>
                     </div>
-                    <span class="bottom_text btn btn-link" style="font-size:small;"><p class="swtich" style="color:#130486;"> Don't have an account? &nbsp<a href="{{ url_for('Main.signup', token=token) }} " style="font-size: small;">Sign up</a></p></span>
+                    <span class="bottom_text btn btn-link mt-2" style="font-size:small;"><p class="swtich" style="color:#130486;"> Don't have an account? &nbsp<a href="{{ url_for('Main.signup', token=token) }} " style="font-size: small;">Sign up</a></p></span>
+                    <br>
                     <span class="bottom_text btn btn-link" style="font-size:small;"><p for="forgot-link" class="swtich" style="color:#130486;">Forgot Password?  <a style="font-size: small;" href="{{ url_for('Main.reset') }}">Click here</a></p></span>
                 </form>
                 {% endblock %}

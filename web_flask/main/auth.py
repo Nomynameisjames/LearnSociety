@@ -144,7 +144,7 @@ def login_user_and_redirect(user: user_id, remember=False) -> Any:
     uploader = update_redis_profile(str(user.ID))
     token = jwt.encode({'user_id': user.ID, 'exp':
                        datetime.datetime.utcnow()
-                       + datetime.timedelta(minutes=60)},
+                       + datetime.timedelta(minutes=120)},
                        app.config['SECRET_KEY'])
     flash(_('You are logged in!'), 'success')
     uploader.update_last_seen()

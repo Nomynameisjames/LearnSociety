@@ -70,12 +70,9 @@
     box-sizing: border-box;
 }
 
+/* Custom styles for screens with width <= 400px */
 
 @media (max-width: 480px) {
-	#login-card {
-		width: 100%;
-		height: auto;
-	}
     .datatable-search {
         max-width: 250px;
     }
@@ -103,18 +100,6 @@
     #Not-Found {
         font-size: 15px;
     }
-    .fffw {
-        width: 100%;
-        display: flex;
-        border: 2px solid red;
-        flex-direction: row;
-    }
-
-  /*  #friends-sec img {
-        width: 50px;
-        height: 50px;
-        border-radius: 100%;
-    }*/
 }
 /* login page styles */
 .registration-field {
@@ -172,7 +157,7 @@
 
 #main-chat-interface {
     margin-right: auto;
-    padding: 0;
+    padding: 5px;
     border: none;
 }
 .group-chat-conversation, .main-chat-section {
@@ -345,17 +330,14 @@
     align-items: center;
     width: 100%;
 }
+/* chat interface cards */
 
 #friends-sec {
     border-radius: 20px;
-    margin-top: 20px;
+    margin: 5px;
     width: 100%;
     cursor: pointer;
 }
-
-/*#friends-sec > div {
-    border: 2px solid red;
-}*/
 
 #friends-sec:hover {
     background-color: #0d0c0c;
@@ -369,12 +351,11 @@
     margin-bottom: 5px;
 }
 #friends-img {
-    width: 50%;
-    margin-top: 10px;
-    height: auto;
-    border-radius: 10px;
-    margin-left: 50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
 }
+/* end card */
 
 #friend-img {
     width: 50px;
@@ -594,34 +575,27 @@
     #friends-search {
         max-width: 100%;
     }
-    #friends-sec {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        height: auto;
-        border: 2px solid blue;
+ /* chat interface card responsive */
+    #friends-card-body {
+        font-size: 0.8rem;
     }
-    #friends-sec div:first-child { 
-        width: 100%;
-        border: 2px solid green;
-        height: auto;
-    }
-    .vo {
-        width: 70px;
-        border: 2px solid red;
-    }
-    #main-chat-interface {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        border: 2px solid red;
+    #friends-sec h5 {
+        font-size: 1rem;
     }
     #friends-img {
-        width: 50px;
+        margin-top: 10px;
+        width: 70px;
+        height: 70px;
         border-radius: 100%;
-        border: 1px solid blue;
-        height: 50px;
     }
+    #friends-img-div {
+        margin-left: 10px;
+    }
+    #friends-sec-btn {
+        display: flex;
+        justify-content: flex-end;
+    }
+    /* end of chat interface card responsive */
     #Group-display {
         width: 300px;
         height: 300px;
@@ -635,6 +609,10 @@
     .community-note p {
         font-size: 15px;
         margin: 10px;
+    }
+    #login-card {
+        width: 100%;
+        height: auto;
     }
 }
 .modal-communities li, .modal-active-courses li {
@@ -668,6 +646,9 @@
     }
     #input-container {
         width: 65%
+    }
+    #login-card {
+        width: 500px;
     }
 }
 
@@ -1195,7 +1176,7 @@ td {
              -20px -20px 37px #545454;
 }
 
-#login-card, #chart-body{
+/*#login-card*/ #chart-body{
     color: #FFFFFF;
     padding: 20px;
     margin: 10px;
@@ -1203,6 +1184,17 @@ td {
     background: linear-gradient(145deg, #f0ebeb, #cac6c6);
     box-shadow:  27px 27px 39px #474747,
              -27px -27px 39px #2c2a2a;
+}
+.Reg-card {
+    color: #FFFFFF;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 50px;
+    background: linear-gradient(145deg, #f0ebeb, #cac6c6);
+    box-shadow:  27px 27px 39px #474747,
+             -27px -27px 39px #2c2a2a;
+    width: 550px;
+    height: auto;
 }
 
 .grp-chat-home-icon {
