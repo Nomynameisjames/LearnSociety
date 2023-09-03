@@ -337,6 +337,7 @@
     margin: 5px;
     width: 100%;
     cursor: pointer;
+    background-color: #0f0f0f;
 }
 
 #friends-sec:hover {
@@ -589,7 +590,7 @@
         border-radius: 100%;
     }
     #friends-img-div {
-        margin-left: 10px;
+        margin-left: 5px;
     }
     #friends-sec-btn {
         display: flex;

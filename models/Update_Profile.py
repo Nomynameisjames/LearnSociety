@@ -28,8 +28,9 @@ def SQL_data(ID: str) -> dict:
             ]
 
     if user_data:
+        created_datetime = datetime.strptime(user_data.Created_at, '%Y-%m-%d %H:%M:%S.%f')
         profile = {
-                "Created":  user_data.Created_at.strftime("%d %B %Y"),
+                "Created":  created_datetime.strftime("%d %B %Y"),
                 "Active_courses": unique_courses
                 }
         return profile

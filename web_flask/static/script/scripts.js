@@ -40,12 +40,12 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let imgDiv = $("<div>", {
-    class: "col-3",
+    class: "col-4",
   });
 
   let img = $("<img>", {
     src: value.profile_picture,
-    class: "img-fluid",
+    class: "rounded-circle mx-auto",
     id: "friends-img",
   });
 

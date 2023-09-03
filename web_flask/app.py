@@ -122,7 +122,6 @@ def Privateconnect():
         friends_list = []
         if user.update_online_id(ID):
             friends_list = user.view_online_friends()
-        print(f"{type(friends_list)}\n {friends_list}")
         emit('Private_connection', {"data": friends_list})
     except Exception as e:
         print(e)
