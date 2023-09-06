@@ -11,6 +11,7 @@ from google_auth_oauthlib.flow import Flow
 from typing import Union, Any
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 from models.baseModel import user_id
 from models.Update_Profile import update_redis_profile
 from models.RequestModule import Notifications
@@ -26,6 +27,7 @@ import os
 import models
 
 # Google OAuth2 Configurations and settings
+load_dotenv()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 GOOGLE_CALLBACK_URL = os.getenv('GOOGLE_CALLBACK_URL')
 client_secrets = os.path.join(Path(__file__).parent,
@@ -57,6 +59,11 @@ def create_user_profile(ID: str, name: str) -> bool:
     """
         function creates a user profile for new users and saves in redisDB
     """
+    search_name = models.storage.search(name, user_id)
+    if search_name:
+        for item in search_name:
+            if name == item.User_name:
+                return False
     data = [
             {ID: {
                 'username': name,
@@ -72,6 +79,7 @@ def create_user_profile(ID: str, name: str) -> bool:
                 "is_active": True
                 }
              }]
+    
     new_user_obj = models.redis_storage.set_list_dict("Users-Profile", data)
     if new_user_obj:
         return True
@@ -144,7 +152,7 @@ def login_user_and_redirect(user: user_id, remember=False) -> Any:
     uploader = update_redis_profile(str(user.ID))
     token = jwt.encode({'user_id': user.ID, 'exp':
                        datetime.datetime.utcnow()
-                       + datetime.timedelta(minutes=60)},
+                       + datetime.timedelta(minutes=120)},
                        app.config['SECRET_KEY'])
     flash(_('You are logged in!'), 'success')
     uploader.update_last_seen()
@@ -164,12 +172,12 @@ def save_user_to_db(user) -> Any:
     cache_file = {}
     if not user:
         return redirect(url_for('Main.signup'))
-    response = None
     check_email = models.storage.access(user.get("user_email"),
                                         'Email', user_id)
     ID = str(uuid.uuid4())
     if check_email:
-        response = login_user_and_redirect(check_email)
+        return login_user_and_redirect(check_email)
+
     elif username_availability(user.get("user_name"), user.get("user_email")):
         cache_file[ID] = {
                     'Email': user.get("user_email"),
@@ -179,7 +187,7 @@ def save_user_to_db(user) -> Any:
         if list_item == {}:
             models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
         flash(_("Username already taken"), 'danger')
-        response = redirect(url_for('Main.confirm_username', personal_id=ID))
+        return redirect(url_for('Main.confirm_username', personal_id=ID))
     else:
         hashed_sub = generate_password_hash(user.get("user_id"))
         auth_user = user_id(ID=ID,
@@ -190,8 +198,8 @@ def save_user_to_db(user) -> Any:
             models.storage.new(auth_user)
             models.storage.save()
             models.storage.close()
-            response = login_user_and_redirect(auth_user)
-    return response
+            return login_user_and_redirect(auth_user)
+        return redirect(url_for('Main.signup'))
 
 
 @Main.route('/signup', methods=['GET', 'POST'])
@@ -295,7 +303,7 @@ def login() -> Any:
                                                remember=form.remember.data)
             else:
                 flash(_(f'Login Unsuccessful. Please check username and'
-                        f'password'), 'danger')
+                        f' password'), 'danger')
         else:
             return render_template('csrf_error.html'), 400
     return render_template('login.html', title='Login', form=form)

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from typing import Union
+from dotenv import load_dotenv
 from models.Schedule import Create_Schedule
 from .baseModel import user_id
 from .Update_Profile import update_redis_profile
@@ -9,6 +10,8 @@ import json
 import yaml
 import datetime
 import models
+
+load_dotenv()
 
 
 class Checker:
@@ -80,7 +83,7 @@ class Checker:
         if not isinstance(data, dict):
             raise ValueError("data must be a dictionary")
         try:
-            openai.api_key = os.environ['OPENAI_API_KEY']
+            openai.api_key = os.getenv('OPENAI_API_KEY')
             response_dict = {"True": {}, "False": {}}
             Value = None
             for _, v in data.items():
@@ -176,7 +179,7 @@ class Checker:
             Bot method allows to indicate which model to use for the
             openAI API request
         """
-        openai.api_key = os.environ['OPENAI_API_KEY']
+        openai.api_key = os.getenv('OPENAI_API_KEY')
         if model is None:
             model = "gpt-3.5-turbo"
             response = openai.ChatCompletion.create(

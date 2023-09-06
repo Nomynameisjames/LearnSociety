@@ -2,7 +2,7 @@
 {% block newblock %}
     <div id="layoutSidenav_content" class="chatbot-container" style="background-color: #474747;">
         <main>
-            <div class="group-intro" id="friendsGroup-bar">
+            <div id="friendsGroup-bar">
                 <ul class="navbar-nav" id="friendsNav" style="margin-top: 7px;">
                     <li class="nav-item" id="Nav-item">
                         <a class="nav-link" aria-current="page" href="#" style="color: #fff;"><iconify-icon icon="fa-solid:user-friends" style="color: #fff;"></iconify-icon>&nbsp Friends</a>
@@ -29,38 +29,39 @@
                         <button type="button" class="btn btn-success btn-sm" id="Add-Friend" style="margin-top: 2px; margin-bottom: 2px;" >Add Friend</button>
                     </li>
                 </ul>
+
                 <div class="btn-group" id="hidden-friendsGroup-bar">
                     <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li class="nav-item" id="Nav-item">
-                            <button type="button" class="btn btn-link nav-link" id="All-Online">Online</button>
+                            <button type="button" class="btn btn-link nav-link" id="all-Online">Online</button>
                         </li>
                         <li class="nav-item" id="Nav-item">
-                            <button type="button" class="btn btn-link nav-link" id="All-Friends">All</button>
+                            <button type="button" class="btn btn-link nav-link" id="all-Friends">All</button>
                         </li>
                         <li class="nav-item" id="Nav-item">
-                            <button type="button" class="btn btn-link nav-link" id="All-Pending">Pending</button>
+                            <button type="button" class="btn btn-link nav-link" id="all-Pending">Pending</button>
                         </li>
                         <li class="nav-item" id="Nav-item">
-                            <button type="button" class="btn btn-link nav-link" id="All-Blocked">Blocked</button>
+                            <button type="button" class="btn btn-link nav-link" id="all-Blocked">Blocked</button>
                         </li>
                         <li class="nav-item" id="Nav-item">
-                            <button type="button" class="btn btn-link">Add Friend</button>
+                            <button type="button" class="btn btn-link" id="add-Friends">Add Friend</button>
                         </li>
                     </ul>
-                </div>
+             </div>
             </div>
-            <div class="chat-container" style="margin-top: 40px; background-color: transparent;">
+            <div class="chat-container mt-2" style="background-color: transparent;">
                 <section class="group-chat-conversation" id="main-friends-section" style="background-color: transparent; border: none">
                 </section>
                 <div class="friends-search-section">
-                    <h5 class="text-start" style="color: #fff; text-shadow: 2px 2px 4px #000000; margin-top: 10px;">Add friends</h5>
-                    <p class="text-start" style="color: #fff; text-shadow: 2px 2px 4px #000; margin-top: 10px;">Add friends with their LearnSociety Username</p>
+                    <h5 class="text-start mt-2" style="color: #fff; text-shadow: 2px 2px 4px #000000;">Add friends</h5>
+                    <p class="text-start mt-2" style="color: #fff; text-shadow: 2px 2px 4px #000;">Add friends with their LearnSociety Username</p>
                     <div class="input-group mb-3">
                         <form method='POST' id="friends-search-bar" action=''>
                             {{ form.hidden_tag() }}
-                                {{ form.search_user(type="text", class="form-control friends-search", placeholder="search friends") }}
+                                {{ form.search_user(type="text", class="form-control friends-search", id="friends-search-box", placeholder="search friends") }}
                                 {{ form.submit(class="btn btn-outline-primary find-user", style="margin-left: 5px; border-radius: 5px;") }}
                         </form>
                         <span id="Not-Found" style="text-shadow: 2px 2px 4px #000; margin-top: 5px;"></span>

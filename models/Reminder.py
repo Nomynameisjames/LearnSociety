@@ -3,16 +3,19 @@ import schedule
 import time
 import os
 from twilio.rest import Client
+from dotenv import load_dotenv
 from models.Schedule import Create_Schedule
+
+load_dotenv()
 
 
 class Reminder:
     def __init__(self, usr) -> None:
         self.usr = usr
-        self.__acct_sid = os.environ["TWILIO_ACCOUNT_SID"]
-        self.__auto_token = os.environ["TWILIO_AUTH_TOKEN"]
-        self.__from_no = os.environ["TWILIO_WHATSAPP_NO"]
-        self.__to_no = os.environ["MY_NUMBER"]
+        self.__acct_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        self.__auto_token = os.getenv("TWILIO_AUTH_TOKEN")
+        self.__from_no = os.getenv("TWILIO_WHATSAPP_NO")
+        self.__to_no = os.getenv("MY_NUMBER")
         self.schedule = Create_Schedule(self.usr)
         self.data = self.schedule.View("daily", None)
         self.reminder = None

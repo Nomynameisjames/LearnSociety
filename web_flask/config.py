@@ -1,21 +1,22 @@
 import os
 import models
+from dotenv import load_dotenv
 
-
+load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in \
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.googlemail.com')
+    MAIL_PORT = int(os.getenv('MAIL_PORT', '587'))
+    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'true').lower() in \
         ['true', 'on', '1']
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     BOT_MAIL_SUBJECT_PREFIX = '[LearnSociety]'
     BOT_MAIL_SENDER = 'LearnSociety Admin <LearnSociety@noreply.com>'
-    BOT_ADMIN = os.environ.get('BOT_ADMIN')
+    BOT_ADMIN = os.getenv('BOT_ADMIN')
     LANGUAGES = ['en', 'es', 'ru', 'zh', 'fr', 'de', 'it', 'ja', 'ko', 'uk']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -33,23 +34,23 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('STORAGE_TYPE') or \
+    SQLALCHEMY_DATABASE_URI = os.getenv('STORAGE_TYPE') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
-    Redis_URL = os.environ.get('STORAGE_TYPE2') or \
+    Redis_URL = os.getenv('STORAGE_TYPE2') or \
         'redis://localhost:6379/0'
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
+    SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL') or \
         'sqlite://'
-    Redis_URL = os.environ.get('STORAGE_TYPE2') or \
+    Redis_URL = os.getenv('STORAGE_TYPE2') or \
         'redis://localhost:6379/0'
     os.environ["MYSQL_TEST_DB"] = "BotSchedule_test_DB"
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
 

@@ -29,8 +29,8 @@ let friend_card = (modal, Status, value = {}) => {
   });
 
   let rowDiv = $("<div>", {
-    class: "row g-0",
-    id: "friends-sec"
+    class: "row",
+    id: "friends-sec",
   });
 
   // Check if modal is provided
@@ -40,21 +40,22 @@ let friend_card = (modal, Status, value = {}) => {
   }
 
   let imgDiv = $("<div>", {
-    class: "col-md-3",
+    class: "col-4",
   });
 
   let img = $("<img>", {
     src: value.profile_picture,
-    class: "img-fluid",
+    class: "rounded-circle mx-auto",
     id: "friends-img",
   });
 
   let colDiv = $("<div>", {
-    class: "col-md-8",
+    class: "col p-0",
   });
 
   let cardBodyDiv = $("<div>", {
     class: "card-body",
+      id: "friends-card-body",
   });
 
   let hiddenField = $("<input>", {
@@ -111,7 +112,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             let friendCard = friend_card(modal, Status, value);
             if (includeButtons) {
                 friendCard.find("#friends-sec").append(`
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
+                    <div class="gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
                         <button class="btn btn-sm me-md-2 decline-request" type="button">
                             <iconify-icon icon="mdi:cancel-bold" width="15" height="15" style="color: red;"></iconify-icon>
                         </button>
@@ -121,6 +122,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
                         </button>
                     </div>
                 `);
+
                 friendCard.find(".decline-request").on("click", function() {
                 // Find the associated username within the same parent element
                 //let username = $(this).closest(".card").find(".card-title").text().trim();
@@ -179,7 +181,7 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             let friendCard = friend_card(null, Status, value);
             if (includeButtons) {
                 friendCard.find("#friends-sec").append(`
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="friends-sec-btn">
+                    <div class="gap-2 justify-content-md-start" id="friends-sec-btn">
                         <button class="btn unblock-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unblock">
                             <iconify-icon icon="fluent-mdl2:block-contact" id="unblock" height="20" width="20"></iconify-icon>
                         </button>
@@ -198,8 +200,6 @@ export function displayFriendRequests(friendRequestList, includeButtons, Status)
             }
             $("#main-friends-section").append(friendCard);
         }
-        // Append the friend card to the friends section
-       // $("#main-friends-section").append(friendCard);
     });
      $('[data-bs-toggle="tooltip"]').each(function() {
         new bootstrap.Tooltip(this);
@@ -440,7 +440,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $("#All-Friends").click(function() {
+    $("#All-Friends, #all-Friends").click(function() {
         let option = "All";
         let url = 'http://127.0.0.1:5001/api/v1/friends/' + option;
 
@@ -461,7 +461,7 @@ $(document).ready(function() {
             }
         });
     });
-    $("#All-Pending").click(function () {
+    $("#All-Pending, #all-Pending").click(function () {
         let option = "Pending";
         let url = "http://127.0.0.1:5001/api/v1/friends/" + option;
 
@@ -486,7 +486,7 @@ $(document).ready(function() {
             }
         });
     });
-    $("#All-Blocked").click(function() {
+    $("#All-Blocked, #all-Blocked").click(function() {
         let option = "Blocked";
         let url = "http://127.0.0.1:5001/api/v1/friends/" + option;
         RequestCall("GET", url, null, null, null, function (data) {
@@ -509,7 +509,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#Add-Friend").click(function() {
+    $("#Add-Friend, #add-Friends").click(function() {
         $(".friends-search-section").css("display", "flex");
         $(".None-Online").css("display", "none");
         $("#main-friends-section").css("display", "none");

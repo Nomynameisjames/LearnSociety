@@ -8,7 +8,7 @@
     {% if dp == "" %}
         <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
     {% else %}
-        <img src="{{ dp }}" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+        <img src="{{ dp }}" class="card-img-top rounded-circle" id="myImg" alt="Profile Picture"  style="cursor: pointer; transition: 0.3s;">
     {% endif %}
     <div class="card-body" style="color: #fff;">
         <h5 class="card-title">{{ current_user.User_name }}</h5>

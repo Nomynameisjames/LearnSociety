@@ -11,13 +11,15 @@ from functools import wraps
 from typing import Dict, List, Union, Any, Callable
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
 from .baseModel import user_id
 
 """
     cache decorator to save web scrapped data from the wikipedia api
     for a given time
 """
-file_loader = FileSystemLoader(os.environ.get('FILE_PATH'))
+load_dotenv()
+file_loader = FileSystemLoader(os.getenv('FILE_PATH'))
 env = Environment(loader=file_loader)
 template = env.get_template('emailFile.html')
 
@@ -91,8 +93,8 @@ class SearchBar:
                 return self.__cache[search]
             url = "https://wiki-briefs.p.rapidapi.com/search"
             querystring = {"q": search, "topk": "3"}
-            code = os.environ.get('RapidAPI')
-            Host = os.environ.get('X-RapidAPI-Host') or\
+            code = os.getenv('RapidAPI')
+            Host = os.getenv('X-RapidAPI-Host') or\
                 "wiki-briefs.p.rapidapi.com"
             code = str(code)
             headers = {
@@ -207,10 +209,10 @@ class Notifications:
         emails and notifications to users
     """
     def __init__(self) -> None:
-        self.sender_email = os.environ.get('MAIL_USERNAME')
-        self.password = os.environ.get('MAIL_PASSWORD')
-        self.server = os.environ.get('MAIL_SERVER')
-        self.port = os.environ.get('MAIL_PORT')
+        self.sender_email = os.getenv('MAIL_USERNAME')
+        self.password = os.getenv('MAIL_PASSWORD')
+        self.server = os.getenv('MAIL_SERVER')
+        self.port = os.getenv('MAIL_PORT')
         self._token = None
         self.server_connection = None
 
@@ -278,7 +280,7 @@ class Notifications:
             file = [mail_body, header, username]
             html_content = template.render(file=file, url=verify_url)
             URL = "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send"
-            tok = os.environ.get('RapidAPI')
+            tok = os.getenv('RapidAPI')
             Host = "rapidprod-sendgrid-v1.p.rapidapi.com"
             tok = str(tok)
             payload = {
@@ -317,7 +319,7 @@ class Notifications:
         url = f"https://api.emailvalidation.io/v1/info?email={email}"
 
         headers = CaseInsensitiveDict()
-        headers['apikey'] = os.environ.get('MAIL_VALIDATE')
+        headers['apikey'] = os.getenv('MAIL_VALIDATE')
         try:
             response = requests.get(url, headers=headers)
             if response.status_code == 200:

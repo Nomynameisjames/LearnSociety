@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>About - LearnSociety</title>
+        {% block title %} <title>About</title> {% endblock %}
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
         <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet" />
@@ -56,8 +56,8 @@
                                 <h5 class="card-title">Adava Onimisi</h5>
                                 <p class="card-text fw-semibold">Adava Onimisi is the author of the LearnSociety project, a full-stack developer from Nigeria. If you have any questions or feedback, you can contact him using the following platform.</p>
                             </div>
-                            <div class="card-footer" id="about-footer"style="background-color: rgba(0,0,0,0); border: none; outline: none;">
-                                <a href="https://github.com/Nomynameisjames" class="card-link link-danger" id="github"><iconify-icon icon="logos:github-icon" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>
+                            <div class="card-footer" id="about-footer"style="background-color: rgba(0,0,0,0); outline: none;">
+                                <a href="https://github.com/Nomynameisjames" class="card-link link-danger" id="github"><iconify-icon  icon="arcticons:github" width="25" height="25" style="color: #fff;"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>
                                 <a href="twitter.com/Pathoverdex" class="card-link link-danger" id="github"><iconify-icon icon="skill-icons:twitter" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Twitter</a>
                                 <a href="Adavaonimisi@gmail.com" class="card-link link-danger" id="github"><iconify-icon icon="mdi:email" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email</a>
                                 <a href="www.linkedin.com/in/adava-onimisi-9bb5189a" class="card-link link-danger" id="github"><iconify-icon icon="skill-icons:linkedin" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;&nbsp;LinkedIn</a>
@@ -72,18 +72,18 @@
                     </h3>
                     <p class="card-text text-center text-light" id="history-text">The LearnSociety project was inspired by personal experiences gained during our learning phase at the ALX software engineering program, As new students in the field, we were faced with the daunting task of digesting and processing a vast amount of information in various subject areas within a set timeline. It became apparent that effective time management and scheduling were critical to achieving productivity and meeting our deadlines. To solve these problems, we developed the LearnSociety application. The app provides core functionality to organize and plan a daily schedule, including setting reminders for specific tasks, accessing relevant resources for a set topic of the day, embeded chatbot functionality to get suggestions when stuck on certain concepts, taking a daily quiz to test knowledge, and visualizing productivity levels with graphs.</p>
                     <p class="card-text text-center text-light" id="history-text">LearnSociety is an open source project, and we welcome contributions from anyone interested in making the app better. You can find the public repository on GitHub here:</p>
-                    <div class="card-footer text-center" id="about-footer"style="background-color: rgba(0,0,0,0); border: none; outline: none;">
-                         <a href="https://github.com/Nomynameisjames/LearnSociety.git" class="text-success text-center" id="github"><iconify-icon icon="bi:github" width="20" height="20"></iconify-icon>&nbsp;&nbsp;&nbsp;Github</a>                
+                    <div class="card-footer text-center" id=""style="background-color: rgba(0,0,0,0); border: none; outline: none;">
+                         <a href="https://github.com/Nomynameisjames/LearnSociety.git" class="text-success text-center" id="github"><iconify-icon icon="arcticons:github" width="25" height="25" style="color: #fff"></iconify-icon></a>                
                     </div>
                 </div>
             </div> 
             {% endblock %}
         </div>
-        <footer class="py-4 bg-dark mt-auto", style="padding: 20px; text-align: center; bottom: 0%; margin-top: 20px;">
+        <footer class="py-4 bg-dark mt-auto", style="padding: 10px; text-align: center; bottom: 0%; margin-top: 20px;">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-white bg-dark">Copyright &copy; LearnSociety 2023</div>
-                    <div>
+			<div class="text-white bg-dark" id="about-desc">Copyright &copy; LearnSociety 2023</div>
+                    <div id="about-desc">
                         <a href="#">Privacy Policy</a>
                             &middot;
                         <a href="#">Terms &amp; Conditions</a>

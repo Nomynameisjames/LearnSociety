@@ -52,7 +52,7 @@ $(document).ready(function() {
     socketio.on('connected', function(response) {
         socketio.send('I\'m connected!');
         $("#online-status").removeClass("bg-primary").addClass("bg-success").text(response.data);
-        console.log(`Connected to server: ${response.data}`);
+     //   console.log(`Connected to server: ${response.data}`);
     });
 
     $("#send-RoomCode-btn").on("click", function() {
@@ -138,7 +138,8 @@ $(document).ready(function() {
                 online_friends = response.data;
         }
     });
-       $("#All-Online").on("click", function() { 
+    console.log(online_friends);
+       $("#All-Online, #all-Online").on("click", function() { 
             if (Array.isArray(online_friends) && online_friends.length === 0) {
             $(".friends-search-section").css("display", "none");
             $("#main-friends-section").css("display", "none");
