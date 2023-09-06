@@ -1,7 +1,5 @@
- -- delete database if exixt
+DROP DATABASE BotSchedule;
 
-
- -- Creates database if not exist
 
 CREATE DATABASE IF NOT EXISTS BotSchedule;
 
@@ -11,25 +9,21 @@ USE BotSchedule;
 
 -- create user if not exists and set password, privileges
 
-/*CREATE USER IF NOT EXISTS 'BotSchedule'@'localhost';
-SET PASSWORD FOR 'BotSchedule'@'localhost' = 'BotSchedule';
-GRANT ALL PRIVILEGES ON BotSchedule.* TO 'BotSchedule'@'localhost';
-GRANT SELECT ON performance_schema.* TO 'BotSchedule'@'localhost'; */
-
-  -- Table structure for table `cities`
-
   -- delete table if exist
 
  DROP TABLE IF EXISTS `user_info`;
   
     CREATE TABLE `user_info` (
-    `id` VARCHAR(200) NOT NULL,
+    `ID` VARCHAR(200) NOT NULL,
     `User_name` VARCHAR(50) NOT NULL,
     `Email` VARCHAR(50) NOT NULL,
     `Password` VARCHAR(255) NOT NULL,
+    `Phone_number` VARCHAR(50) NULL,
     `Created_at` VARCHAR(50) NOT NULL,
     `Updated_at` VARCHAR(50) NULL,
-    PRIMARY KEY (`id`)
+    `save_history` INT,
+    `Rooms` INT(0),
+    PRIMARY KEY (`ID`)
  );
 
 
@@ -49,7 +43,7 @@ DROP TABLE IF EXISTS `January`;
     `created_at` VARCHAR(50),
     `updated_at` VARCHAR(50),
     PRIMARY KEY(`ID`),
-    FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`id`)
+    FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`ID`)
   ); 
 
 DROP TABLE IF EXISTS `JavascriptDB`;
@@ -66,7 +60,7 @@ CREATE TABLE `JavascriptDB` (
       `created_at` VARCHAR(50),
       `updated_at` VARCHAR(50),
       PRIMARY KEY(`ID`),
-      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`id`)
+      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`ID`)
     );
 
 DROP TABLE IF EXISTS `PythonDB`;
@@ -84,7 +78,7 @@ CREATE TABLE `PythonDB` (
       `created_at` VARCHAR(50),
       `updated_at` VARCHAR(50),
       PRIMARY KEY(`ID`),
-      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`id`)
+      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`ID`)
     );
 
 DROP TABLE IF EXISTS `ReactDB`;
@@ -101,7 +95,7 @@ CREATE TABLE `ReactDB` (
       `created_at` VARCHAR(50),
       `updated_at` VARCHAR(50),
       PRIMARY KEY(`ID`),
-      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`id`)
+      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`ID`)
     );
 
 DROP TABLE IF EXISTS `C-DB`;
@@ -118,7 +112,7 @@ CREATE TABLE `C-DB` (
       `created_at` VARCHAR(50),
       `updated_at` VARCHAR(50),
       PRIMARY KEY(`ID`),
-      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`id`)
+      FOREIGN KEY (`user_ID`) REFERENCES `user_info` (`ID`)
     );
 
 

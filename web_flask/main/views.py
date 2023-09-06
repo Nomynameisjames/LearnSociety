@@ -3,6 +3,7 @@ from flask import (render_template, abort, url_for, redirect,
 from flask_login import login_required, current_user
 from pyuploadcare import Uploadcare
 from typing import Union, Any
+from dotenv import load_dotenv
 from models.Schedule import Create_Schedule
 from models.checker import Checker
 from models.Update_Profile import update_redis_profile
@@ -19,6 +20,7 @@ import models
     this enables user to query the database to view Schedules
     based on the status of the task
 """
+load_dotenv()
 auto = False
 course = None
 
@@ -27,8 +29,8 @@ def Upload_file(file: str) -> Union[str, None]:
     """
         uploads file to uploadcare and returns the cdn url
     """
-    pub_key = os.environ.get('UploadCare_PUBLIC_KEY')
-    secret_key = os.environ.get('UploadCare_SECRET_KEY')
+    pub_key = os.getenv('UploadCare_PUBLIC_KEY')
+    secret_key = os.getenv('UploadCare_SECRET_KEY')
     try:
         uploadcare = Uploadcare(public_key=pub_key, secret_key=secret_key)
         ucare_file = uploadcare.upload(file)

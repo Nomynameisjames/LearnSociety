@@ -2,9 +2,11 @@ import models
 import os
 from datetime import datetime
 from typing import Dict, List, Union
+from dotenv import load_dotenv
 from models.Schedule import Create_Schedule as schedule
 from models.baseModel import user_id
 
+load_dotenv()
 default_picture = os.getenv("DEFAULT_PICTURE")
 """
     class Querys and update Users-Profile activities in Redis DB
@@ -28,8 +30,10 @@ def SQL_data(ID: str) -> dict:
             ]
 
     if user_data:
+        created_datetime = datetime.strptime(str(user_data.Created_at),
+                                             '%Y-%m-%d %H:%M:%S')
         profile = {
-                "Created": user_data.Created_at.strftime("%d %B %Y"),
+                "Created":  created_datetime.strftime("%d %B %Y"),
                 "Active_courses": unique_courses
                 }
         return profile
@@ -260,6 +264,7 @@ class update_redis_profile:
         if self.value is None:
             return
         self.value["is_active"] = False
+        self.value["username"] = "Deleted User"
         self.value["status"] = "User account deleted"
         self.value["profile_picture"] = default_picture
         self.value["friends"].clear()

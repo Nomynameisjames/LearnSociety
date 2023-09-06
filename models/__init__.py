@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 import os
 
-storage = None
-redis_storage = None
-
 storage_type = os.environ.get('STORAGE_TYPE')
 storage_type2 = os.environ.get('STORAGE_TYPE2')
 

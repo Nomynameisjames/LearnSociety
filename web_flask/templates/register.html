@@ -1,118 +1,81 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <link rel="stylesheet" href="static/styles/styles_3.css">
-  <link rel="stylesheet" href="static/styles/styles_2.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="a    nonymous">
-  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Signup</title>
-</head> 
-<body style="background-color: #474747;">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <div class="container">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">
-                    {{ message }}
-                  </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-            {% block content %}{% endblock %}
-
-  <div class="align-center">
-      <div class="card-body" id='chart-body' style="max-width: 600px; height: auto;">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <input type="hidden" name="ID" value="{{ ID }}">
-            <fieldset  class="form-group">
-                {% block formm %}
-                <legend class="border-bottom mb-2 signup">Sign Up</legend>
-                <div class="mb-4" id="reg-form-label">
-                    {{ form.username.label(for="exampleFormControlInput1", class="form-control-label") }}
-                    {% if form.username.errors %}
-                        {{ form.username(class="form-control form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.username.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                    <div>{{ form.username(type="text", autocomplete="username", class="form-control form-control-sm", id="exampleFormControlInput1") }}</div>
-                    {% endif %}
+{% extends "login.html" %}
+{% block title %}
+<title>Register</title>
+{% endblock %}
+{% block content %}
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="ID" value="{{ ID }}">
+        {% block formm %}
+        <h1 class="border-bottom signup" style="text-shadow: 0 0 3px #FF0000;">Sign Up</h1>
+        <div class="text-dark">
+            {{ form.username.label(for="exampleFormControlInput1", class="form-control-label") }}
+            {% if form.username.errors %}
+                {{ form.username(class="form-control form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <div class="form-group">
-                    <div  id="reg-form-label">
-                        {{ form.email.label(for="exampleFormControlInput2", class="form-control-label") }}
-                        {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                    <div> {{ form.email(type="text", autocomplete="email", class="form-control form-control-sm", id="exampleFormControlInput2") }}</div>
-                    {% endif %}
-                </div>`
-                <div class="form-group">
-                    <div  id="reg-form-label">
-                        {{ form.password.label(class="form-control-label", for="inputPassword5") }}
-                        {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                    <div>{{ form.password(type="password",  autocomplete="new-password", class="form-control form-control-sm", id="inputPassword5") }}</div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <div class=" text-nowrap " id="reg-form-label">
-                        {{ form.confirm_password.label(for="inputPassword6", class="form-control-label") }}
-                        {% if form.confirm_password.errors %}
-                        {{ form.confirm_password(class="form-control form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.confirm_password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                    <div>{{ form.confirm_password(type="password",  autocomplete="new-password", class="form-control form-control-sm", id="inputPassword6") }}</div>
-                    {% endif %}
-                </div>
-            </fieldset>
-            <div class="login-btn">
-                {{ form.submit(class="btn-success frm-btn") }}
+            {% else %}
+                {{ form.username(type="text", autocomplete="username", class="form-control form-control-sm", id="exampleFormControlInput1") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <div class="text-dark">
+                {{ form.email.label(for="exampleFormControlInput2", class="form-control-label") }}
+                {% if form.email.errors %}
+                    {{ form.email(class="form-control form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(type="text", autocomplete="email", class="form-control form-control-sm", id="exampleFormControlInput2") }}
+                {% endif %}
+            </div>`
+            <div class="text-dark">
+                {{ form.password.label(class="form-control-label", for="inputPassword5") }}
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(type="password",  autocomplete="new-password", class="form-control form-control-sm", id="inputPassword5") }}
+                {% endif %}
             </div>
-              <br>
-                 <div class="separator">
-                      <hr class="line">
-                      <span>OR</span>
-                      <hr class="line">
-                 </div>
-                 <br>
-                 <div class="login-btn">
-                      <a href="{{ url_for('Main.google_oauth2') }}" id="ggl-signin-btn" role="button" class="btn-outline-primary" style="text-decoration: none; width: 75%; border-radius: 25px; box-shadow: 0 8px 16px 0 rgba(0,0,    0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); text-align: center;">
-                          <span><iconify-icon icon="devicon:google" id="ggl-signin-icon" height="20" width="20"></iconify-icon>&nbsp Continue with Google</span>
-                      </a>
-                  </div>
-                  <br>
-        <span class="bottom_text" style="font-size:small;"><p class="swtich" for="register_toggle" style="color: #130486;font-size: small;">Have an account? <a style="font-size: small;" href="{{ url_for('Main.login') }}"> Login </a></p></span>
-
-      <!-- <button class="form--submit">
-          Sign up
-      </button> -->
+            <div class="text-nowrap text-dark">
+                {{ form.confirm_password.label(for="inputPassword6", class="form-control-label") }}
+                {% if form.confirm_password.errors %}
+                    {{ form.confirm_password(class="form-control form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.confirm_password(type="password",  autocomplete="new-password", class="form-control form-control-sm", id="inputPassword6") }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="login-btn">
+            {{ form.submit(class="btn-success frm-btn") }}
+        </div>
+        <div class="separator">
+            <hr class="line">
+                <span>OR</span>
+            <hr class="line">
+        </div>
+        <div class="login-btn mb-2">
+            <a href="{{ url_for('Main.google_oauth2') }}" id="ggl-signin-btn" role="button" class="btn-outline-primary" style="text-decoration: none; width: 75%; border-radius: 25px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); text-align: center;">
+                <span><iconify-icon icon="devicon:google" id="ggl-signin-icon" height="20" width="20"></iconify-icon>&nbsp Continue with Google</span>
+            </a>
+        </div>
+        <span class="bottom_text mt-2" style="font-size:small;"><p class="swtich" for="register_toggle" style="color: #130486;font-size: small;">Have an account? <a style="font-size: small;" href="{{ url_for('Main.login') }}"> Login </a></p></span>
       {% endblock %}
     </form>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
- </html> 
+{% endblock %}

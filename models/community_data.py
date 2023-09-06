@@ -2,8 +2,9 @@ import os
 from . import redis_storage
 from .Update_Profile import update_redis_profile
 from typing import Union, List
+from dotenv import load_dotenv
 
-
+load_dotenv()
 default_picture = os.getenv("DEFAULT_PICTURE")
 
 

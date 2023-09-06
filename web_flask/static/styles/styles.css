@@ -93,6 +93,43 @@ pre.scrollable::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
 
+@media (max-width: 480px) {
+/* responsive about page */
+	#about-intro {
+		margin-top: 15px;
+	}
+	#about-footer a {
+		font-size: 0;
+	}
+	#about-footer a::before  {
+    		content: ""; /* Empty content to preserve space */
+    		display: inline-block;
+	}
+	#about-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	#about-desc {
+		font-size: 8px;
+	}
+	#About-content p {
+		font-size: 14px;
+	}
+/* end about page design */
+/*main landing page */
+	#company-info-body {
+		margin-top: 5px;
+	}
+	#img-gal {
+		width: 70%;
+		height: auto;
+	}
+/* end style */
+/* login page */
+
+
+}
 #settings-card {
     backdrop-filter: blur(6px) saturate(152%);
     -webkit-backdrop-filter: blur(6px) saturate(152%);

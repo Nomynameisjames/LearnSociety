@@ -11,7 +11,7 @@
     {% if friend_info.profile_picture == "" %}
         <img src="https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/" class="card-img-top" id="myImg" alt="Profile Picture"  style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer;transition: 0.3s;">
     {% else %}
-        <img src="{{ friend_info.profile_picture }}" class="card-img-top" id="myimg" alt="Profile Picture"  data-bs-toggle="modal" data-bs-target="#staticBackdrop13" style="border-radius: 50%; height: auto; width: 50%;  cursor: pointer; transition: 0.3s;">
+        <img src="{{ friend_info.profile_picture }}" class="rounded-circle" id="myimg" alt="Profile Picture"  data-bs-toggle="modal" data-bs-target="#staticBackdrop13" style=" cursor: pointer; transition: 0.3s;">
     {% endif %}
     <div class="card-body" style="color: #fff;">
         <h5 class="card-title">{{ friend_info.username }}</h5>
@@ -109,15 +109,15 @@
     {% block footer %}
     <footer class="py-4 bg-dark mt-auto">
         <div class="cont w-100" style="background-color: #474747; margin-top: -20px;">
-            <div class="friends-message-col" style="margin-bottom: 40px;">
+            <div class="friends-message-col" id="msg-box" style="margin-bottom: 40px;">
                 <textarea type="text" class="form-control" id="friends-message-input" placeholder="Type a message"></textarea>
                 <button class="btn btn-dark mb-4" type="button" id="button-addon3"><iconify-icon class="sender-btn" icon="ic:round-send" width="30" height="30"></iconify-icon></button>
             </div>
         </div>
         <div class="container-fluid px-4">
             <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-white bg-dark">Copyright &copy; Nomynameisjamees 2023</div>
-                <div>
+                <div class="text-white bg-dark" id="about-desc">Copyright &copy; Nomynameisjamees 2023</div>
+                <div id="about-desc">
                     <a href="#">Privacy Policy</a>
                     &middot;
                     <a href="#">Terms &amp; Conditions</a>

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 from flask import abort, jsonify, request
 from flask_login import current_user
+from dotenv import load_dotenv
 from datetime import datetime
-from models import redis_storage
 from models.checker import Checker
 from models.Update_Profile import update_redis_profile
 from models.community_data import CommunityData
@@ -14,6 +14,9 @@ from .update_data import Settings, create_community
 import yaml
 import functools
 import os
+
+
+load_dotenv()
 
 
 @main_app.route('/chatbot/', methods=['GET', 'POST'])
@@ -36,7 +39,7 @@ def help(current_user: current_user) -> jsonify:
             message = {
                 "text": res,
                 "time": datetime.utcnow().strftime("%-d %b %Y %I:%M:%S%p"),
-                "picture": os.environ.get('CHAT_BOT')
+                "picture": os.getenv('CHAT_BOT')
             }
             return jsonify(message), 200
     if request.method == 'DELETE':
