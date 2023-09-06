@@ -5,7 +5,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import QueuePool
 from typing import Dict, Union, Tuple
+from dotenv import load_dotenv
 from models.baseModel import Base, user_id
+
+load_dotenv()
 
 
 class DBstorage:
@@ -27,18 +30,18 @@ class DBstorage:
                     f'mysql://{Mysql_User}:{Mysql_Pass}@{Mysql_Host}:{port}/'
                     f'{Mysql_Db}'
                     )
-        pool_size = 10  # Maximum number of connections in the pool
-        max_overflow = 5  # Number of connections that can be opened above pool_size
-        pool_timeout = 30  # Maximum wait time for acquiring a connection
+        pool_size = 10
+        max_overflow = 5
+        pool_timeout = 30
         pool_recycle = 3600
         self._engine = create_engine(_database_url,
-                        poolclass=QueuePool,
-                        pool_size=pool_size,
-                        max_overflow=max_overflow,
-                        pool_timeout=pool_timeout,
-                        pool_recycle=pool_recycle
-                    )
-        if os.environ.get("DB_ENV") == 'test':
+                                     poolclass=QueuePool,
+                                     pool_size=pool_size,
+                                     max_overflow=max_overflow,
+                                     pool_timeout=pool_timeout,
+                                     pool_recycle=pool_recycle
+                                     )
+        if os.getenv("DB_ENV") == 'test':
             Base.metadata.drop_all(self._engine)
 
     """
@@ -99,7 +102,8 @@ class DBstorage:
         data = None
         if self._session:
             try:
-                data = self._session.query(obj).filter(index[key] == mode).first()
+                data = self._session.query(obj).filter(
+                        index[key] == mode).first()
             except Exception as e:
                 print(e)
                 self.rollback_session()

@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
-from flask_caching import Cache
-#from flasgger import Swagger
 from werkzeug.exceptions import HTTPException
+from dotenv import load_dotenv
 from api.v1.main import main_app
 import psutil
 import os
 import models
 
-
+load_dotenv()
 app = Flask(__name__)
 #cache = Cache(app)
 #app.config['CACHE_TYPE'] = 'redis'
@@ -20,7 +19,7 @@ app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/api/v1/*": {"origin": "*"}})
 
 app.register_blueprint(main_app)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 host = os.getenv('HBNB_API_HOST', '127.0.0.1')
 port = os.getenv('HBNB_API_PORT', '5000')

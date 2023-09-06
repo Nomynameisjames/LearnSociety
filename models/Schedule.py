@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 from datetime import datetime
-from typing import Union, Tuple
+from typing import Union
 from .baseModel import User, user_id
-from typing import Union, Tuple
 import models
 
 

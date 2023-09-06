@@ -11,6 +11,7 @@ from google_auth_oauthlib.flow import Flow
 from typing import Union, Any
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 from models.baseModel import user_id
 from models.Update_Profile import update_redis_profile
 from models.RequestModule import Notifications
@@ -26,6 +27,7 @@ import os
 import models
 
 # Google OAuth2 Configurations and settings
+load_dotenv()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 GOOGLE_CALLBACK_URL = os.getenv('GOOGLE_CALLBACK_URL')
 client_secrets = os.path.join(Path(__file__).parent,
