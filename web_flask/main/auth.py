@@ -396,25 +396,35 @@ def reset() -> Any:
     form = RequestResetForm()
     mail_app = Notifications()
     if form.validate_on_submit():
-        token = None
         user = models.storage.access(form.email.data, 'Email', user_id)
-        if user:
-            token = user.get_reset_token()
-        url = f"""{url_for('Main.reset_token', token=token,
-                    _external=True)}"""
-        mydict = {
-                'url': url,
-                'message': '''To reset your password, kindly visit the
-                            following link:''',
-                'subject': 'Password Reset Request',
-                'header': f'Password Reset'
+        token = user.get_reset_token()
+        url = url_for(
+                        "Main.reset_token",
+                        token=token,
+                        _external=True,
+                    )
+        context = {
+                "url": url,
+                "username": user.User_name,
+                "email": form.email.data,
                 }
-        sent = mail_app.send_Grid(user, **mydict)
+        
+        if not mail_app.send_mail(
+            "Password Reset - Learnsociety",
+            form.email.data,
+            "password_reset_temp.html",
+            context
+        ):
+            flash(_("Invalid/Blacklisted email"), "warning")
+            return make_response(
+                render_template("register.html", form=form, ID=user.ID)
+            )
+        # sent = mail_app.send_Grid(user, **mydict)
         models.storage.close()
-        if sent:
-            flash(_('''An email has been sent with instructions to reset
-                  your password.'''), 'info')
-            return redirect(url_for('Main.login'))
+        flash(_("An email has been sent with instructions to " \
+                "reset your password."), 'info')
+        current_app.logger.info(f"reset url: {url}")
+        return redirect(url_for('Main.login'))
     return render_template('forget.html', title='Reset Password', form=form)
 
 

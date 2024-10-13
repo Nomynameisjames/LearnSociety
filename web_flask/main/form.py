@@ -101,8 +101,8 @@ class RequestResetForm(FlaskForm):
     def validate_email(self, email: FlaskForm) -> None:
         user = models.storage.access(email.data, 'Email', user_id)
         if user is None:
-            raise ValidationError(_l('''No account registered with that
-                                     email address.'''))
+            raise ValidationError(_l("No account registered with that" \
+                                     "email address."))
 
 
 class ResetPasswordForm(FlaskForm):
