@@ -12,7 +12,6 @@ from flask_babel import lazy_gettext as _l
 from web_flask.config import config
 from flask_caching import Cache
 from datetime import timedelta
-import models
 
 
 bootstrap = Bootstrap()
@@ -34,12 +33,13 @@ def create_app(config_name):
     """
     from .main import Main as main_blueprint
     app = Flask(__name__)
+    
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=120)
     app.config['CACHE_TYPE'] = 'redis'
     app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
-    app.register_blueprint(main_blueprint)
     app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    #config[config_name].init_app(app)
+    
     bootstrap.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
@@ -53,4 +53,9 @@ def create_app(config_name):
     login_manager.login_message = _l('Please log in to access this page.')
     moment.init_app(app)
     mail.init_app(app)
+    
+    # blue print registration
+    app.register_blueprint(main_blueprint)
+    
+    
     return app

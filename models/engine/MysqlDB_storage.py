@@ -21,19 +21,24 @@ class DBstorage:
         Mysql_User = os.getenv('MYSQL_USR')
         Mysql_Host = os.getenv('MYSQL_HOST')
         Mysql_Pass = os.getenv('MYSQL_PASS')
-        Mysql_Db = None
+        #Mysql_Db = None
+        Mysql_Db = os.getenv('MYSQL_DB')
         port = os.getenv('PORT')
         _database_url = ""
         if Mysql_Db is None:
-            Mysql_Db = os.getenv('MYSQL_DB')
+            _database_url = "sqlite:///learnsociety.db"            
+                
+        else:
             _database_url = (
-                    f'mysql://{Mysql_User}:{Mysql_Pass}@{Mysql_Host}:{port}/'
-                    f'{Mysql_Db}'
-                    )
+                f'mysql://{Mysql_User}:{Mysql_Pass}@{Mysql_Host}:{port}/'
+                f'{Mysql_Db}'
+            )
+            
         pool_size = 10
         max_overflow = 5
         pool_timeout = 30
         pool_recycle = 3600
+        
         self._engine = create_engine(_database_url,
                                      poolclass=QueuePool,
                                      pool_size=pool_size,

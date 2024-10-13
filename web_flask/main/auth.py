@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
-from flask import (render_template, flash, redirect, url_for, request,
-                   make_response, abort, session)
+from flask import (
+    abort,
+    current_app,
+    flash,
+    make_response,
+    redirect,
+    request,
+    render_template,
+    url_for,
+    session,
+)
+
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from flask_babel import _
@@ -66,7 +76,7 @@ def create_user_profile(ID: str, name: str) -> bool:
                 return False
     data = [
             {ID: {
-                'username': name,
+                "username": name,
                 "status": "",
                 "friends": [],
                 "profile_picture": "",
@@ -88,7 +98,7 @@ def create_user_profile(ID: str, name: str) -> bool:
 
 def username_availability(username: str, email: str) -> bool:
     """
-        function checks if username is available i the mysql database and
+        function checks if username is available in the mysql database and
         returns True if available else False
     """
     all_profile = models.storage.search(username, user_id)
@@ -104,8 +114,10 @@ def new_user_token(ID: str) -> str:
         function generates a jwt token for new users
     """
     from ..app import app
-    token = token_payload = {'user_id': ID, 'exp': datetime.datetime.utcnow()
-                             + timedelta(minutes=2)}
+    token = token_payload = {
+                                'user_id': ID,
+                                'exp': datetime.datetime.now() + timedelta(minutes=2)
+                            }
     token = jwt.encode(token_payload, app.config['SECRET_KEY'])
     return token.encode('utf-8').decode()
 
@@ -116,16 +128,25 @@ def verify_new_user_token(token: str) -> Union[dict, None]:
     """
     from ..app import app
     try:
-        token_payload = jwt.decode(token, app.config['SECRET_KEY'],
-                                   algorithms=["HS256"])
+        token_payload = jwt.decode(
+                            token, 
+                            app.config['SECRET_KEY'],
+                            algorithms=["HS256"],
+                        )
+        
         my_id = token_payload['user_id']
+        
     except jwt.ExpiredSignatureError:
         return None
+    
     except (jwt.InvalidTokenError, KeyError):
         return None
+    
     user = models.redis_storage.get_dict("temp_storage", my_id)
+    
     if not user:
         return None
+    
     return user
 
 
@@ -151,7 +172,7 @@ def login_user_and_redirect(user: user_id, remember=False) -> Any:
     login_user(user, remember=remember)
     uploader = update_redis_profile(str(user.ID))
     token = jwt.encode({'user_id': user.ID, 'exp':
-                       datetime.datetime.utcnow()
+                       datetime.datetime.now()
                        + datetime.timedelta(minutes=120)},
                        app.config['SECRET_KEY'])
     flash(_('You are logged in!'), 'success')
@@ -220,38 +241,61 @@ def signup() -> Any:
     if form.validate_on_submit():
         ID = str(uuid.uuid4())
         token = new_user_token(ID)
-        is_valid = mail_app.is_valid(form.email.data)
-        if not is_valid:
-            flash(_('Invalid email address'), 'warning')
-            return redirect(url_for('Main.signup'))
-        url = (f"""{url_for('Main.confirm_email', token=token,
-               ID=ID, _external=True)}""")
-        temp_file = {
-                'url': url,
-                'message': '''Kindly click on the link below to
-                                complete your registration''',
-                'subject': 'Email Verification',
-                'header': 'Verification',
-                'username': form.username.data,
-                'email': form.email.data,
-                'id': ID
-                }
-        sent = mail_app.send_Grid(None, **temp_file)
-        if sent:
-            flash(_(f"An email has been sent to {form.email.data}"
-                    f"to complete your registration"), 'success')
-            password = generate_password_hash(form.password.data)
-            cache_file[ID] = {
+        # is_valid = mail_app.is_valid(form.email.data)
+        
+        # if not is_valid:
+        #     flash(_('Invalid email address'), 'warning')
+        #     return redirect(url_for('Main.signup'))
+        
+        url = url_for(
+                        'Main.confirm_email',
+                        token=token,
+                        ID=ID,
+                        _external=True,
+                    )
+
+        context = dict(url=url, username=form.username.data,)
+        # temp_file = {
+        #         'url': url,
+        #         'message': "Kindly click on the link below to "\
+        #                    f"complete your registration\n{url}",
+        #         'subject': 'Email Verification',
+        #         #'header': 'Verification',
+        #         'username': form.username.data,
+        #         'email': form.email.data,
+        #         'id': ID
+        #      }
+
+        #sent = mail_app.send_Grid(**temp_file)
+        if not mail_app.send_mail(
+            "Email Verification",
+            form.email.data,
+            "emailFile.html",
+            context
+        ):
+            flash(_("Use a valid/non-blacklisted email account to sign up"), "warning")
+            return make_response(render_template('register.html', form=form,
+                                             ID=ID))
+            
+        flash(_(f"An email has been sent to {form.email.data} " \
+                    f"to complete your registration"), "success")
+        
+        password = generate_password_hash(form.password.data)
+        cache_file[ID] = {
                         'Username': form.username.data,
                         'Email': form.email.data,
                         'Password': password,
                         'id':  ID
                     }
-            prev_cache_file = models.redis_storage.get_dict("temp_storage", ID)
-            if prev_cache_file == {}:
-                models.redis_storage.set_dict("temp_storage", cache_file,
-                                              ex=1800)
-            return redirect(url_for('Main.signup', ID=ID))
+            
+        prev_cache_file = models.redis_storage.get_dict("temp_storage", ID)
+        if prev_cache_file == {}:
+            models.redis_storage.set_dict(
+                "temp_storage", cache_file, ex=1800
+            )
+           
+        return redirect(url_for('Main.signup', ID=ID))
+        
     response = make_response(render_template('register.html', form=form,
                                              ID=ID))
     return response
@@ -265,7 +309,7 @@ def confirm_email(token: str, ID: str) -> Any:
     """
     user = verify_new_user_token(token)
     if user is None:
-        flash('Invalid or expired token', 'warning')
+        flash(_('Invalid or expired token'), 'warning')
         return redirect(url_for('Main.signup'))
     cache = models.redis_storage.get_dict('temp_storage', ID)
     if cache['id'] == ID and user:
@@ -278,7 +322,9 @@ def confirm_email(token: str, ID: str) -> Any:
         username = {'Username': cache['Username']}
         flash(_('Account created successfully for %(user)s',
                 user=username['Username']), 'success')
+        
         return redirect(url_for('Main.login'))
+    
     return redirect(url_for('Main.signup'))
 
 

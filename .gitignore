@@ -4,4 +4,7 @@ __pycache__
 *.json
 venv/
 var
+*.db
+.env
+*.txt_bkp
 web_flask/main/client_secrets.json

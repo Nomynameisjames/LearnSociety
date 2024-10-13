@@ -29,15 +29,18 @@
     </style>
 </head>
 <body>
-    <h1>{{ file[1] }}</h1>
-	    <p>Dear {{ file[2] }},</p>
-        <p>{{ file[0] }}</p>
-        {% if url == None %}
+    <h1>You're almost there, one more click to go</h1>
+    <p>Dear {{ username }},</p>
+    <p> Kindly click on the link below to complete your registration</p>
+    {% if url == None %}
         <p></p>
-        {% else %}
-            <a href="{{ url }}" class="button">Verify Email</a>
-        {% endif %}
-	    <p>If you did not sign up for our service, please ignore this email.</p>
+
+    {% else %}
+        <a href="{{ url }}" class="button">Verify Email</a>
+
+    {% endif %}
+
+    <p>If you did not sign up for our service, please ignore this email.</p>
 </body>
 </html>
 
