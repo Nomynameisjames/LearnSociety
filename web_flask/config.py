@@ -10,10 +10,6 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY') or secrets.token_hex(70)
     MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(os.getenv('MAIL_PORT', '587'))
-    
-    #MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'true').lower() in \
-    #    ['true', 'on', '1']
-    
     MAIL_USE_SSL = os.getenv("USE_SSL")
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
@@ -25,9 +21,6 @@ class Config:
     BOT_ADMIN = os.getenv('BOT_ADMIN')
     LANGUAGES = ['en', 'es', 'ru', 'zh', 'fr', 'de', 'it', 'ja', 'ko', 'uk']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    @staticmethod
-    def init_app(app): pass
 
 
 """

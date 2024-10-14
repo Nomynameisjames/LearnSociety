@@ -98,7 +98,7 @@ class user_id(Base, UserMixin):
     Email = Column(String(100))
     Password = Column(String(300))
     Phone_number = Column(String(100))
-    Created_at = Column(DateTime, default=datetime.utcnow)
+    Created_at = Column(DateTime, default=datetime.now)
     Updated_at = Column(DateTime)
     save_history = Column(Boolean)
     Rooms = Column(Integer, default=0)

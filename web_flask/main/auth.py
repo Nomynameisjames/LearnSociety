@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from flask import (
-    abort,
     current_app,
     flash,
     make_response,
@@ -9,6 +8,7 @@ from flask import (
     render_template,
     url_for,
     session,
+    Response
 )
 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -91,8 +91,11 @@ def create_user_profile(ID: str, name: str) -> bool:
              }]
     
     new_user_obj = models.redis_storage.set_list_dict("Users-Profile", data)
+    current_app.logger.info(new_user_obj)
     if new_user_obj:
         return True
+    
+    print("last call to false inside create_profile")
     return False
 
 
@@ -163,25 +166,27 @@ def validate_csrf_token(token: str) -> bool:
         return False
 
 
-def login_user_and_redirect(user: user_id, remember=False) -> Any:
-    from ..app import app
+def login_user_and_redirect(user: user_id, remember=False) -> Response:
     """
-        Log in the user and redirect to the appropriate page sending neccessary
-        auth token alongside
+        Log in the user and redirect to the appropriate
+        page sending neccessary auth token alongside
     """
     login_user(user, remember=remember)
     uploader = update_redis_profile(str(user.ID))
-    token = jwt.encode({'user_id': user.ID, 'exp':
-                       datetime.datetime.now()
-                       + datetime.timedelta(minutes=120)},
-                       app.config['SECRET_KEY'])
+    token = jwt.encode(
+                {
+                    'user_id': user.ID,
+                    'exp': datetime.datetime.now() + datetime.timedelta(minutes=120)
+                },
+                current_app.config['SECRET_KEY']
+            )
+
     flash(_('You are logged in!'), 'success')
     uploader.update_last_seen()
     next_page = request.args.get('next')
     response = redirect(next_page) if next_page \
         else redirect(url_for('Main.view'))
-    tok = token.encode('UTF-8').decode()
-    response.set_cookie('access_token', tok)
+    response.set_cookie('access_token', token)
     return response
 
 
@@ -190,36 +195,41 @@ def save_user_to_db(user) -> Any:
         Save a user object to the database.
         If the user already exists, log them in.
     """
+
     cache_file = {}
-    if not user:
-        return redirect(url_for('Main.signup'))
     check_email = models.storage.access(user.get("user_email"),
                                         'Email', user_id)
     ID = str(uuid.uuid4())
     if check_email:
         return login_user_and_redirect(check_email)
 
+    # new user
     elif username_availability(user.get("user_name"), user.get("user_email")):
         cache_file[ID] = {
-                    'Email': user.get("user_email"),
-                    'user_id': user.get("user_id")
+                    "Email": user.get("user_email"),
+                    "user_id": user.get("user_id")
                 }
         list_item = models.redis_storage.get_dict("temp_storage", ID)
         if list_item == {}:
             models.redis_storage.set_dict("temp_storage", cache_file, ex=1800)
         flash(_("Username already taken"), 'danger')
         return redirect(url_for('Main.confirm_username', personal_id=ID))
+
     else:
         hashed_sub = generate_password_hash(user.get("user_id"))
-        auth_user = user_id(ID=ID,
-                            User_name=user.get("user_name"),
-                            Email=user.get("user_email"),
-                            Password=hashed_sub)
+        auth_user = user_id(
+                        ID=ID,
+                        User_name=user.get("user_name"),
+                        Email=user.get("user_email"),
+                        Password=hashed_sub
+                    )
+
         if create_user_profile(ID, user.get("user_name")):
             models.storage.new(auth_user)
             models.storage.save()
             models.storage.close()
             return login_user_and_redirect(auth_user)
+
         return redirect(url_for('Main.signup'))
 
 
@@ -241,12 +251,6 @@ def signup() -> Any:
     if form.validate_on_submit():
         ID = str(uuid.uuid4())
         token = new_user_token(ID)
-        # is_valid = mail_app.is_valid(form.email.data)
-        
-        # if not is_valid:
-        #     flash(_('Invalid email address'), 'warning')
-        #     return redirect(url_for('Main.signup'))
-        
         url = url_for(
                         'Main.confirm_email',
                         token=token,
@@ -255,18 +259,6 @@ def signup() -> Any:
                     )
 
         context = dict(url=url, username=form.username.data,)
-        # temp_file = {
-        #         'url': url,
-        #         'message': "Kindly click on the link below to "\
-        #                    f"complete your registration\n{url}",
-        #         'subject': 'Email Verification',
-        #         #'header': 'Verification',
-        #         'username': form.username.data,
-        #         'email': form.email.data,
-        #         'id': ID
-        #      }
-
-        #sent = mail_app.send_Grid(**temp_file)
         if not mail_app.send_mail(
             "Email Verification",
             form.email.data,
@@ -338,7 +330,9 @@ def login() -> Any:
         and logs in the user if the user exists in the database
     """
     if current_user.is_authenticated:
+        current_app.logger.info("user already authenticated")
         return redirect(url_for('Main.view'))
+
     form = LoginForm()
     if form.validate_on_submit():
         if validate_csrf_token(form.csrf_token.data):
@@ -352,6 +346,7 @@ def login() -> Any:
                         f' password'), 'danger')
         else:
             return render_template('csrf_error.html'), 400
+
     return render_template('login.html', title='Login', form=form)
 
 
@@ -404,9 +399,9 @@ def reset() -> Any:
                         _external=True,
                     )
         context = {
-                "url": url,
-                "username": user.User_name,
-                "email": form.email.data,
+                    "url": url,
+                    "username": user.User_name,
+                    "email": form.email.data,
                 }
         
         if not mail_app.send_mail(
@@ -419,12 +414,11 @@ def reset() -> Any:
             return make_response(
                 render_template("register.html", form=form, ID=user.ID)
             )
-        # sent = mail_app.send_Grid(user, **mydict)
         models.storage.close()
         flash(_("An email has been sent with instructions to " \
                 "reset your password."), 'info')
-        current_app.logger.info(f"reset url: {url}")
         return redirect(url_for('Main.login'))
+
     return render_template('forget.html', title='Reset Password', form=form)
 
 
@@ -435,12 +429,15 @@ def reset_token(token: str) -> Any:
         of the ResetPasswordForm class and validating the form data, validates
         the token sent to user and updates the user's password
     """
+
     if current_user.is_authenticated:
         return redirect(url_for('Main.view'))
+
     user = user_id.verify_reset_token(token)
     if user is None:
         flash('That is an invalid or expired token', 'warning')
         return redirect(url_for('Main.reset'))
+
     form = ResetPasswordForm()
     if form.validate_on_submit():
         hash_password = generate_password_hash(form.password.data)
@@ -450,6 +447,7 @@ def reset_token(token: str) -> Any:
         flash(_('Your password has been updated! You are now able to log in'),
               'success')
         return redirect(url_for('Main.login'))
+
     return render_template('reset_pass.html', form=form)
 
 
@@ -474,21 +472,31 @@ def callback():
     """gets googles athorization code and then exchange code for
     tokens to get the user details
 
-    Return: the users details"""
+    Return: the users details
+    """
     Google_Flow = flow()
     Google_Flow.fetch_token(authorization_response=request.url)
     credentials = Google_Flow.credentials
 
-    user_info = jwt.decode(credentials.id_token,
-                           options={"verify_signature": False})
-    user = {}
+    user_info = jwt.decode(
+                    credentials.id_token,
+                    options={"verify_signature": False},
+                )
     try:
-        user["user_id"] = user_info["sub"]
-        user["user_name"] = user_info["name"]
-        user["user_email"] = user_info["email"]
+        authenticated_user = dict(
+            user_id=user_info["sub"],
+            user_name="{}{}".format(
+                                user_info["name"].replace(" ", ""),
+                                uuid.uuid4().int % 10000
+                            ),
+            user_email=user_info["email"],
+        )
+
     except KeyError:
-        abort(404)
-    response = save_user_to_db(user)
+        flash(_("Authtorization with google failed, try again"), "warning")
+        return render_template("login.html")
+
+    response = save_user_to_db(authenticated_user)
     return response
 
 
@@ -501,10 +509,12 @@ def confirm_username(personal_id: str) -> Any:
             flash(_('User not found'), 'danger')
         else:
             hashed_sub = generate_password_hash(usr.get("user_id"))
-            auth_user = user_id(ID=personal_id,
-                                User_name=form.username.data,
-                                Email=usr.get("user_email"),
-                                Password=hashed_sub)
+            auth_user = user_id(
+                            ID=personal_id,
+                            User_name=form.username.data,
+                            Email=usr.get("user_email"),
+                            Password=hashed_sub
+                        )
             if create_user_profile(personal_id, form.username.data):
                 models.storage.new(auth_user)
                 models.storage.save()
@@ -512,4 +522,5 @@ def confirm_username(personal_id: str) -> Any:
                 flash(_('Your account has been created!', 'success'))
                 response = login_user_and_redirect(auth_user)
                 return response
+
     return render_template('select_username.html', form=form)

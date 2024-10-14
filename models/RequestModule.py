@@ -23,7 +23,6 @@ from flask import current_app
 load_dotenv()
 file_loader = FileSystemLoader(os.getenv('FILE_PATH') or "web_flask/templates")
 ENV = Environment(loader=file_loader)
-# template = env.get_template('emailFile.html')
 
 
 def cached_route(ttl=300) -> Callable:
@@ -209,16 +208,7 @@ class Notifications:
     """
         class defines all requests to enable sending
         emails and notifications to users
-    # """
-    # def __init__(self) -> None:
-    #     self.sender_email = os.getenv('MAIL_USERNAME')
-    #     self.password = os.getenv('MAIL_PASSWORD')
-    #     self.server = os.getenv('MAIL_SERVER')
-    #     self.port = int(os.getenv('MAIL_PORT'))
-    #     self.use_ssl = bool(os.getenv("USE_SSL"))
-    #     self._token = None
-    #     self.server_connection = None
-
+    """
     def send_mail(self, subject: str, to_email: str, temp_name: str, temp_context: dict) -> bool:
         """
             Sends an email to a specified recipient using a rendered template.
@@ -263,133 +253,3 @@ class Notifications:
             return False
         
         return True
-            
-
-    # def send_email(self, user: user_id, subject: str, message: str) -> bool:
-    #     """
-    #         function sends an email to a given email address by using the
-    #         smtplib module returns True if email is sent successfully
-    #     """
-    #     try:
-    #         self._token = user.generate_confirmation_code()
-    #         code = self._token[0]
-    #         message = f"{message}\n\n{code}"
-            
-    #         if not self.sender_email or not self.password:
-    #             return False
-            
-    #         if self.server and self.port:
-    #             file = [message, subject, user.User_name]
-    #             html_content = template.render(file=file, url=None)
-    #             msg = MIMEMultipart()
-    #             msg['From'] = self.sender_email
-    #             msg['To'] = user.Email
-    #             msg['Subject'] = subject
-    #             msg.attach(MIMEText(html_content, 'html'))
-                
-    #             with smtplib.SMTP(self.server, int(self.port))\
-    #                     as self.server_connection:
-    #                 self.server_connection.starttls()
-    #                 self.server_connection.ehlo()
-    #                 self.server_connection.login(
-    #                     self.sender_email,
-    #                     self.password
-    #                 )
-                    
-    #                 self.server_connection.sendmail(
-    #                     self.sender_email,
-    #                     user.Email,
-    #                     msg.as_string()
-    #                 )
-
-    #             return True
-            
-    #     except Exception as e:
-    #         print("some error occured while sending mail {}".format(e))
-    #         return False
-
-    # def close_connection(self):
-    #     """
-    #         function closes the server connection established by the smtplib
-    #         module after each request
-    #     """
-    #     if self.server_connection:
-    #         self.server_connection.quit()
-
-    # def send_Grid(self, **kwargs) -> Union[bool, Any]:
-    #     """
-    #         function sends an email to a given email address by using the
-    #         sendgrid API returns True if email is sent successfully
-    #     """
-    #     try:
-    #         """
-    #             file path points to the directory where the email template is
-    #             stored
-    #         """
-    #         verify_url = kwargs.get('url')
-    #         mail_body = kwargs.get('message')
-    #         #header = kwargs.get('header')
-    #         username = kwargs.get('username')
-    #         email = kwargs.get('email')
-                
-    #         subject = kwargs.get('subject')
-    #         # file = [mail_body, header, username]
-    #         file = [mail_body, username]
-    #         html_content = template.render(file=file, url=verify_url)
-    #         URL = "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send"
-    #         tok = os.getenv('RapidAPI')
-    #         Host = "rapidprod-sendgrid-v1.p.rapidapi.com"
-    #         tok = str(tok)
-    #         payload = {
-    #                 "personalizations": [
-    #                     {
-    #                         "to": [{"email": email}],
-    #                         "subject": subject
-    #                         }
-    #                     ],
-    #                 "from": {"email": self.sender_email},
-    #                 "content": [
-    #                     {
-    #                         "type": "text/html",
-    #                         "value": html_content
-    #                         }
-    #                     ]
-    #                 }
-    #         headers = {
-    #                 "content-type": "application/json",
-    #                 "X-RapidAPI-Key": tok,
-    #                 "X-RapidAPI-Host": Host
-    #                 }
-    #         response = requests.post(URL, json=payload, headers=headers)
-
-    #         if response.status_code == 202:
-    #             return True
-            
-    #     except Exception as e:
-    #         print("some error occured while sending email {}".format(e))
-    #         raise ValueError(f"Error sending email: {e}")
-
-    def is_valid(self, email: str) -> Any:
-        """
-            function checks if an email address is valid by using the
-            emailvalidation.io API returns True if email is valid
-        """
-        url = f"https://api.emailvalidation.io/v1/info?email={email}"
-
-        headers = CaseInsensitiveDict()
-        headers['apikey'] = os.getenv('MAIL_VALIDATE')
-        try:
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                json_resp = response.json()
-                format_valid = json_resp['format_valid']
-                mx_found = json_resp['mx_found']
-                smtp_check = json_resp['smtp_check']
-                state = json_resp['state']
-                return format_valid and mx_found and smtp_check and\
-                    state == 'deliverable'
-            else:
-                raise ConnectionError(f'Error: {response.status_code}')
-        except Exception as exc:
-            print(f'There was a problem: {exc}')
-            return False

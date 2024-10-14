@@ -144,7 +144,7 @@ class Cache:
         for value in values:
             self._cache.lpush(key, value)
 
-    def set_list_dict(self, key: str, values: List[Dict]) -> Union[bool, None]:
+    def set_list_dict(self, key: str, values: List[Dict]) -> bool:
         community = self.get_list_dict(key)
         unique_keys = set()
         try:
@@ -156,6 +156,8 @@ class Cache:
                 if get_key not in unique_keys:
                     self._cache.lpush(key, json.dumps(value))
                     unique_keys.add(get_key)
+                    return True
+
         except Exception as e:
             print(f"the following error occured: {e}")
             return False
