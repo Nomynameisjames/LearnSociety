@@ -423,6 +423,8 @@ $(document).ready(function() {
         if (btnClicked !== 'RandomSearchBtn') {
             RequestCall('POST', url, data, null, null, function(response) {
                 $("#staticBackdrop8").modal('show');
+                $("#staticBackdropLabel8").empty();
+                $(".modal-body").empty();
                 let lastElement = '';
                 var file = response.Document;
                 $.each(file, function(index, item) {
@@ -445,14 +447,24 @@ $(document).ready(function() {
                     });
                 });
             });
-        } else {
+
+    } else {
             RequestCall('POST', url, data, null, null, function(response) {
                 $("#staticBackdrop8").modal('show');
+                $("#staticBackdropLabel8").empty();
+                $(".modal-body").empty();
                 var file = response;
+            if (typeof file !== 'object' || file === null || Array.isArray(file)) {
+                 $("#staticBackdropLabel8").append('Search result for: ' + text);
+
+                 $('<p>').appendTo('.modal-body').text(file);
+        } else {
                 $("#staticBackdropLabel8").append('Search result for..', text);
-                $('.modal-body').append($('<p>').text(file));
-                });
-            }
+                $('.modal-body').append($('<p>').text(file['description']));
+        }
+        
+    });
+    };
     });
 });
 

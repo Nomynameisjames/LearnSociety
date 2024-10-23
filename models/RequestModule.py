@@ -13,6 +13,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 from .baseModel import user_id
+from flask_mail import Message
+from flask import current_app
 
 """
     cache decorator to save web scrapped data from the wikipedia api
@@ -83,7 +85,7 @@ class SearchBar:
             print(f"Error: {e}")
             return False
 
-    def get_wiki_briefs(self, search: str) -> Union[str, Dict[str, Any], None]:
+    def google_search(self, search: str) -> Union[str, List, None]:
         """
             function makes a request to the get_wiki_briefs api endpoint
             returns a summary for a given search term
@@ -91,11 +93,11 @@ class SearchBar:
         try:
             if search in self.__cache:
                 return self.__cache[search]
-            url = "https://wiki-briefs.p.rapidapi.com/search"
-            querystring = {"q": search, "topk": "3"}
+            url = "https://google-search74.p.rapidapi.com/"
+            querystring = {"query":search,"limit":"3","related_keywords":"true"}
             code = os.getenv('RapidAPI')
             Host = os.getenv('X-RapidAPI-Host') or\
-                "wiki-briefs.p.rapidapi.com"
+                "google-search74.p.rapidapi.com"
             code = str(code)
             headers = {
                     "X-RapidAPI-Key": code,
@@ -106,7 +108,7 @@ class SearchBar:
             if response.status_code == 200:
                 response_dict = response.json()
                 self.__cache[search] = response_dict
-                return response_dict
+                return response_dict["results"]
             else:
                 return None
         except Exception as e:
@@ -216,100 +218,68 @@ class Notifications:
         self._token = None
         self.server_connection = None
 
-    def send_email(self, user: user_id, subject: str, message: str) -> Any:
-        """
-            function sends an email to a given email address by using the
-            smtplib module returns True if email is sent successfully
-        """
-        try:
-            self._token = user.generate_confirmation_code()
-            code = self._token[0]
-            message = f"{message}\n\n{code}"
-            if not self.sender_email or not self.password:
-                return False
-            if self.server and self.port:
-                file = [message, subject, user.User_name]
-                html_content = template.render(file=file, url=None)
-                msg = MIMEMultipart()
-                msg['From'] = self.sender_email
-                msg['To'] = user.Email
-                msg['Subject'] = subject
-                msg.attach(MIMEText(html_content, 'html'))
-                with smtplib.SMTP(self.server, int(self.port))\
-                        as self.server_connection:
-                    self.server_connection.starttls()
-                    self.server_connection.ehlo()
-                    self.server_connection.login(self.sender_email,
-                                                 self.password)
-                    self.server_connection.sendmail(self.sender_email,
-                                                    user.Email,
-                                                    msg.as_string())
-                return True
-        except Exception as e:
-            print("some error occured while sending mail {}".format(e))
-            return False
 
-    def close_connection(self):
+    def send_mail(self, user=None, **kwargs) -> bool:
         """
-            function closes the server connection established by the smtplib
-            module after each request
-        """
-        if self.server_connection:
-            self.server_connection.quit()
+            Sends an email to a specified recipient using a rendered template.
 
-    def send_Grid(self, user=None, **kwargs) -> Union[bool, Any]:
+            Args:
+                subject (str): The subject of the email.
+                to_email (str): The email address of the recipient.
+                temp_name (str): The name of the template to use for the email
+                body.
+                temp_context (dict): A dictionary of variables to render in 
+                the template.
+
+            Returns:
+                bool: True if the email is sent successfully, False otherwise.
+
+            Raises:
+                Exception: If an error occurs while sending the email or failed
+                to access the mail settings, an exception is logged and False 
+                is returned.
+
+            Notes:
+                This function uses the Flask-Mail extension to send emails.
+                It retrieves the email template from the Jinja2 environment,
+                renders it with the provided context, and sends the resulting
+                HTML message to the specified recipient.
         """
-            function sends an email to a given email address by using the
-            sendgrid API returns True if email is sent successfully
-        """
-        try:
-            """
-                file path points to the directory where the email template is
-                stored
-            """
-            verify_url = kwargs.get('url')
-            mail_body = kwargs.get('message')
-            header = kwargs.get('header')
-            if user:
-                username = user.User_name
-                email = user.Email
-            else:
-                username = kwargs.get('username')
-                email = kwargs.get('email')
+        verify_url = kwargs.get('url')
+        mail_body = kwargs.get('message')
+        header = kwargs.get('header')
+        if user:
+            username = user.User_name
+            email = user.Email
+        else:
+            username = kwargs.get('username')
+            email = kwargs.get('email')
             subject = kwargs.get('subject')
-            file = [mail_body, header, username]
-            html_content = template.render(file=file, url=verify_url)
-            URL = "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send"
-            tok = os.getenv('RapidAPI')
-            Host = "rapidprod-sendgrid-v1.p.rapidapi.com"
-            tok = str(tok)
-            payload = {
-                    "personalizations": [
-                        {
-                            "to": [{"email": email}],
-                            "subject": subject
-                            }
-                        ],
-                    "from": {"email": self.sender_email},
-                    "content": [
-                        {
-                            "type": "text/html",
-                            "value": html_content
-                            }
-                        ]
-                    }
-            headers = {
-                    "content-type": "application/json",
-                    "X-RapidAPI-Key": tok,
-                    "X-RapidAPI-Host": Host
-                    }
-            response = requests.post(URL, json=payload, headers=headers)
+        file = [mail_body, header, username]
+        html_content = template.render(file=file, url=verify_url)
+        subject = kwargs.get('subject')
+        Sender = os.getenv("MAIL_USERNAME") 
+        msg = Message(subject, recipients=[email], html=html_content,
+                      sender=Sender)
+        
+        try:
+            mail = current_app.extensions["mail"]
+            mail.send(msg)
 
-            if response.status_code == 202:
-                return True
-        except Exception as e:
-            print("some error occured while sending email {}".format(e))
-            raise ValueError(f"Error sending email: {e}")
+        except KeyError as err:
+            current_app.logger.error(f"""Flask Mail not installed,
+                                     initialize and re-run""")
+            return False
+        
+        except smtplib.SMTPRecipientsRefused as err:
+            current_app.logger.warning(err)
+            return False
+            
+        except Exception as err:
+            current_app.logger.error(err, exc_info=True)
+            return False
+        
+        return True
 
     def is_valid(self, email: str) -> Any:
         """

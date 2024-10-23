@@ -115,7 +115,7 @@ def update_profile(ID: str, item: str, value: Union[str, int, bool])\
     if item in my_dict:
         Property: str = my_dict[item]
         setattr(user, Property, value)
-        user.Updated_at = datetime.now().strftime("%Y-%m-%d")
+        user.Updated_at = datetime.now()
         storage.save()
         storage.close()
         return True
@@ -242,7 +242,7 @@ class Settings:
         if self.usr:
             Notify = Notifications()
             email_content = compose_message(self.usr)
-            send_notification = Notify.send_Grid(self.usr, **email_content)
+            send_notification = Notify.send_mail(self.usr, **email_content)
             if send_notification:
                 return f"confirmaion code sent to {self.usr.Email}"
         return False

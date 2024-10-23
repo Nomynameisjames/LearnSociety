@@ -11,6 +11,7 @@ from models.baseModel import (user_id, AutoSchedule, JSCourse,
                               ReactCourse, C_Course)
 from functools import wraps, lru_cache
 from models.RequestModule import SearchBar
+import pprint
 import jwt
 import json
 import re
@@ -200,30 +201,31 @@ def auto_dash(current_user: current_user) -> jsonify:
         if key:
             return jsonify({"message": "User task already set"}), 400
         if doc:
-            with open(doc[2], 'r') as f:
-                courses = json.load(f)
-                file = [v for v in courses.values()]
-                for i, topic in enumerate(file):
-                    date = day + timedelta(days=i)
-                    task = doc[0](user_ID=ID,
-                                  Days=date,
-                                  Course=topic["Course"],
-                                  Topic=topic["Topic"],
-                                  Target=False,
-                                  Reminder=req_json.get("Reminder"),
-                                  Created_at=datetime.utcnow().date())
-                    storage.new(task)
-            storage.save()
-            return jsonify({"message": f"{course} created"}), 200
-        else:
-            return jsonify({"message": "Course not found"}), 400
+            try:
+                with open(doc[2], 'r') as f:
+                    courses = json.load(f)
+                    file = [v for v in courses.values()]
+                    for i, topic in enumerate(file):
+                        date = day + timedelta(days=i)
+                        task = doc[0](user_ID=ID,
+                                    Days=date,
+                                    Course=topic["Course"],
+                                    Topic=topic["Topic"],
+                                    Target=False,
+                                    Reminder=req_json.get("Reminder"),
+                                    Created_at=datetime.utcnow().date())
+                        storage.new(task)
+                storage.save()
+                return jsonify({"message": f"{course} created"}), 200
+            except FileNotFoundError:
+                return jsonify({"message": "Course not found"}), 400
 
 
 @main_app.route('/wikisearch', methods=['POST'])
 @token_required
 @lru_cache(maxsize=128)
 @limit_request_frequency(num_requests=20, per_seconds=60)
-def searchBar() -> jsonify:
+def searchBar(*args, **kwargs) -> jsonify:
     """
         function creates an instance of the SearchBar class and calls the
         Wikipedia method to search for a topic if not found makes a call to the
@@ -258,15 +260,15 @@ def searchBar() -> jsonify:
         except Exception as e:
             print(e)
         if doc is None:
-            doc = search_Func.get_wiki_briefs(data)
-            if doc and isinstance(doc, dict):
+            doc = search_Func.google_search(data)
+            if doc and isinstance(doc, list):
                 dictionary = redis_storage.get_list_dict("dictionary")
-                doc = doc.get('summary')
-                doc = ' '.join(doc)
-                temp_dict[data] = doc
+                #doc = doc[0]
+                #doc = ' '.join(doc)
+                temp_dict[data] = doc[0]
                 dictionary.append(temp_dict)
                 redis_storage.set_list_dict('dictionary', dictionary)
-                return jsonify(doc), 200
+                return jsonify(doc[0]), 200
             return jsonify({"description": "No results found"}), 404
 
 
@@ -274,7 +276,7 @@ def searchBar() -> jsonify:
 @token_required
 @limit_request_frequency(num_requests=20, per_seconds=60)
 @lru_cache(maxsize=128)
-def Subject_search(topic: str) -> jsonify:
+def Subject_search(*args, topic: str) -> jsonify:
     """
         function creates an instance of the SearchBar class and calls the
         get_recommendations method to search for a topic and retrive the link

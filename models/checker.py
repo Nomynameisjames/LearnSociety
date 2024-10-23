@@ -9,6 +9,7 @@ import openai
 import json
 import yaml
 import datetime
+import requests
 import models
 
 load_dotenv()
@@ -131,7 +132,7 @@ class Checker:
             messages = [
                         {"role": "system", "content": f"{message}"}
                 ]
-            answer = self.Bot(messages)
+            answer = self.Bot(message)
             """
                 returns a JSON value of the API response
             """
@@ -159,8 +160,8 @@ class Checker:
                 opt = self.question
             dic = {}
             new_dic = {}
-            model = "text-davinci-003"
-            data = self.Bot(opt, model)
+            model = "AI"
+            data = self.Bot(str(opt), model)
             dic["tasks"] = data
             obj = dic["tasks"].split("\n")
             for key in range(len(obj)):
@@ -174,34 +175,37 @@ class Checker:
             print(f"Error invoking chatbot {e}")
             return False
 
-    def Bot(self, prompt, model=None):
+    def Bot(self, prompt: str, model=None) -> str:
         """
             Bot method allows to indicate which model to use for the
-            openAI API request
+            openAI API request. The current model utilises the RapidApi
+            ChatGPT API access
         """
-        openai.api_key = os.getenv('OPENAI_API_KEY')
-        if model is None:
-            model = "gpt-3.5-turbo"
-            response = openai.ChatCompletion.create(
-                    model=model,
-                    messages=prompt,
-                    temperature=0.3,
-                    max_tokens=150,
-                    top_p=1.0,
-                    frequency_penalty=0.0,
-                    presence_penalty=0.0
-                    )
-            answer = response['choices'][0]['message']['content'].strip()
-            return answer
-        else:
-            response = openai.Completion.create(
-                model=model,
-                prompt=prompt,
-                temperature=0.3,
-                max_tokens=150,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0
-                )
-            answer = response['choices'][0]['text'].strip()
-            return answer
+        url = "https://chatgpt-42.p.rapidapi.com/conversationgpt4-2"
+        payload = {
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                        }
+                    ],
+                "system_prompt": "",
+                "temperature": 0.9,
+                "top_k": 5,
+                "top_p": 0.9,
+                "max_tokens": 256,
+                "web_access": False
+                }
+        headers = {
+                "x-rapidapi-key": os.getenv("RapidAPI"),
+                "x-rapidapi-host": "chatgpt-42.p.rapidapi.com",
+                "Content-Type": "application/json"
+                }
+        try:
+            response = requests.post(url, json=payload, headers=headers)
+            if response.json()["status"]:
+                return response.json()["result"]
+            else:
+                return response.json()["message"]
+        except Exception as e:
+            return f"Error: {e}"

@@ -22,7 +22,7 @@ class Auto_courses:
     Days = Column(DateTime)
     Course = Column(String(50))
     Topic = Column(String(50))
-    Reminder = Column(DateTime)
+    Reminder = Column(String(10))
     Target = Column(Boolean)
     Created_at = Column(DateTime, default=datetime.utcnow)
     Updated_at = Column(DateTime)

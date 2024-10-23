@@ -43,7 +43,7 @@ class Create_Schedule(User):
         set_day, set_reminder = None, None
         if day and reminder:
             set_day = datetime.strptime(day, "%Y-%m-%d").date()
-            set_reminder = datetime.strptime(reminder, "%H:%M:%S").time()
+            set_reminder = datetime.strptime(reminder, "%H:%M:%S")
         if self.my_id is None:
             return
         else:
@@ -52,7 +52,7 @@ class Create_Schedule(User):
                     user_ID=self.my_id,
                     Course=kwargs.get('Course'),
                     Topic=kwargs.get('Topic'),
-                    Reminder=set_reminder,
+                    Reminder=set_reminder.strftime("%H:%M:%S"),
                     Target=False,
                     Average=None,
                     Created_at=self.now,
@@ -104,7 +104,7 @@ class Create_Schedule(User):
             short_date = self.now.strftime("%Y-%m-%d")
             for task in tasks:
                 new_dict[task.ID] = {
-                    "Date": task.Days,
+                    "Date": task.Days.date(),
                     "Course": task.Course,
                     "Topic": task.Topic,
                     "Target": task.Target,

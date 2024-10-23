@@ -59,11 +59,10 @@ def create_user_profile(ID: str, name: str) -> bool:
     """
         function creates a user profile for new users and saves in redisDB
     """
-    search_name = models.storage.search(name, user_id)
-    if search_name:
-        for item in search_name:
-            if name == item.User_name:
-                return False
+    #search_name = models.storage.search(name, user_id)
+    search_redis_db = update_redis_profile.find_user(name)
+    if search_redis_db and search_redis_db.get("username") == name:
+        return False
     data = [
             {ID: {
                 'username': name,
@@ -142,25 +141,27 @@ def validate_csrf_token(token: str) -> bool:
         return False
 
 
-def login_user_and_redirect(user: user_id, remember=False) -> Any:
+def login_user_and_redirect(user: user_id, remember_me=False) -> Any:
     from ..app import app
     """
         Log in the user and redirect to the appropriate page sending neccessary
         auth token alongside
     """
-    login_user(user, remember=remember)
+    #login_user(user, remember=remember)
     uploader = update_redis_profile(str(user.ID))
     token = jwt.encode({'user_id': user.ID, 'exp':
                        datetime.datetime.utcnow()
                        + datetime.timedelta(minutes=120)},
                        app.config['SECRET_KEY'])
-    flash(_('You are logged in!'), 'success')
+    #flash(_('You are logged in!'), 'success')
     uploader.update_last_seen()
     next_page = request.args.get('next')
     response = redirect(next_page) if next_page \
         else redirect(url_for('Main.view'))
     tok = token.encode('UTF-8').decode()
     response.set_cookie('access_token', tok)
+    login_user(user, remember=remember_me)
+    flash(_('Logged in'), 'success')
     return response
 
 
@@ -236,7 +237,7 @@ def signup() -> Any:
                 'email': form.email.data,
                 'id': ID
                 }
-        sent = mail_app.send_Grid(None, **temp_file)
+        sent = mail_app.send_mail(None, **temp_file)
         if sent:
             flash(_(f"An email has been sent to {form.email.data}"
                     f"to complete your registration"), 'success')
@@ -247,13 +248,14 @@ def signup() -> Any:
                         'Password': password,
                         'id':  ID
                     }
-            prev_cache_file = models.redis_storage.get_dict("temp_storage", ID)
+            prev_cache_file = \
+            models.redis_storage.get_dict("temp_storage", ID)
             if prev_cache_file == {}:
                 models.redis_storage.set_dict("temp_storage", cache_file,
                                               ex=1800)
-            return redirect(url_for('Main.signup', ID=ID))
-    response = make_response(render_template('register.html', form=form,
-                                             ID=ID))
+            return redirect(url_for('Main.login', ID=ID))
+    response = make_response(render_template('register.html',
+                                             form=form, ID=ID))
     return response
 
 
@@ -267,7 +269,8 @@ def confirm_email(token: str, ID: str) -> Any:
     if user is None:
         flash('Invalid or expired token', 'warning')
         return redirect(url_for('Main.signup'))
-    cache = models.redis_storage.get_dict('temp_storage', ID)
+    cache = models.redis_storage.get_dict(
+            'temp_storage', ID)
     if cache['id'] == ID and user:
         user = user_id(ID=cache['id'], User_name=cache['Username'],
                        Email=cache['Email'], Password=cache['Password'])
@@ -296,11 +299,12 @@ def login() -> Any:
     form = LoginForm()
     if form.validate_on_submit():
         if validate_csrf_token(form.csrf_token.data):
-            user = models.storage.access(form.email.data, 'Email', user_id)
+            user = models.storage.access(form.email.data,
+                                         'Email', user_id)
             models.storage.close()
             if user and check_password_hash(user.Password, form.password.data):
                 return login_user_and_redirect(user,
-                                               remember=form.remember.data)
+                                               remember_me=form.remember.data)
             else:
                 flash(_(f'Login Unsuccessful. Please check username and'
                         f' password'), 'danger')
@@ -363,7 +367,7 @@ def reset() -> Any:
                 'subject': 'Password Reset Request',
                 'header': f'Password Reset'
                 }
-        sent = mail_app.send_Grid(user, **mydict)
+        sent = mail_app.send_mail(user, **mydict)
         models.storage.close()
         if sent:
             flash(_('''An email has been sent with instructions to reset
@@ -430,10 +434,27 @@ def callback():
         user["user_id"] = user_info["sub"]
         user["user_name"] = user_info["name"]
         user["user_email"] = user_info["email"]
-    except KeyError:
-        abort(404)
-    response = save_user_to_db(user)
-    return response
+        check_email = models.storage.access(
+                user["user_email"], "Email", user_id)
+        if check_email:
+            return login_user_and_redirect(check_email)
+        ID = str(uuid.uuid4())
+        hashed_sub = generate_password_hash(user.get("user_id"))
+        auth_user = user_id(ID=ID,
+                User_name=user.get("user_name"),
+                Email=user.get("user_email"),
+                Password=hashed_sub)
+        save_to_redis = create_user_profile(ID, user["user_name"])
+        if save_to_redis:
+            models.storage.new(auth_user)
+            models.storage.save()
+            models.storage.close()
+            return login_user_and_redirect(auth_user)
+        flash(_("Authentication failed"), "danger")
+        return redirect(url_for("Main.login"))
+    except Exception as e:
+        print(e)
+        abort(500)
 
 
 @Main.route('/confirm_username/<personal_id>', methods=['GET', 'POST'])

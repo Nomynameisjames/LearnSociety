@@ -35,7 +35,7 @@ def help(current_user: current_user) -> jsonify:
     req_data = request.get_json()
     if request.method == 'POST':
         for text in req_data.values():
-            res = bot.Help(text)
+            res = bot.Help(str(text))
             message = {
                 "text": res,
                 "time": datetime.utcnow().strftime("%-d %b %Y %I:%M:%S%p"),

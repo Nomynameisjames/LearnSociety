@@ -10,10 +10,6 @@ import models
 
 load_dotenv()
 app = Flask(__name__)
-#cache = Cache(app)
-#app.config['CACHE_TYPE'] = 'redis'
-#app.config['CACHE_REDIS_URL'] = 'redis://localhost:6379/0'
-#swagger = Swagger(app)
 
 app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/api/v1/*": {"origin": "*"}})
@@ -22,7 +18,7 @@ app.register_blueprint(main_app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 host = os.getenv('HBNB_API_HOST', '127.0.0.1')
-port = os.getenv('HBNB_API_PORT', '5000')
+port = os.getenv('HBNB_API_PORT', '5001')
 
 
 @app.teardown_appcontext
