@@ -2,6 +2,7 @@ __pyache__/
 __pycache__
 *.swp
 *.json
+*.env
 venv/
 var
 learnsociety.db
