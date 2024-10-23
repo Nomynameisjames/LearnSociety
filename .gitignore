@@ -4,4 +4,5 @@ __pycache__
 *.json
 venv/
 var
+learnsociety.db
 web_flask/main/client_secrets.json
