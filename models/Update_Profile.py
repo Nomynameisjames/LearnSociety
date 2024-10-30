@@ -31,7 +31,7 @@ def SQL_data(ID: str) -> dict:
 
     if user_data:
         created_datetime = datetime.strptime(str(user_data.Created_at),
-                                             '%Y-%m-%d %H:%M:%S')
+                                             '%Y-%m-%d %H:%M:%S.%f')
         profile = {
                 "Created":  created_datetime.strftime("%d %B %Y"),
                 "Active_courses": unique_courses

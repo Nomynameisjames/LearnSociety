@@ -34,6 +34,7 @@ def Upload_file(file: str) -> Union[str, None]:
     try:
         uploadcare = Uploadcare(public_key=pub_key, secret_key=secret_key)
         ucare_file = uploadcare.upload(file)
+        print(ucare_file.cdn_url)
         return ucare_file.cdn_url
     except Exception as e:
         print(f"\nfollwing error occured: {e}\n")
@@ -317,6 +318,9 @@ def friends_chat(friend_id) -> Any:
                 break
     else:
         conversation = []
+    if friends_data and friends_data["profile_picture"] is None:
+        friends_data["profile_picture"] = os.environ["DEFAULT_PICTURE"]
+    print(dp)
     return render_template('friendsChat.html', chats=conversation,
                            dp=dp, communities=communities,
                            status=status, friend_info=friends_data,

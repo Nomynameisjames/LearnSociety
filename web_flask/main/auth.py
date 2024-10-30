@@ -62,6 +62,7 @@ def create_user_profile(ID: str, name: str) -> bool:
     #search_name = models.storage.search(name, user_id)
     search_redis_db = update_redis_profile.find_user(name)
     if search_redis_db and search_redis_db.get("username") == name:
+        print('\n\n this is being triggered')
         return False
     data = [
             {ID: {
@@ -80,6 +81,7 @@ def create_user_profile(ID: str, name: str) -> bool:
              }]
     
     new_user_obj = models.redis_storage.set_list_dict("Users-Profile", data)
+    print(f'\n\n from Create_user_profile func {new_user_obj}')
     if new_user_obj:
         return True
     return False
@@ -417,44 +419,88 @@ def google_oauth2() -> Any:
     return redirect(auth_url)
 
 
+#@Main.route('/Oauth/google/callback', methods=["GET", "POST"])
+#def callback():
+#    """gets googles athorization code and then exchange code for
+#    tokens to get the user details
+
+#    Return: the users details"""
+#    Google_Flow = flow()
+#    Google_Flow.fetch_token(authorization_response=request.url)
+#    credentials = Google_Flow.credentials
+
+#    user_info = jwt.decode(credentials.id_token,
+#                           options={"verify_signature": False})
+#    user = {}
+#    try:
+#        user["user_id"] = user_info["sub"]
+#        user["user_name"] = user_info["name"]
+#        user["user_email"] = user_info["email"]
+#        check_email = models.storage.access(
+#                user["user_email"], "Email", user_id)
+#        if check_email:
+#            return login_user_and_redirect(check_email)
+#        ID = str(uuid.uuid4())
+#        hashed_sub = generate_password_hash(user.get("user_id"))
+#        auth_user = user_id(ID=ID,
+#                User_name=user.get("user_name"),
+#                Email=user.get("user_email"),
+#                Password=hashed_sub)
+#        save_to_redis = create_user_profile(ID, user["user_name"])
+#        if save_to_redis:
+#            models.storage.new(auth_user)
+#            models.storage.save()
+#            models.storage.close()
+#            return login_user_and_redirect(auth_user)
+#        flash(_("Authentication failed"), "danger")
+#        return redirect(url_for("Main.login"))
+#    except Exception as e:
+#        print(e)
+#        abort(500)
 @Main.route('/Oauth/google/callback', methods=["GET", "POST"])
 def callback():
-    """gets googles athorization code and then exchange code for
-    tokens to get the user details
-
-    Return: the users details"""
+    """Gets Google's authorization code and exchanges code for tokens to get user details."""
     Google_Flow = flow()
-    Google_Flow.fetch_token(authorization_response=request.url)
-    credentials = Google_Flow.credentials
-
-    user_info = jwt.decode(credentials.id_token,
-                           options={"verify_signature": False})
-    user = {}
     try:
-        user["user_id"] = user_info["sub"]
-        user["user_name"] = user_info["name"]
-        user["user_email"] = user_info["email"]
-        check_email = models.storage.access(
-                user["user_email"], "Email", user_id)
+        Google_Flow.fetch_token(authorization_response=request.url)
+        credentials = Google_Flow.credentials
+        user_info = jwt.decode(credentials.id_token, options={"verify_signature": False})
+        
+        user = {
+            "user_id": user_info.get("sub"),
+            "user_name": user_info.get("name"),
+            "user_email": user_info.get("email")
+        }
+        
+        # Check if user already exists
+        check_email = models.storage.access(user["user_email"], "Email", user_id)
         if check_email:
             return login_user_and_redirect(check_email)
+        
+        #elif check_email is None:
+        # Create new user profile
+        print(f'\n\n {check_email} ')
+        print(f' {user}')
         ID = str(uuid.uuid4())
-        hashed_sub = generate_password_hash(user.get("user_id"))
-        auth_user = user_id(ID=ID,
-                User_name=user.get("user_name"),
-                Email=user.get("user_email"),
-                Password=hashed_sub)
-        save_to_redis = create_user_profile(ID, user["user_name"])
+        hashed_sub = generate_password_hash(user["user_id"])
+        auth_user = user_id(ID=ID, User_name=user["user_name"], Email=user["user_email"], Password=hashed_sub)
+        
+        # Save to Redis
+        save_to_redis = create_user_profile(str(ID), user["user_name"])
+        print(f'\n\n {save_to_redis}')
         if save_to_redis:
             models.storage.new(auth_user)
             models.storage.save()
-            models.storage.close()
             return login_user_and_redirect(auth_user)
+        
+            # If Redis save fails
         flash(_("Authentication failed"), "danger")
         return redirect(url_for("Main.login"))
+    
     except Exception as e:
-        print(e)
-        abort(500)
+        print(f"Error during OAuth callback: {e}")
+        flash(_("An error occurred during authentication"), "danger")
+        return redirect(url_for("Main.login"))
 
 
 @Main.route('/confirm_username/<personal_id>', methods=['GET', 'POST'])

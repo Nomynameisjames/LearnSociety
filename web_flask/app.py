@@ -73,6 +73,8 @@ def handle_send_message(data: dict) -> None:
     message = data.get('message')
     room_id = data.get('id')
     current_datetime = datetime.now()
+    #if sender_data.value["profile_picture"] is None:
+    #    sender_data.value["profile_picture"] = "https://ucarecdn.com/163efe7c-bcc5-4545-a795-128b261d6a45/-/preview/1000x1000/"
     payload = {
                 "sender_id": ID,
                 "text": str(message),

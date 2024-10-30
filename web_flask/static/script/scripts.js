@@ -581,7 +581,7 @@ $(document).ready(function() {
     
     $(".open-chat").click(function(e) {
         e.preventDefault();
-        let url = "http://127.0.0.1:5001/friends/" + unblock;
+        let url = "http://127.0.0.1:5000/friends/" + unblock;
         $(this).attr("href", url);
         window.location.href = url;
         /*$.get(url, function(data) {

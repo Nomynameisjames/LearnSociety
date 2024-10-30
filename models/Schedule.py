@@ -102,6 +102,7 @@ class Create_Schedule(User):
             return new_dict
         else:
             short_date = self.now.strftime("%Y-%m-%d")
+            short_date_obj = datetime.strptime(short_date, "%Y-%m-%d").date()
             for task in tasks:
                 new_dict[task.ID] = {
                     "Date": task.Days.date(),
@@ -117,13 +118,13 @@ class Create_Schedule(User):
             return new_dict
         elif str(choice).lower() == "upcoming":
             new_dict_2 = {k: v for k, v in new_dict.items()
-                          if v["Date"] > short_date}
+                          if v["Date"] > short_date_obj}
         elif str(choice).lower() == "daily":
             new_dict_2 = {k: v for k, v in new_dict.items()
-                          if v["Date"] == short_date}
+                          if v["Date"] == short_date_obj}
         elif str(choice).lower() == "missed":
             new_dict_2 = {k: v for k, v in new_dict.items()
-                          if v["Date"] < short_date and not v['Target']}
+                          if v["Date"] < short_date_obj and not v['Target']}
         else:
             raise ValueError(f"Invalid choice {choice}")
         models.storage.close()
